@@ -4,7 +4,63 @@
     "signin-email": "rajalubenoit@gmail.com",
     "contact-email": "rajalubenoit@gmail.com",
     "profile-picture": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/17634828_10210382518897204_8194606884438197467_n.jpg?oh=3f5600eed7f4737dfd1bd0960a702736&oe=5A1FEFA6", 
-    "display-name": "Benoit"
+    "display-name": "Benoit", 
+    "routines": [
+      {
+        "name": "Routine A", 
+        "id": "01routineA",
+        "color": "#63E577", 
+        "exercices": [
+          {
+            "exerciceId": "ex-04", 
+            "sets": "5", 
+            "reps": "10",
+            "handicap": "20"
+          },
+          {
+            "exerciceId": "ex-06", 
+            "sets": "8", 
+            "reps": "5",
+            "handicap": "15"
+          },
+          {
+            "exerciceId": "ex-30",  
+            "handicap": "40"
+          },
+          {
+            "exerciceId": "ex-28", 
+            "sets": "5", 
+            "reps": "10",
+            "handicap": "20"
+          },
+          {
+            "exerciceId": "ex-26", 
+            "sets": "3", 
+            "reps": "8",
+            "handicap": false
+          }
+        ]
+      },
+      {
+        "name": "Routine B",
+        "id": "02routineB", 
+        "color": "#DE762E", 
+        "exercices": [
+          {
+            "exerciceId": "ex-04", 
+            "sets": "5", 
+            "reps": "10",
+            "handicap": "20"
+          },
+          {
+            "exerciceId": "ex-06", 
+            "sets": "8", 
+            "reps": "5",
+            "handicap": "15"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "02",
