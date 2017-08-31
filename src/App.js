@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import { BrowserRouter, Link, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard.js';
 import Settings from './pages/Settings.js';
@@ -14,12 +13,27 @@ import Nav from './blocks/Nav.js';
 import './styles/placeholder.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: false
+    }
+  }
+
+  componentDidMount() {
+    var scope = this;
+    setTimeout(function(){
+      // Mucking-up a log-in
+      scope.setState({loggedIn: true});
+    },400);
+  }
+
   render() {
     return (
       <BrowserRouter>
-        <div className="App">
+        <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
           <Nav />
-          <main>
+          <main id="mainContents">
             <Switch>
               <Route exact path="/" component={Dashboard}/>
               <Route exact path="/settings" component={Settings}/>
