@@ -4,7 +4,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="Dashboard">
-        <p>Needs text</p>
+        <p>This is the Dashboard</p>
       </div>
     )
   }
