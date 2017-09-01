@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import RoutineDetail from '../blocks/RoutineDetail';
 
 class Routines extends Component {
   render() {
     const routineList = this.props.list;
+    const exercisesDatabase = this.props.exercisesDatabase;
     const routineItems = routineList.map((value) => 
-      <li key={value.id} className="routine-card">{value.name}</li>
+      <RoutineDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} />
     );
 
     return (
-      <ul className="Routines">
+      <div className="Routines">
         {routineItems}
-      </ul>
+      </div>
     )
   }
+}
+
+Routines.propTypes = {
+  list: PropTypes.array.isRequired,
+  exercisesDatabase: PropTypes.array.isRequired
 }
 
 export default Routines;
