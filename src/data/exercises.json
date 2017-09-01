@@ -1,182 +1,182 @@
 [
   {
     "id": "ex-01",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Squats"
   },
   {
     "id": "ex-02",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Deadlifts"
   },
   {
     "id": "ex-03",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "barbell", 
     "name": "Overhead Press"
   },
   {
     "id": "ex-04",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "barbell", 
     "name": "Bent-over Rows"
   }, 
   {
     "id": "ex-05",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "barbell", 
     "name": "Bench Press"
   },
   {
     "id": "ex-06",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "cable", 
     "name": "Triceps press-down"
   }, 
   {
     "id": "ex-07",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "dumbbell", 
     "name": "Incline Dumbbell Press"
   }, 
   {
     "id": "ex-08",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "cable", 
     "name": "Lat Pull-downs"
   }, 
   {
     "id": "ex-09",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "dumbbell", 
     "name": "Lateral Raises"
   }, 
   {
     "id": "ex-10",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "dumbbell", 
     "name": "Curls"
   }, 
   {
     "id": "ex-11",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Romanian Deadlifts"
   }, 
   {
     "id": "ex-12",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Leg Press"
   }, 
   {
     "id": "ex-13",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Leg Curls"
   }, 
   {
     "id": "ex-14",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Calf Raise"
   }, 
   {
     "id": "ex-15",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "cable", 
     "name": "Leg Press"
   }, 
   {
     "id": "ex-16",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "cable", 
     "name": "Cable rows"
   }, 
   {
     "id": "ex-17",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "dumbbell", 
     "name": "Dumbbell Bench Press"
   }, 
   {
     "id": "ex-18",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "dumbbell", 
     "name": "Dumbbell Flyes"
   }, 
   {
     "id": "ex-19",
-    "category": "upper-body", 
+    "muscleGroup": "upper-body", 
     "type": "barbell", 
     "name": "Skull crushers"
   }, 
   {
     "id": "ex-20",
-    "category": "lower-body", 
+    "muscleGroup": "lower-body", 
     "type": "barbell", 
     "name": "Split Squats"
   }, 
   {
     "id": "ex-21",
-    "category": "calisthenics", 
+    "type": "calisthenics", 
     "name": "Abs"
   }, 
   {
     "id": "ex-22",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Push-ups"
   }, 
   {
     "id": "ex-23",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Pull-ups"
   }, 
   {
     "id": "ex-24",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Dips"
   }, 
   {
     "id": "ex-25",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Splits"
   }, 
   {
     "id": "ex-26",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Side-splits"
   }, 
   {
     "id": "ex-27",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Jumping jacks"
   }, 
   {
     "id": "ex-28",
-    "category": "calisthenics",  
+    "type": "calisthenics",  
     "name": "Mountain climbers"
   }, 
   {
     "id": "ex-29",
-    "category": "cardio",  
+    "type": "cardio",  
     "name": "Treadmill run"
   }, 
   {
     "id": "ex-30",
-    "category": "cardio",  
+    "type": "cardio",  
     "name": "Elliptical bike"
   }, 
   {
     "id": "ex-31",
-    "category": "cardio",  
+    "type": "cardio",  
     "name": "Mechanical stairs"
   }, 
   {
     "id": "ex-32",
-    "category": "cardio",  
+    "type": "cardio",  
     "name": "Fitness bike"
   }
 ]
