@@ -10,7 +10,7 @@
         "name": "Routine A", 
         "id": "01routineA",
         "color": "#63E577", 
-        "exercices": [
+        "exercises": [
           {
             "exerciceId": "ex-04", 
             "sets": "5", 
@@ -45,7 +45,7 @@
         "name": "Routine B",
         "id": "02routineB", 
         "color": "#DE762E", 
-        "exercices": [
+        "exercises": [
           {
             "exerciceId": "ex-04", 
             "sets": "5", 
@@ -67,6 +67,7 @@
     "signin-email": "test@gmail.com",
     "contact-email": "test@gmail.com",
     "profile-picture": false, 
-    "display-name": "John Doe"
+    "display-name": "John Doe", 
+    "routines": []
   }
 ]
