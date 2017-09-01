@@ -19,5 +19,5 @@ test('displays the test message', () => {
   );
   
   // Expecting message not to be empty
-  expect(dash.find('p').text()).not.toHaveLength(0);
+  expect(dash.find('h1').text()).not.toHaveLength(0);
 });

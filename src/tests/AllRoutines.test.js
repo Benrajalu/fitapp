@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow} from 'enzyme';
 import AllRoutines from '../pages/AllRoutines';
+import Routines from '../blocks/Routines';
+
+import userData from '../data/users.json';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -19,5 +22,15 @@ test('displays the test message', () => {
   );
   
   // Expecting message not to be empty
-  expect(dash.find('p').text()).not.toHaveLength(0);
+  expect(dash.find('h1').text()).not.toHaveLength(0);
+});
+
+test('displays user routines', () => {
+  const routinesList = userData[0].routines;
+
+  const listing = shallow(
+    <Routines list={routinesList} />
+  );
+
+  expect(listing.find('.routine-card')).not.toHaveLength(0)
 });

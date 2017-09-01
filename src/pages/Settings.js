@@ -4,7 +4,11 @@ class Settings extends Component {
   render() {
     return (
       <div className="Settings">
-        <p>Settings page</p>
+        <div className="container">
+          <div className="page-header">
+            <h1>Paramètres</h1>
+          </div>
+        </div>
       </div>
     )
   }

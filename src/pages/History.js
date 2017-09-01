@@ -4,7 +4,11 @@ class History extends Component {
   render() {
     return (
       <div className="History">
-        <p>History page</p>
+        <div className="container">
+          <div className="page-header">
+            <h1>Historique</h1>
+          </div>
+        </div>
       </div>
     )
   }

@@ -4,7 +4,11 @@ class NoMatch extends Component {
   render() {
     return (
       <div className="NoMatch">
-        <p>404 page not found</p>
+        <div className="container">
+          <div className="page-header">
+            <h1>404 - Cette page n'existe pas</h1>
+          </div>
+        </div>
       </div>
     )
   }
