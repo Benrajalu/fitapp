@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import AllRoutines from '../pages/AllRoutines';
 import Routines from '../blocks/Routines';
 
 import userData from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -28,9 +29,9 @@ test('displays the test message', () => {
 test('displays user routines', () => {
   const routinesList = userData[0].routines;
 
-  const listing = shallow(
-    <Routines list={routinesList} />
+  const listing = mount(
+    <Routines list={routinesList} exercisesDatabase={exercisesDatabase} />
   );
 
-  expect(listing.find('.routine-card')).not.toHaveLength(0)
+  expect(listing.find('.routine-card').length).not.toEqual(0)
 });
