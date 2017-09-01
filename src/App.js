@@ -8,7 +8,7 @@ import AllRoutines from './pages/AllRoutines.js';
 import NewRoutine from './pages/NewRoutine.js';
 import Workout from './pages/Workout.js';
 import NoMatch from './pages/NoMatch.js';
-import Nav from './blocks/Nav.js';
+import MainNav from './blocks/Nav.js';
 
 import './styles/placeholder.css';
 
@@ -32,7 +32,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          <Nav />
+          <MainNav />
           <main id="mainContents">
             <Switch>
               <Route exact path="/" component={Dashboard}/>
