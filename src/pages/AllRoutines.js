@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Routines from '../blocks/Routines';
 
 import userData from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
 
 
 
@@ -9,12 +10,14 @@ class AllRoutines extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      routinesList:[]
+      routinesList:[], 
+      exercises: []
     }
   }
   componentDidMount() {
     this.setState({
-      routinesList: userData[0].routines
+      routinesList: userData[0].routines, 
+      exercises: exercisesDatabase, 
     });
   }
   
@@ -25,7 +28,7 @@ class AllRoutines extends Component {
           <div className="page-header">
             <h1>Mes entraînements</h1>
           </div>
-          <Routines list={this.state.routinesList} />
+          <Routines list={this.state.routinesList} exercisesDatabase={this.state.exercises} />
         </div>
       </div>
     )
