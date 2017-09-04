@@ -1,7 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import RoutineLauncherModal from '../blocks/RoutineLauncherModal';
+
+import userData from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalDisplay: false,
+      routinesList:[], 
+      exercises: []
+    };
+    this.displayModal = this.displayModal.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      routinesList: userData[0].routines, 
+      exercises: exercisesDatabase, 
+    });
+  }
+
+  displayModal(event) {
+    this.setState({
+      modalDisplay: !this.state.modalDisplay
+    })
+  }
+
+
   render() {
     return (
       <div className="Dashboard">
@@ -13,7 +41,7 @@ class Dashboard extends Component {
 
         <div className="container">
           <div className="col-md-4">
-            <button className="btn btn-primary btn-lg btn-block">Lancer un entraînement</button>
+            <button className="btn btn-primary btn-lg btn-block" onClick={this.displayModal}>Lancer un entraînement</button>
           </div>
           <div className="col-md-4">
             <Link to='/new-routine' className="btn btn-default btn-lg btn-block">Créer un entraînement</Link>
@@ -22,6 +50,12 @@ class Dashboard extends Component {
             <Link to='/settings' className="btn btn-default btn-lg btn-block">Paramètres</Link>
           </div>
         </div>
+
+        <RoutineLauncherModal 
+          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+          routinesList={this.state.routinesList} 
+          exercises={this.state.exercises} 
+          modalCloser={this.displayModal} />
       </div>
     )
   }
