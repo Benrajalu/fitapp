@@ -64,6 +64,64 @@
           }
         ]
       }
+    ],
+    "workoutLog": [
+      {
+        "id": "log-1504290660-01", 
+        "routineName": "Routine A", 
+        "timestamp": "1504290660", 
+        "exercises": [
+          {
+            "exerciceId": "ex-04", 
+            "handicap": "20",
+            "repTarget": "10",
+            "sets": [10, 8, 10, 10, 2]
+          },
+          {
+            "exerciceId": "ex-06", 
+            "repTarget": "5",
+            "handicap": "15",
+            "sets": [5, 5, 5, 5, 5, 4, 3, 2]
+          },
+          {
+            "exerciceId": "ex-30", 
+            "repTarget": "40",
+            "handicap": "40",
+            "sets": [30]
+          },
+          {
+            "exerciceId": "ex-28", 
+            "repTarget": "10",
+            "handicap": "20",
+            "sets": [10, 8, 10, 10, 2]
+          },
+          {
+            "exerciceId": "ex-26", 
+            "repTarget": "8",
+            "handicap": false,
+            "sets": [8, 8, 8]
+          }
+        ]
+      }, 
+      {
+        "id": "log-1504428300-01", 
+        "routineName": "Routine B", 
+        "timestamp": "1504428300", 
+        "exercises": [
+          {
+            "exerciceId": "ex-04", 
+            "repTarget": "10",
+            "handicap": "20",
+            "sets": [10, 8, 10, 10, 2]
+          },
+          {
+            "exerciceId": "ex-06", 
+            "repTarget": "5",
+            "handicap": "15",
+            "sets": [5, 5, 5, 5, 5, 4, 3, 2]
+          }
+        ]
+      }
     ]
   },
   {
@@ -72,6 +130,7 @@
     "contact-email": "test@gmail.com",
     "profile-picture": false, 
     "display-name": "John Doe", 
-    "routines": []
+    "routines": [],
+    "workoutLog": []
   }
 ]
