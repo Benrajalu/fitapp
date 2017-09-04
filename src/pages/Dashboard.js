@@ -34,6 +34,13 @@ class Dashboard extends Component {
 
 
   render() {
+    // Ensuring workouts are always in chronological order
+    const workouts = this.state.workoutList.sort((a, b) => {
+      var c = a.timestamp;
+      var d = b.timestamp;
+      return c>d ? -1 : c<d ? 1 : 0;
+    });
+
     return (
       <div className="Dashboard">
         <div className="container">
@@ -62,7 +69,7 @@ class Dashboard extends Component {
         <div className="container">
           <div className="col-md-9">
             <h2>Vos entraînements récents</h2>
-            <WorkoutsLog list={this.state.workoutList} exercisesDatabase={this.state.exercises} />
+            <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
           </div>
 
           <div className="col-md-3">
