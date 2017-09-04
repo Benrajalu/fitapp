@@ -7,6 +7,7 @@ class WorkoutHistoryDetail extends Component {
   render() {
     const workoutExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
+
     const listExercises = workoutExercices.map((value) => {
       return <ExerciseListing key={value.exerciceId.toString()} exerciseData={value} exercisesDatabase={exercisesDatabase} status="past" />
     });
