@@ -7,7 +7,9 @@ class WorkoutsLog extends Component {
   render() {
     const workoutsList = this.props.list;
     const exercisesDatabase = this.props.exercisesDatabase;
-    const workoutItems = workoutsList.map((value) => 
+    const displayLimit= this.props.limit ? this.props.limit : workoutsList.length;
+
+    const workoutItems = workoutsList.slice(0, displayLimit).map((value) => 
       <WorkoutHistoryDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} />
     );
 
