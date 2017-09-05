@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ExerciseListing from '../blocks/ExerciseListing';
+import Timestamper from '../blocks/Timestamper';
 
 class WorkoutHistoryDetail extends Component {
   render() {
@@ -19,6 +20,9 @@ class WorkoutHistoryDetail extends Component {
         </div>
         <div className="panel-body">
           {listExercises}
+        </div>
+        <div className="panel-footer">
+          <Timestamper timestamp={this.props.contents.timestamp * 1000} />
         </div>
       </div>
     )
