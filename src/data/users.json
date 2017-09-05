@@ -122,6 +122,18 @@
           }
         ]
       }
+    ], 
+    "personalRecords":[
+      {
+        "exerciseId": "ex-04", 
+        "record": "100kg",
+        "timestamp": 1504290660
+      }, 
+      {
+        "exerciseId": "ex-20", 
+        "record": "25kg",
+        "timestamp": 1504509483
+      }
     ]
   },
   {
@@ -131,6 +143,7 @@
     "profile-picture": false, 
     "display-name": "John Doe", 
     "routines": [],
-    "workoutLog": []
+    "workoutLog": [],
+    "personalRecords":[]
   }
 ]

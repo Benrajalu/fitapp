@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import RoutineLauncherModal from '../blocks/RoutineLauncherModal';
 import WorkoutsLog from '../blocks/WorkoutsLog';
+import RecordsLog from '../blocks/RecordsLog';
 import WeekCounter from '../blocks/WeekCounter';
 
 import userData from '../data/users.json';
@@ -14,7 +15,8 @@ class Dashboard extends Component {
       modalDisplay: false,
       routinesList:[], 
       exercises: [], 
-      workoutList: []
+      workoutList: [], 
+      records: []
     };
     this.displayModal = this.displayModal.bind(this);
   }
@@ -23,6 +25,7 @@ class Dashboard extends Component {
     this.setState({
       routinesList: userData[0].routines,
       workoutList: userData[0].workoutLog, 
+      records: userData[0].personalRecords,
       exercises: exercisesDatabase, 
     });
   }
@@ -35,8 +38,13 @@ class Dashboard extends Component {
 
 
   render() {
-    // Ensuring workouts are always in chronological order
+    // Ensuring workouts and records are always in chronological order
     const workouts = this.state.workoutList.sort((a, b) => {
+      var c = a.timestamp;
+      var d = b.timestamp;
+      return c>d ? -1 : c<d ? 1 : 0;
+    });
+    const records = this.state.records.sort((a, b) => {
       var c = a.timestamp;
       var d = b.timestamp;
       return c>d ? -1 : c<d ? 1 : 0;
@@ -73,11 +81,12 @@ class Dashboard extends Component {
             <WeekCounter list={workouts} />
             <Link to="/history" className="btn btn-default">Historique</Link>
             <hr/>
-            <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="" />
+            <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
           </div>
 
           <div className="col-md-3">
             <h2>Vos records</h2>
+            <RecordsLog list={records} exercisesDatabase={this.state.exercises} limit="5" />
           </div>
         </div>
 
