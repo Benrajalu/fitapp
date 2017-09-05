@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import RoutineLauncherModal from '../blocks/RoutineLauncherModal';
 import WorkoutsLog from '../blocks/WorkoutsLog';
+import WeekCounter from '../blocks/WeekCounter';
 
 import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
@@ -69,7 +70,10 @@ class Dashboard extends Component {
         <div className="container">
           <div className="col-md-9">
             <h2>Vos entraînements récents</h2>
-            <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
+            <WeekCounter list={workouts} />
+            <Link to="/history" className="btn btn-default">Historique</Link>
+            <hr/>
+            <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="" />
           </div>
 
           <div className="col-md-3">
