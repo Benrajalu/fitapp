@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Timestamper from '../blocks/Timestamper';
+
 class RecordBadge extends Component {
   render() {
     const data = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
     const trueExercise = exercisesDatabase.filter(obj => obj.id === data.exerciseId )[0];
-
-    console.log(data);
 
 
     return (
@@ -17,6 +17,9 @@ class RecordBadge extends Component {
         </div>
         <div className="panel-body">
           <p><strong>{data.record}</strong></p>
+        </div>
+        <div className="panel-footer">
+          <Timestamper timestamp={data.timestamp * 1000} />
         </div>
       </div>
     )
