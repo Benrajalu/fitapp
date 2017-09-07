@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import users from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
+
+import ExercisePicker from '../blocks/ExercisePicker';
 
 class RoutineMaker extends Component {
   constructor(props) {
@@ -7,6 +10,7 @@ class RoutineMaker extends Component {
     const timestamp = new Date();
     this.state = {
       user: {}, 
+      exercisesDatabase: [],
       newRoutine: {
         routineId: timestamp.getTime(),
         routineColor : "#67E658", 
@@ -17,30 +21,14 @@ class RoutineMaker extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.validate = this.validate.bind(this);
-    this.addExercise = this.addExercise.bind(this);
+    this.displayModal = this.displayModal.bind(this);
   }
 
   componentDidMount() {
-    this.setState({user: users[0]});
-  }
-
-  addExercise(event) {
-    event.preventDefault();
-
-    var routine = this.state.newRoutine;
-
-    routine.exercises.push(
-      {
-        exerciceId: "ex-04", 
-        sets: "1", 
-        reps: "1",
-        handicap: "20"
-      }
-    );
-
     this.setState({
-      newRoutine : routine
-    })
+      user: users[0],
+      exercisesDatabase: exercisesDatabase
+    });
   }
 
   validate(event){
@@ -85,43 +73,57 @@ class RoutineMaker extends Component {
     console.log(this.state.newRoutine);
   }
 
+  displayModal(event) {
+    this.setState({
+      modalDisplay: !this.state.modalDisplay
+    })
+  }
+
 
   render() {
     return (
-      <form onSubmit={this.validate} className="container">
-        <div className={this.state.errors.routineName ? "form-group has-error" : "form-group"}>
-          <label>Routine name</label>
-          <input type="text" name="routineName" className="form-control" onChange={this.handleInputChange} />
-          {this.state.errors.routineName ? <span className="help-block">{this.state.errors.routineName}</span> : false }
-        </div>
-        <div className="form-group">
-          <label>Routine color</label>
-          <div className="radio">
-              <label>
-                <input type="radio" name="routineColor" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
-              </label>
+      <div id="RoutineMaker">
+        <form onSubmit={this.validate} className="container">
+          <div className={this.state.errors.routineName ? "form-group has-error" : "form-group"}>
+            <label>Routine name</label>
+            <input type="text" name="routineName" className="form-control" onChange={this.handleInputChange} />
+            {this.state.errors.routineName ? <span className="help-block">{this.state.errors.routineName}</span> : false }
           </div>
-          <div className="radio">
-              <label>
-                <input type="radio" name="routineColor" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
-              </label>
+          <div className="form-group">
+            <label>Routine color</label>
+            <div className="radio">
+                <label>
+                  <input type="radio" name="routineColor" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
+                </label>
+            </div>
+            <div className="radio">
+                <label>
+                  <input type="radio" name="routineColor" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
+                </label>
+            </div>
+            <div className="radio">
+                <label>
+                  <input type="radio" name="routineColor" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
+                </label>
+            </div>
           </div>
-          <div className="radio">
-              <label>
-                <input type="radio" name="routineColor" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
-              </label>
+          <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
+            <label>Exercices</label>
+            {this.state.newRoutine.exercises.length > 0 ? <p>Exo id: {this.state.newRoutine.exercises[0].exerciceId}</p> : <p>Aucun exercice n'a été ajouté</p>}
+            {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
+            <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
           </div>
-        </div>
-        <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
-          <label>Exercices</label>
-          {this.state.newRoutine.exercises.length > 0 ? <p>Exo id: {this.state.newRoutine.exercises[0].exerciceId}</p> : <p>Aucun exercice n'a été ajouté</p>}
-          {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
-          <button className="btn btn-primary" type="button" onClick={this.addExercise}>Ajouter un exercice</button>
-        </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-default">Submit</button>
-        </div>
-      </form>
+          <hr/>
+          <div className="form-group">
+            <button type="submit" className="btn btn-default">Submit</button>
+          </div>
+        </form>
+
+        <ExercisePicker 
+          exercisesDatabase={this.state.exercisesDatabase} 
+          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+          modalCloser={this.displayModal} />
+      </div>
     )
   }
 }
