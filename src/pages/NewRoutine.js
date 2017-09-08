@@ -9,7 +9,6 @@ class NewRoutine extends Component {
 
   handleFormPost(event, data) {
     event.preventDefault();
-    console.log(event.target);
   }
 
   render() {

@@ -8,12 +8,14 @@ class RoutineMaker extends Component {
   constructor(props) {
     super(props);
     const timestamp = new Date();
+
+    // Defaults
     this.state = {
       user: {}, 
       exercisesDatabase: [],
       newRoutine: {
         routineId: timestamp.getTime(),
-        routineColor : "#67E658", 
+        color : "#67E658", 
         exercises : []
       },
       errors:{}
@@ -35,25 +37,25 @@ class RoutineMaker extends Component {
   validate(event){
     event.preventDefault();
     let currentErrors = false;
-
-    if(!this.state.newRoutine.routineName || this.state.newRoutine.routineName.length <= 0){
+    
+    // Updating the current errors array with whatever's been required but failed to be created
+    if(!this.state.newRoutine.name || this.state.newRoutine.name.length <= 0){
       currentErrors = typeof currentErrors === "boolean" ? currentErrors = {} : currentErrors;
-      currentErrors.routineName = "Le nom de l'entraînement doit être rempli";
+      currentErrors.name = "Le nom de l'entraînement doit être rempli";
     }
     if(this.state.newRoutine.exercises.length === 0){
       currentErrors = typeof currentErrors === "boolean" ? currentErrors = {} : currentErrors;
       currentErrors.exercises = "Vous devez ajouter au moins un exercice";
     }
-
+    
+    // Updating the error state. If it's filled, then the submission will fail
     this.setState({
       errors: currentErrors
     }, () => {
+      // If it's still false, then we proceed
       if (!this.state.errors){
         console.log("Congrats, built this new routine :");
         console.log(this.state.newRoutine);
-      }
-      else{
-        console.log(this.state.errors);
       }
     })
   }
@@ -70,8 +72,6 @@ class RoutineMaker extends Component {
     this.setState({
       newRoutine: routine
     })
-
-    console.log(this.state.newRoutine);
   }
 
   displayModal(event) {
@@ -81,6 +81,7 @@ class RoutineMaker extends Component {
   }
 
   updateExercises(data) {
+    // This gets called by the exercise picker and adds / remove the exercises that are part of the routine
     const routineSnapshot = this.state.newRoutine;
     routineSnapshot.exercises = data;
     this.setState({
@@ -100,26 +101,26 @@ class RoutineMaker extends Component {
     return (
       <div id="RoutineMaker">
         <form onSubmit={this.validate} className="container">
-          <div className={this.state.errors.routineName ? "form-group has-error" : "form-group"}>
+          <div className={this.state.errors.name ? "form-group has-error" : "form-group"}>
             <label>Routine name</label>
-            <input type="text" name="routineName" className="form-control" onChange={this.handleInputChange} />
-            {this.state.errors.routineName ? <span className="help-block">{this.state.errors.routineName}</span> : false }
+            <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} />
+            {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
           </div>
           <div className="form-group">
             <label>Routine color</label>
             <div className="radio">
                 <label>
-                  <input type="radio" name="routineColor" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
+                  <input type="radio" name="color" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
                 </label>
             </div>
             <div className="radio">
                 <label>
-                  <input type="radio" name="routineColor" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
+                  <input type="radio" name="color" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
                 </label>
             </div>
             <div className="radio">
                 <label>
-                  <input type="radio" name="routineColor" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.routineColor === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
+                  <input type="radio" name="color" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
                 </label>
             </div>
           </div>
