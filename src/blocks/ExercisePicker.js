@@ -31,11 +31,12 @@ class ExercisePicker extends Component {
     this.props.exercises(this.state.exercises);
   }
   removeExercise(data) {
+    console.log(data);
     let currentExercises = this.state.exercises;
     let i;
     for(i= 0; i < currentExercises.length; i++){
       // Find where the exercice is in the array and remove it. If there's more than one of that exercise, only one of them gets removed
-      if(currentExercises[i] === data) {
+      if(currentExercises[i].exerciseId === data) {
         currentExercises.splice(i, 1);
         i = currentExercises.length;
       }
@@ -60,19 +61,19 @@ class ExercisePicker extends Component {
 
     // Looping through the filtered ans sorted output to create the DOM elements
       const showBarbells = barbellExercises.map((value) => 
-        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id}/>
+        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id} exercisesDatabase={this.props.exercisesDatabase} userSettings={this.props.user} />
       ),
       showDumbbells = dumbbellExercises.map((value) => 
-        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id}/>
+        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id} exercisesDatabase={this.props.exercisesDatabase} userSettings={this.props.user} />
       ),
       showCables = cableExercises.map((value) => 
-        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id}/>
+        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id} exercisesDatabase={this.props.exercisesDatabase} userSettings={this.props.user} />
       ),
       showCalithenics = calisthenicsExercises.map((value) => 
-        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id}/>
+        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id} exercisesDatabase={this.props.exercisesDatabase} userSettings={this.props.user} />
       ),
       showCardio = cardioExercises.map((value) => 
-        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id}/>
+        <ExercisePickerDetails data={value} handleClick={this.addExercise} key={value.id} exercisesDatabase={this.props.exercisesDatabase} userSettings={this.props.user} />
       );
 
 
@@ -80,7 +81,7 @@ class ExercisePicker extends Component {
       let currentExercisesList = <p>Aucun exercice selectionné</p>;
       if(this.state.exercises.length > 0){
         currentExercisesList = this.state.exercises.map((value, index) => 
-          <ExercisePickerPick database={this.props.exercisesDatabase} currentExercise={value} handleClick={this.removeExercise} key={value + '-' + new Date().getTime() + index}/>
+          <ExercisePickerPick database={this.props.exercisesDatabase} currentExercise={value} handleClick={this.removeExercise} key={value.exerciseId + '-' + new Date().getTime() + index}/>
         );
       }
 
@@ -109,6 +110,7 @@ class ExercisePicker extends Component {
 ExercisePicker.propTypes = {
   shouldAppear: PropTypes.string.isRequired,  
   exercisesDatabase: PropTypes.array.isRequired,  
+  settings: PropTypes.object.isRequired
 }
 
 export default ExercisePicker;

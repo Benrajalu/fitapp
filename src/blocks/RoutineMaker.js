@@ -90,6 +90,13 @@ class RoutineMaker extends Component {
 
 
   render() {
+    let listExercises = <p>Aucun exercice n'a été ajouté</p>;
+    if(this.state.newRoutine.exercises.length > 0){
+      listExercises= this.state.newRoutine.exercises.map((value, index) => 
+        <p key={value.id + '-' + index}>{value.exerciseId}</p>
+      )
+    }
+
     return (
       <div id="RoutineMaker">
         <form onSubmit={this.validate} className="container">
@@ -118,7 +125,7 @@ class RoutineMaker extends Component {
           </div>
           <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
             <label>Exercices</label>
-            {this.state.newRoutine.exercises.length > 0 ? <p>Exo id: {this.state.newRoutine.exercises[0].exerciceId}</p> : <p>Aucun exercice n'a été ajouté</p>}
+            {listExercises}
             {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
             <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
           </div>
@@ -132,7 +139,8 @@ class RoutineMaker extends Component {
           exercisesDatabase={this.state.exercisesDatabase} 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
           modalCloser={this.displayModal}
-          exercises={this.updateExercises} />
+          exercises={this.updateExercises}
+          settings={this.state.user} />
       </div>
     )
   }

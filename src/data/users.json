@@ -134,7 +134,10 @@
         "record": "25kg",
         "timestamp": 1504509483
       }
-    ]
+    ],
+    "settings": {
+      "baseBarebell" : "10"
+    }
   },
   {
     "id": "02",
