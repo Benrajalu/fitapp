@@ -22,6 +22,7 @@ class RoutineMaker extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.validate = this.validate.bind(this);
     this.displayModal = this.displayModal.bind(this);
+    this.updateExercises = this.updateExercises.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +80,14 @@ class RoutineMaker extends Component {
     })
   }
 
+  updateExercises(data) {
+    const routineSnapshot = this.state.newRoutine;
+    routineSnapshot.exercises = data;
+    this.setState({
+      newRoutine: routineSnapshot
+    })
+  }
+
 
   render() {
     return (
@@ -122,7 +131,8 @@ class RoutineMaker extends Component {
         <ExercisePicker 
           exercisesDatabase={this.state.exercisesDatabase} 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          modalCloser={this.displayModal} />
+          modalCloser={this.displayModal}
+          exercises={this.updateExercises} />
       </div>
     )
   }
