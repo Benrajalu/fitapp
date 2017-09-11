@@ -31,8 +31,6 @@ test('runs the required user tasks smoothy until submit', () => {
     <RoutineMaker />
   );
 
-  const timestamp = new Date();
-
   maker.setState({
     exercisesDatabase: exercisesDatabase,
     newRoutine: {
