@@ -27,6 +27,7 @@ class RoutineMaker extends Component {
     this.displayModal = this.displayModal.bind(this);
     this.updateExercises = this.updateExercises.bind(this);
     this.customizeExercise = this.customizeExercise.bind(this);
+    this.organizeExercises = this.organizeExercises.bind(this);
   }
 
   componentDidMount() {
@@ -109,12 +110,50 @@ class RoutineMaker extends Component {
     })
   }
 
+  organizeExercises(index, direction, event){
+    // We use this to move exercises up and down the list for better ordering
+    const routineSnapshot = this.state.newRoutine, 
+          exercisesLength = routineSnapshot.exercises.length;
+
+    let exercises = routineSnapshot.exercises;
+
+    const moveIndex = (array, old_index, new_index) => {
+      if (new_index >= array.length) {
+          var k = new_index - array.length;
+          while ((k--) + 1) {
+              array.push(undefined);
+          }
+      }
+      array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+      return array; // for testing purposes
+    };
+    
+    if(index === 0 && direction === "up"){
+      return false;
+    }
+    else if(index === exercisesLength - 1 && direction === "down"){
+      return false;
+    }
+    else if(direction === "up"){
+      moveIndex(exercises, index, index-1);
+    }
+    else if(direction === "down"){
+      moveIndex(exercises, index, index+1);
+    }
+
+    routineSnapshot.exercises = exercises;
+
+    this.setState({
+      newRoutine: routineSnapshot
+    });
+  }
+
 
   render() {
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if(this.state.newRoutine.exercises.length > 0){
       listExercises= this.state.newRoutine.exercises.map((value, index) => 
-        <ExerciseCustomizer database={this.state.exercisesDatabase} currentExercise={value} key={index + '-' + value.exerciseId} index={index} newValues={this.customizeExercise}/>
+        <ExerciseCustomizer database={this.state.exercisesDatabase} currentExercise={value} key={index + '-' + value.exerciseId} index={index} newValues={this.customizeExercise} organize={this.organizeExercises}/>
       )
     }
 

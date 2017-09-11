@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
 import RoutineMaker from '../blocks/RoutineMaker';
 
+import exercisesDatabase from '../data/exercises.json';
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
@@ -32,19 +34,20 @@ test('displays no messages when it submits filled', () => {
   const timestamp = new Date();
 
   maker.setState({
+    exercisesDatabase: exercisesDatabase,
     newRoutine: {
       name: "Routine B",
       id: "02routineB", 
       color: "#DE762E", 
       exercises: [
         {
-          "exerciceId": "ex-04", 
+          "exerciseId": "ex-04", 
           "sets": "5", 
           "reps": "10",
           "handicap": "20"
         },
         {
-          "exerciceId": "ex-06", 
+          "exerciseId": "ex-06", 
           "sets": "8", 
           "reps": "5",
           "handicap": "15"
@@ -53,6 +56,11 @@ test('displays no messages when it submits filled', () => {
     },
     errors:{}
   })
+
+  // Testing that buttons to up / down the exercises work 
+  expect(maker.find('.panel-heading h3').first().text()).toEqual('Bent-over Rows');
+  maker.find('.panel-heading .btn-down').first().simulate('click');
+  expect(maker.find('.panel-heading h3').first().text()).toEqual('Triceps press-down');
 
   maker.find('form').simulate('submit');
   

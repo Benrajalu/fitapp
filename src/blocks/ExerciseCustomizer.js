@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 class ExerciseCustomizer extends Component {
   render() {
-    const realExercice = this.props.database.filter(obj => obj.id === this.props.currentExercise.exerciseId )[0], 
-          realType = realExercice.type;
+    const realExercise = this.props.database.filter(obj => obj.id === this.props.currentExercise.exerciseId )[0], 
+          realType = realExercise ? realExercise.type : null;
 
     let handicapType = '',
         sets = false,
@@ -35,7 +35,9 @@ class ExerciseCustomizer extends Component {
     return (
       <div className="panel panel-primary">
         <div className="panel-heading">
-          <h3 className="panel-title">{realExercice.name}</h3>
+          <h3 className="panel-title">{realExercise ? realExercise.name : ''}</h3>
+          <button onClick={this.props.organize.bind(this, this.props.index, "up")} className="btn btn-default btn-up" type="button">Up</button>
+          <button onClick={this.props.organize.bind(this, this.props.index, "down")} className="btn btn-default btn-down" type="button">Down</button>
         </div>
         <div className="panel-body container-fluid">
           {sets}
