@@ -8,10 +8,15 @@ class ExercisePickerDetails extends Component {
 
     const ExerciseObject = {};
     ExerciseObject.exerciseId = this.props.data.id;
-    if(realExercise.type !== "cardio"){
+    if(realExercise.type !== "cardio" && realExercise.type !== "calisthenics"){
       ExerciseObject.sets = 1;
       ExerciseObject.reps = 1;
       ExerciseObject.handicap = this.props.userSettings ? this.props.userSettings.settings.baseBarebell : 10;
+    }
+    else if (realExercise.type === "calisthenics"){
+      ExerciseObject.sets = 1;
+      ExerciseObject.reps = 1;
+      ExerciseObject.handicap = 0;  
     }
     else{
       ExerciseObject.handicap = 30
