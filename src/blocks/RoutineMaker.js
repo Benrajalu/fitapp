@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import {Redirect} from 'react-router';
+
 import users from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
@@ -59,6 +62,35 @@ class RoutineMaker extends Component {
       if (!this.state.errors){
         console.log("Congrats, built this new routine :");
         console.log(this.state.newRoutine);
+
+        const userId = this.state.user.id, 
+              addedRoutine = this.state.newRoutine, 
+              _this = this;
+
+        axios({
+          method: 'post', 
+          url: '../data/users.json',
+          data: {
+            userId: userId,
+            newRoutine: addedRoutine
+          }
+        })
+        .then(function(response){
+          console.log("that's a pass!");
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log("that's a fail : " + error.message);
+          // Mock success still 
+          _this.setState({
+            success:true
+          });
+          setTimeout(() => {
+            _this.setState({
+              successRedirect:true
+            });
+          }, 1500);
+        })
       }
     })
   }
@@ -192,7 +224,9 @@ class RoutineMaker extends Component {
           <hr/>
           <div className="form-group">
             <button type="submit" className="btn btn-default">Submit</button>
+            {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
           </div>
+          {this.state.successRedirect ? <Redirect push to={{ pathname:'/', state:{newRoutine:true} }} /> : false}
         </form>
 
         <ExercisePicker 

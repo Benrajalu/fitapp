@@ -26,7 +26,7 @@ test('displays error messages when it submits empty', () => {
   expect(maker.find('.help-block')).toHaveLength(2);
 });
 
-test('displays no messages when it submits filled', () => {
+test('runs the required user tasks smoothy until submit', () => {
   const maker = mount(
     <RoutineMaker />
   );
@@ -61,8 +61,6 @@ test('displays no messages when it submits filled', () => {
   expect(maker.find('.panel-heading h3').first().text()).toEqual('Bent-over Rows');
   maker.find('.panel-heading .btn-down').first().simulate('click');
   expect(maker.find('.panel-heading h3').first().text()).toEqual('Triceps press-down');
-
-  maker.find('form').simulate('submit');
   
   // Expecting message not to be empty
   expect(maker.find('.help-block')).toHaveLength(0);
