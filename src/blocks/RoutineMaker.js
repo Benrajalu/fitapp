@@ -26,6 +26,7 @@ class RoutineMaker extends Component {
     this.validate = this.validate.bind(this);
     this.displayModal = this.displayModal.bind(this);
     this.updateExercises = this.updateExercises.bind(this);
+    this.customizeExercise = this.customizeExercise.bind(this);
   }
 
   componentDidMount() {
@@ -90,12 +91,30 @@ class RoutineMaker extends Component {
     })
   }
 
+  customizeExercise(index, event){
+    // This is what happens when you try to change the number of sets or reps or handicap on an exercise
+    const target = event.target,
+          name = target.name;
+
+    let value = target.type === 'checkbox' ? target.checked : target.value;
+
+    if(name === "sets" || name === "reps"){
+      value = value < 1 ? 1 : value;
+    }
+
+    const routineSnapshot = this.state.newRoutine;
+    routineSnapshot.exercises[index][name] = value;
+    this.setState({
+      newRoutine: routineSnapshot
+    })
+  }
+
 
   render() {
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if(this.state.newRoutine.exercises.length > 0){
       listExercises= this.state.newRoutine.exercises.map((value, index) => 
-        <ExerciseCustomizer database={this.state.exercisesDatabase} currentExercise={value} key={index + '-' + value.exerciseId} />
+        <ExerciseCustomizer database={this.state.exercisesDatabase} currentExercise={value} key={index + '-' + value.exerciseId} index={index} newValues={this.customizeExercise}/>
       )
     }
 

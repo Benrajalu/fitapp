@@ -19,14 +19,14 @@ class ExerciseCustomizer extends Component {
 
     if(this.props.currentExercise.sets){
       sets = <div className="col-xs-4">
-                <input type="text" defaultValue={this.props.currentExercise.sets}/>
+                <input type="number" name="sets" value={this.props.currentExercise.sets} onChange={this.props.newValues.bind(this, this.props.index)}/>
                 <p>Sets</p>
               </div>
     }
 
     if(this.props.currentExercise.reps){
       reps = <div className="col-xs-4">
-                <input type="text" defaultValue={this.props.currentExercise.reps}/>
+                <input type="number" name="reps" value={this.props.currentExercise.reps} onChange={this.props.newValues.bind(this, this.props.index)}/>
                 <p>Reps</p>
               </div>
     }
@@ -41,7 +41,7 @@ class ExerciseCustomizer extends Component {
           {sets}
           {reps}
           <div className="col-xs-4">
-            <input type="text" defaultValue={this.props.currentExercise.handicap}/>
+            <input type="number" name="handicap" value={this.props.currentExercise.handicap} onChange={this.props.newValues.bind(this, this.props.index)}/>
             <p>{handicapType}</p>
           </div>
   
