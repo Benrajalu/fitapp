@@ -3,6 +3,7 @@ import users from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
 import ExercisePicker from '../blocks/ExercisePicker';
+import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
 
 class RoutineMaker extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ class RoutineMaker extends Component {
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if(this.state.newRoutine.exercises.length > 0){
       listExercises= this.state.newRoutine.exercises.map((value, index) => 
-        <p key={value.id + '-' + index}>{value.exerciseId}</p>
+        <ExerciseCustomizer database={this.state.exercisesDatabase} currentExercise={value} key={index + '-' + value.exerciseId} />
       )
     }
 
