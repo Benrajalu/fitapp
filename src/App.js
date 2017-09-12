@@ -39,9 +39,9 @@ class App extends Component {
               <Route exact path="/settings" component={Settings}/>
               <Route exact path="/history" component={History}/>
               <Route exact path="/all-routines" component={AllRoutines}/>
-              <Redirect from="/workout" to="/all-routines"/>
               <Route exact path="/new-routine" component={NewRoutine}/>
               <Route path="/workout/:id" component={Workout}/>
+              <Redirect from="/workout" to="/all-routines"/>
               <Route component={NoMatch}/>
             </Switch>
           </main>
