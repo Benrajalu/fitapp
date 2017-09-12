@@ -49,6 +49,13 @@ class Dashboard extends Component {
       var d = b.timestamp;
       return c>d ? -1 : c<d ? 1 : 0;
     });
+    const routines = this.state.routinesList.sort((a, b) => {
+      var aDate = a.lastPerformed.split('/');
+      var bDate = b.lastPerformed.split('/');
+      var c = new Date('20' + aDate[2], aDate[1] - 1, aDate[0]);
+      var d = new Date('20' + bDate[2], bDate[1] - 1, bDate[0]);
+      return c>d ? -1 : c<d ? 1 : 0;
+    });
 
     return (
       <div className="Dashboard">
@@ -92,7 +99,7 @@ class Dashboard extends Component {
 
         <RoutineLauncherModal 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          routinesList={this.state.routinesList} 
+          routinesList={routines} 
           exercises={this.state.exercises} 
           modalCloser={this.displayModal} />
       </div>

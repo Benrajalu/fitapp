@@ -22,13 +22,22 @@ class AllRoutines extends Component {
   }
   
   render() {
+    // Routines are sorted by most recently performed to never used ever
+    const routines = this.state.routinesList.sort((a, b) => {
+      var aDate = a.lastPerformed.split('/');
+      var bDate = b.lastPerformed.split('/');
+      var c = new Date('20' + aDate[2], aDate[1] - 1, aDate[0]);
+      var d = new Date('20' + bDate[2], bDate[1] - 1, bDate[0]);
+      return c>d ? -1 : c<d ? 1 : 0;
+    });
+
     return (
       <div className="AllRoutines">
         <div className="container">
           <div className="page-header">
             <h1>Mes entraînements</h1>
           </div>
-          <Routines list={this.state.routinesList} exercisesDatabase={this.state.exercises} />
+          <Routines list={routines} exercisesDatabase={this.state.exercises} />
         </div>
       </div>
     )

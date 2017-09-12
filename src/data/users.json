@@ -63,6 +63,21 @@
             "handicap": "15"
           }
         ]
+      },
+      {
+        "name": "Routine C",
+        "id": "03routineC", 
+        "color": "#DE762E", 
+        "dateCreated": "03/08/2017",
+        "lastPerformed": "03/08/2017",
+        "exercises": [
+          {
+            "exerciceId": "ex-04", 
+            "sets": "5", 
+            "reps": "10",
+            "handicap": "20"
+          }
+        ]
       }
     ],
     "workoutLog": [
