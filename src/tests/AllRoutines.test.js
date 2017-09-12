@@ -30,7 +30,9 @@ test('displays user routines', () => {
   const routinesList = userData[0].routines;
 
   const listing = mount(
-    <Routines list={routinesList} exercisesDatabase={exercisesDatabase} />
+    <MemoryRouter>
+      <Routines list={routinesList} exercisesDatabase={exercisesDatabase} />
+    </MemoryRouter>
   );
 
   expect(listing.find('.routine-card').length).not.toEqual(0)
