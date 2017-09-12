@@ -4,19 +4,33 @@ import { MemoryRouter } from 'react-router-dom';
 import {shallow} from 'enzyme';
 import Workout from '../pages/Workout';
 
+import userData from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
+
 it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <MemoryRouter>
-      <Workout />
-    </MemoryRouter>, 
-  div);
+  const dash = shallow(
+    <Workout />
+  );
+
+  dash.setState({
+    routineId: '01routineA', 
+    user: userData[0],
+    exercisesDatabase: exercisesDatabase, 
+    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0]
+  })
 });
 
 test('displays the test message', () => {
   const dash = shallow(
     <Workout />
   );
+
+  dash.setState({
+    routineId: '01routineA', 
+    user: userData[0],
+    exercisesDatabase: exercisesDatabase, 
+    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0]
+  })
   
   // Expecting message not to be empty
   expect(dash.find('h1').text()).not.toHaveLength(0);
