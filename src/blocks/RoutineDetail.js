@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import ExerciseListing from '../blocks/ExerciseListing';
+
 
 class RoutineDetail extends Component {
   render() {
@@ -13,8 +15,13 @@ class RoutineDetail extends Component {
 
     return (
       <div className="panel panel-default routine-card">
-        <div className="panel-heading">
-          <h3 className="panel-title">{this.props.contents.name}</h3>
+        <div className="panel-heading container-fluid">
+          <div className="col-md-8">
+            <h3 className="panel-title">{this.props.contents.name}</h3>
+          </div>
+          <div className="col-md-4 text-right">
+            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>
+          </div>
         </div>
         <div className="panel-body">
           {listExercises}
