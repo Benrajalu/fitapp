@@ -76,6 +76,12 @@
             "sets": "5", 
             "reps": "10",
             "handicap": "20"
+          },
+          {
+            "exerciceId": "ex-04", 
+            "sets": "5", 
+            "reps": "10",
+            "handicap": "25"
           }
         ]
       }

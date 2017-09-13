@@ -9,8 +9,8 @@ class RoutineDetail extends Component {
   render() {
     const routineExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
-    const listExercises = routineExercices.map((value) => {
-      return <ExerciseListing key={value.exerciceId.toString()} exerciseData={value} exercisesDatabase={exercisesDatabase} />
+    const listExercises = routineExercices.map((value, index) => {
+      return <ExerciseListing key={value.exerciceId.toString() + '-' + index} exerciseData={value} exercisesDatabase={exercisesDatabase} />
     });
 
     return (
