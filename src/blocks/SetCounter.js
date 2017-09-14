@@ -9,18 +9,12 @@ class SetCounter extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      value:0
+      value:this.props.value
     }
   }
 
   handleChange(data, event){
-    const max = parseInt(this.props.reps, 10);
-    if(data === max){
-      this.props.onCompletion([true, this.props.index]);
-    }
-    else{
-      this.props.onCompletion([false, this.props.index]);
-    }
+    this.props.onCompletion([data, this.props.index]);
     this.setState({
       value:data
     })
@@ -30,7 +24,7 @@ class SetCounter extends Component {
     return (
       <div className="panel panel-default" key={"set-" + this.props.index}>
         <div className="panel-heading text-center">
-          <h4 className="panel-title">Set {this.props.index + 1} | {this.state.value}/{this.props.reps} reps</h4>
+          <h4 className="panel-title">Set {this.props.index + 1} | {this.state.value}/{this.props.reps} {this.props.repUnit}</h4>
         </div>
         <div className="panel-body">
           <Slider

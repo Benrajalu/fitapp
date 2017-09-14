@@ -10,6 +10,7 @@ class WorkoutDetails extends Component {
     this.setCompletion = this.setCompletion.bind(this);
     this.state = {
       visible: false,
+      sets: [],
       completedSets: []
     }
   }
@@ -23,20 +24,22 @@ class WorkoutDetails extends Component {
       
     // We create a setList in which the requirements for a full exercise to be successful are counted. 
     //If any entry is not a 1, then the exercise isn't 100% done
-    let setList = [];
+    const setArrays = [[], []];
     if(this.props.contents.sets){
       let y = 0, 
           totalSets = parseInt(this.props.contents.sets, 10);
-      console.log(totalSets);
       for(y; y < totalSets; y++){
-        setList.push(0);
+        setArrays[0].push(0);
+        setArrays[1].push(0);
       }
     }
     else{
-      setList = [0];
+      setArrays[0].push(0);
+      setArrays[1].push(0);
     }
     this.setState({
-      completedSets: setList
+      completedSets: setArrays[0], 
+      sets: setArrays[1]
     })
   }
 
@@ -48,18 +51,22 @@ class WorkoutDetails extends Component {
   }
 
   setCompletion(data){
-    // The SetCounter element communicates the current value of reps as a true / false statement
-    // If true, then the set is completed (all reps done)
-    // If fale, it isn't! 
-    const setsSnapshot = this.state.completedSets;
-    if(data[0]){
-      setsSnapshot[data[1]] = 1;
+    // The SetCounter element communicates the current value of reps
+    // We store that value in the setsSnapshot, storing where we are now
+    // And we compare that value to the requested amount of reps. if it's equal to it, then the set is marked completed
+    const completion = this.state.completedSets;
+    const setsSnapshot = this.state.sets;
+    const ceiling = this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10);
+    if(data[0] === ceiling){
+      completion[data[1]] = 1;
     }
     else{
-      setsSnapshot[data[1]] = 0;
+      completion[data[1]] = 0;
     }
+    setsSnapshot[data[1]] = parseInt(data[0], 10);
     this.setState({
-      completedSets: setsSnapshot
+      completedSets: completion,
+      sets: setsSnapshot
     });
   }
 
@@ -73,15 +80,11 @@ class WorkoutDetails extends Component {
     const setsDone = this.state.completedSets.filter(value =>  value > 0);
 
     let sets = false;
-    if(this.props.contents.sets){
-      sets = [];
-      let x = 0;
-      const total = parseInt(this.props.contents.sets, 10);
+    sets = this.state.sets.map((value, index) => 
+      <SetCounter reps={this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.reps ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
+    );
 
-      for(x ; x < total; x++){
-        sets.push(<SetCounter reps={parseInt(this.props.contents.reps,10)} index={x} key={x} onCompletion={this.setCompletion} />);
-      }
-    }
+
 
     return (
       <div className="panel panel-default routine-card">
