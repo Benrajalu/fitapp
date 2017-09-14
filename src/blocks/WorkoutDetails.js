@@ -84,6 +84,16 @@ class WorkoutDetails extends Component {
       <SetCounter reps={this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.reps ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
     );
 
+    let warmup = false;
+    if(trueExercise.type !== "cardio" || trueExercise.type !== "calisthenics"){
+      warmup = <li role="presentation"><a>Échauffement</a></li>;
+    }
+
+    let weightHelper = false;
+    if(trueExercise.type === "barbell"){
+      weightHelper = <li role="presentation"><a>Répartition des poids</a></li>
+    }
+
 
 
     return (
@@ -93,12 +103,20 @@ class WorkoutDetails extends Component {
           <button onClick={this.changeDisplay} className="btn btn-primary">{this.state.visible ? "Hide" : "Show"} routine</button>
         </div>
         { this.state.visible ? 
-          <div className="panel-body">
-            <div className="text-center">
-              <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
-              <p>{handicapType}</p>
+          <div>
+            <div className="panel-body">
+              <div className="text-center">
+                <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
+                <p>{handicapType}</p>
+              </div>
+              <ul className="nav nav-pills">
+                <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li>
+                {warmup ? warmup : false}
+                {weightHelper ? weightHelper : false}
+              </ul>
+              <hr/> 
+              {sets}
             </div>
-            {sets}
           </div>
           : false
         }
