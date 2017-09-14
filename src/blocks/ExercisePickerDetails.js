@@ -30,6 +30,9 @@ class ExercisePickerDetails extends Component {
         <div className="panel-body">
           <h3>{this.props.data.name}</h3>
         </div>
+        <div className="panel-footer">
+          <a href={"https://www.youtube.com/results?search_query=form+" + this.props.data.name.replace(' ', '+')} target="_blank">Démos youtube</a>
+        </div>
       </div>
     )
   }
