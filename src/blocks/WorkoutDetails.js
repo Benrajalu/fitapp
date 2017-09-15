@@ -41,6 +41,8 @@ class WorkoutDetails extends Component {
       completedSets: setArrays[0], 
       sets: setArrays[1]
     })
+
+    this.props.onReps(setArrays[1], this.props.index);
   }
 
   changeDisplay(event) {
@@ -68,6 +70,8 @@ class WorkoutDetails extends Component {
       completedSets: completion,
       sets: setsSnapshot
     });
+
+    this.props.onReps(setsSnapshot, this.props.index);
   }
 
   render() {

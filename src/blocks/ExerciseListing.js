@@ -80,7 +80,7 @@ class ExerciseListing extends Component {
             <div className={"status " + status} key={i + trueExercise.name}>
               <div className="progress">
                 <div className={progress !== 100 ? 'progress-bar' : 'progress-bar progress-bar-success'}  role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" style={{width: progress + '%'}}>
-                    {numberOfReps} { handicap ? repIndicator + (handicap + unit) : 'reps'}
+                    {numberOfReps} { handicap !== 0 ? repIndicator + (handicap + unit) : 'reps'}
                 </div>
               </div>
             </div>

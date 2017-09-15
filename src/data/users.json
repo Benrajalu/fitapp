@@ -119,7 +119,7 @@
           {
             "exerciceId": "ex-26", 
             "repTarget": "8",
-            "handicap": false,
+            "handicap": "0",
             "sets": [8, 8, 8]
           }
         ]
