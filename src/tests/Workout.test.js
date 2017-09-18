@@ -20,7 +20,7 @@ it('renders without crashing', () => {
   })
 });
 
-test('displays the test message', () => {
+test('displays the correct routine', () => {
   const dash = shallow(
     <Workout />
   );
@@ -29,9 +29,11 @@ test('displays the test message', () => {
     routineId: '01routineA', 
     user: userData[0],
     exercisesDatabase: exercisesDatabase, 
-    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0]
+    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0],
+    changedRoutine: false, 
+    workoutLog: {}
   })
   
   // Expecting message not to be empty
-  expect(dash.find('h1').text()).not.toHaveLength(0);
+  expect(dash.find('h1 small').text()).toEqual('Routine A');
 });

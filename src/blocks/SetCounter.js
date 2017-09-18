@@ -22,9 +22,9 @@ class SetCounter extends Component {
 
   render() {
     return (
-      <div className="panel panel-default" key={"set-" + this.props.index}>
+      <div className="panel panel-default set-counter" key={"set-" + this.props.index}>
         <div className="panel-heading text-center">
-          <h4 className="panel-title">Set {this.props.index + 1} | {this.state.value}/{this.props.reps} {this.props.repUnit}</h4>
+          <h4 className="panel-title">Set {this.props.index + 1} | {this.props.value}/{this.props.reps} {this.props.repUnit}</h4>
         </div>
         <div className="panel-body">
           <Slider

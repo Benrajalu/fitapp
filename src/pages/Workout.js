@@ -48,6 +48,10 @@ class Workout extends Component {
         "exercises": logExercises
       }
     });
+
+    this.setState({
+
+    })
   }
 
   updateRoutine(index, event){
