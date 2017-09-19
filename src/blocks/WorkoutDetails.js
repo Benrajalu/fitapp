@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import SetCounter from '../blocks/SetCounter';
+import WarmUp from '../blocks/WarmUp';
 
 class WorkoutDetails extends Component {
   constructor(props) {
     super(props);
     this.changeDisplay = this.changeDisplay.bind(this);
     this.setCompletion = this.setCompletion.bind(this);
+    this.displayModal = this.displayModal.bind(this);
     this.state = {
       visible: false,
       sets: [],
-      completedSets: []
+      completedSets: [],
+      modalDisplay: false 
     }
   }
 
@@ -74,6 +77,12 @@ class WorkoutDetails extends Component {
     this.props.onReps(setsSnapshot, this.props.index);
   }
 
+  displayModal(event) {
+    this.setState({
+      modalDisplay: !this.state.modalDisplay
+    })
+  }
+
   render() {
     // Setting up variables
     const workoutExercise = this.props.contents;
@@ -88,9 +97,12 @@ class WorkoutDetails extends Component {
       <SetCounter reps={this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.reps ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
     );
 
-    let warmup = false;
-    if(trueExercise.type !== "cardio" || trueExercise.type !== "calisthenics"){
-      warmup = <li role="presentation"><a>Échauffement</a></li>;
+    let warmupButton = false, 
+        warmupWindow = false;
+    
+    if(trueExercise.type === "barbell" || trueExercise.type === "dumbbell" || trueExercise.type === "cable"){
+      warmupButton = <li role="presentation"><a onClick={this.displayModal}>Échauffement</a></li>;
+      warmupWindow = <WarmUp closeModal={this.displayModal} shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} name={trueExercise.name} weight={workoutExercise.handicap} maxReps={workoutExercise.reps ? workoutExercise.reps : false} type={trueExercise.type} settings={this.props.settings}/>;
     }
 
     let weightHelper = false;
@@ -114,13 +126,14 @@ class WorkoutDetails extends Component {
                 <p>{handicapType}</p>
               </div>
               <ul className="nav nav-pills">
-                <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li>
-                {warmup ? warmup : false}
+                { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
+                {warmupButton ? warmupButton : false}
                 {weightHelper ? weightHelper : false}
               </ul>
               <hr/> 
               {sets}
             </div>
+            {warmupWindow ? warmupWindow : false}
           </div>
           : false
         }
