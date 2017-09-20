@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import BarbellLoader from '../blocks/BarbellLoader';
+
 class WarmUp extends Component {
   constructor(props) {
     super(props);
@@ -22,18 +24,21 @@ class WarmUp extends Component {
     if(isBarebell){
       lowHandicap = parseInt(handicap, 10) <= parseInt(this.props.settings.baseBarbell, 10) ? true : false;
     }
-    
+
+    // initialiszing warmup array of "slides"
     let slides = [];
 
     // Slide 1, 2
     slides.push(
       <div className="slide">
         <p>{repCeil} x {isBarebell ? this.props.settings.baseBarbell + 'kg' : '5kg' }</p>
+        {isBarebell ? <BarbellLoader settings={this.props.settings} weight={parseInt(this.props.settings.baseBarbell, 10)} /> : false }
       </div>
     );
     slides.push(
       <div className="slide">
         <p>{repCeil} x {isBarebell ? this.props.settings.baseBarbell + 'kg' : '5kg' }</p>
+        {isBarebell ? <BarbellLoader settings={this.props.settings} weight={parseInt(this.props.settings.baseBarbell, 10)} /> : false }
       </div>
     );
 
@@ -56,6 +61,7 @@ class WarmUp extends Component {
         slides.push(
           <div className="slide">
             <p>{repCeil} x {Math.floor(slideValue) + 'kg'}</p>
+            {isBarebell ? <BarbellLoader settings={this.props.settings} weight={Math.floor(slideValue)} /> : false }
           </div>
         );
         return slides;

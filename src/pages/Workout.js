@@ -56,8 +56,12 @@ class Workout extends Component {
 
   updateRoutine(index, event){
     // When the workout detail component wants to update handicaps, we do it here
-    const changedName = event.target["name"],
+    let changedName = event.target["name"],
           changedValue = event.target.value;
+
+    if(changedName === "handicap" && changedValue <= 0){
+      changedValue = 1;
+    }
 
     const routineSnapshot = this.state.routine,
           logSnapshot = this.state.workoutLog;
