@@ -24,7 +24,7 @@ it('renders without crashing', () => {
   }
 
   const dash = shallow(
-    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps}/>
+    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps} settings={userData[0].settings}/>
   );
 });
 
@@ -45,7 +45,7 @@ it('accurately translate completed sets and reps arrays into values', () => {
   }
 
   const dash = mount(
-    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps}/>
+    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps} settings={userData[0].settings}/>
   );
 
   dash.setState({
@@ -72,7 +72,7 @@ it('manages to deal with cardio exercises by remplacing reps with minutes', () =
   }
 
   const dash = mount(
-    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps}/>
+    <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps} settings={userData[0].settings}/>
   );
 
   expect(dash.find('.set-counter .panel-title').first().text()).toEqual('Set 1 | 0/40 minutes');

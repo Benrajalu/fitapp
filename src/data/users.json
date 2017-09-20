@@ -157,7 +157,8 @@
       }
     ],
     "settings": {
-      "baseBarebell" : "10"
+      "baseBarbell" : "10", 
+      "availableWeights" : [20,10,5,2.5,1.25]
     }
   },
   {
@@ -168,6 +169,10 @@
     "display-name": "John Doe", 
     "routines": [],
     "workoutLog": [],
-    "personalRecords":[]
+    "personalRecords":[],
+    "settings": {
+      "baseBarbell" : "10", 
+      "availableWeights" : [25,20,15,10,5,2.5,1.25,1,0.5,0.25]
+    }
   }
 ]

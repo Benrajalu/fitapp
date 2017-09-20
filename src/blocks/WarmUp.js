@@ -20,7 +20,7 @@ class WarmUp extends Component {
     // Check if the handicap is above the base barbell weight. If it's not, then all séries of the warmup are basically empty barbells
     let lowHandicap = false;
     if(isBarebell){
-      lowHandicap = parseInt(handicap, 10) <= parseInt(this.props.settings.baseBarebell, 10) ? true : false;
+      lowHandicap = parseInt(handicap, 10) <= parseInt(this.props.settings.baseBarbell, 10) ? true : false;
     }
     
     let slides = [];
@@ -28,12 +28,12 @@ class WarmUp extends Component {
     // Slide 1, 2
     slides.push(
       <div className="slide">
-        <p>{repCeil} x {isBarebell ? this.props.settings.baseBarebell + 'kg' : '5kg' }</p>
+        <p>{repCeil} x {isBarebell ? this.props.settings.baseBarbell + 'kg' : '5kg' }</p>
       </div>
     );
     slides.push(
       <div className="slide">
-        <p>{repCeil} x {isBarebell ? this.props.settings.baseBarebell + 'kg' : '5kg' }</p>
+        <p>{repCeil} x {isBarebell ? this.props.settings.baseBarbell + 'kg' : '5kg' }</p>
       </div>
     );
 
@@ -43,7 +43,7 @@ class WarmUp extends Component {
       for(x; x < 6; x++){
         slides.push(
           <div className="slide">
-            <p>{repCeil} x {this.props.settings.baseBarebell + 'kg'}</p>
+            <p>{repCeil} x {this.props.settings.baseBarbell + 'kg'}</p>
           </div>
         );
       }
@@ -51,8 +51,8 @@ class WarmUp extends Component {
     else if(isBarebell){
       const steps = [30, 60, 80];
       steps.map((value) => {
-        const basebarebell = parseInt(this.props.settings.baseBarebell, 10);
-        const slideValue = (handicap * value)/100 > basebarebell ? (handicap * value)/100 : basebarebell;  
+        const baseBarbell = parseInt(this.props.settings.baseBarbell, 10);
+        const slideValue = (handicap * value)/100 > baseBarbell ? (handicap * value)/100 : baseBarbell;  
         slides.push(
           <div className="slide">
             <p>{repCeil} x {Math.floor(slideValue) + 'kg'}</p>
