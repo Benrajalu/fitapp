@@ -20,7 +20,6 @@ class BarbellLoader extends Component {
 
     if(weight === barbell){
       // All weight has been accounted for ! Yay ! 
-      console.log("we here with " + weight);
       this.setState({
         remainingWeight: false
       })
@@ -66,14 +65,13 @@ class BarbellLoader extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.weight !== this.props.weight){      
-      console.log(nextProps.weight);
       // Decompose a weight into loads using only available weights set in settings: 
       // Initializing the "rack" : what discs are available ? 
       const rack = this.props.settings.availableWeights.sort((a,b) => {return a - b}).reverse();
       // Initializing the container (always empty before the fonction hits it)
       let finalLoads = {};
       // Decompose the weight in individua loads, aiming for heavier discs first
-      this.decomposeWeight(rack, this.props.weight, 0, finalLoads);
+      this.decomposeWeight(rack, nextProps.weight, 0, finalLoads);
       // Updating the component with its weight list 
       this.setState({
         finalLoads: finalLoads
@@ -116,10 +114,14 @@ class BarbellLoader extends Component {
       // And then display the results
       loadHelper = <div className="load"><div className="barbell">{this.props.settings.baseBarbell + 'kg'}</div>{loadsWrapper}</div>;
     }
+
+    let weightNotReached = <div>{this.state.remainingWeight ? <div className="alert alert-info">Poids calculé <strong> -{this.state.remainingWeight - this.props.settings.baseBarbell}kg</strong> (disques non disponibles)</div> : false}</div>;
+
   
     return (
       <div>
         {loadHelper}
+        {weightNotReached}
       </div>
     )
   }

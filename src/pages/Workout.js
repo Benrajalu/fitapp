@@ -75,7 +75,7 @@ class Workout extends Component {
       routine: routineSnapshot, 
       workoutLog: logSnapshot, 
       changedRoutine: true
-    })
+    });
   }
 
   feedReps(data, index){
