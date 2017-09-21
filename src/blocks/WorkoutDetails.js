@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import SetCounter from '../blocks/SetCounter';
 import WarmUp from '../blocks/WarmUp';
+import WeightHelper from '../blocks/WeightHelper';
 
 class WorkoutDetails extends Component {
   constructor(props) {
@@ -14,7 +15,10 @@ class WorkoutDetails extends Component {
       visible: false,
       sets: [],
       completedSets: [],
-      modalDisplay: false 
+      modalDisplay: {
+        warmup: false,
+        weightHelper: false
+      } 
     }
   }
 
@@ -77,9 +81,12 @@ class WorkoutDetails extends Component {
     this.props.onReps(setsSnapshot, this.props.index);
   }
 
-  displayModal(event) {
+  displayModal(data, event) {
+    // There are two different modals so we have to initialize both and use an argument to find who's who 
+    const modals = this.state.modalDisplay;
+    modals[data] = !modals[data];
     this.setState({
-      modalDisplay: !this.state.modalDisplay
+      modalDisplay: modals
     })
   }
 
@@ -91,25 +98,28 @@ class WorkoutDetails extends Component {
     const handicapType = trueExercise.type !== "cardio" ? "kg" : "minutes";
     // We count how many of the sets have been done (1s in the completedSets array)
     const setsDone = this.state.completedSets.filter(value =>  value > 0);
-
+    
+    // Let's build the sets (ranger sliders to say how many reps you've done in that set)
     let sets = false;
     sets = this.state.sets.map((value, index) => 
       <SetCounter reps={this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.reps ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
     );
-
+    
+    // Let's plan warm-ups if the exercise is relevant to warm-ups and feed the resulting variables with required DOM
     let warmupButton = false, 
         warmupWindow = false;
-    
     if(trueExercise.type === "barbell" || trueExercise.type === "dumbbell" || trueExercise.type === "cable"){
-      warmupButton = <li role="presentation"><a onClick={this.displayModal}>Échauffement</a></li>;
-      warmupWindow = <WarmUp closeModal={this.displayModal} shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} name={trueExercise.name} weight={workoutExercise.handicap} maxReps={workoutExercise.reps ? workoutExercise.reps : false} type={trueExercise.type} settings={this.props.settings}/>;
+      warmupButton = <li role="presentation"><a onClick={this.displayModal.bind(this, 'warmup')}>Échauffement</a></li>;
+      warmupWindow = <WarmUp closeModal={this.displayModal.bind(this, 'warmup')} shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'} name={trueExercise.name} weight={workoutExercise.handicap} maxReps={workoutExercise.reps ? workoutExercise.reps : false} type={trueExercise.type} settings={this.props.settings}/>;
     }
-
-    let weightHelper = false;
+    
+    // Let's plan a helper window to load your barbell with requisite weights if needed
+    let weightHelper = false, 
+        weightWindow = false;
     if(trueExercise.type === "barbell"){
-      weightHelper = <li role="presentation"><a>Répartition des poids</a></li>
+      weightHelper = <li role="presentation"><a onClick={this.displayModal.bind(this, 'weightHelper')}>Répartition des poids</a></li>;
+      weightWindow = <WeightHelper closeModal={this.displayModal.bind(this, 'weightHelper')} shouldAppear={this.state.modalDisplay.weightHelper ? 'visible' : 'hidden'} weight={workoutExercise.handicap} settings={this.props.settings} />;
     }
-
 
 
     return (
@@ -118,7 +128,7 @@ class WorkoutDetails extends Component {
           <h3 className="panel-title">{trueExercise.name} {setsDone.length}/{this.props.contents.sets ? this.props.contents.sets : 1}</h3>
           <button onClick={this.changeDisplay} className="btn btn-primary">{this.state.visible ? "Hide" : "Show"} routine</button>
         </div>
-        { this.state.visible ? 
+        { this.state.visible ? // If the user so chosses, that part of the routine is hidden
           <div>
             <div className="panel-body">
               <div className="text-center">
@@ -134,6 +144,7 @@ class WorkoutDetails extends Component {
               {sets}
             </div>
             {warmupWindow ? warmupWindow : false}
+            {weightWindow ? weightWindow : false}
           </div>
           : false
         }
