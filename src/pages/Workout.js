@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Prompt} from 'react-router';
 
 import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
@@ -14,11 +15,13 @@ class Workout extends Component {
       user: [], 
       exercisesDatabase: [], 
       changedRoutine: false, 
-      workoutLog: {}
+      workoutLog: {}, 
+      runningWorkout: true
     };
 
     this.updateRoutine = this.updateRoutine.bind(this);
     this.feedReps = this.feedReps.bind(this);
+    console.log(this.props.history);
   }
 
   componentDidMount() {
@@ -99,11 +102,14 @@ class Workout extends Component {
 
     return (
       <div className="Workout">
+        <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
         <div className="container">
           <div className="page-header">
             <h1>Entraînement <small>{currentRoutine.name}</small></h1>
+            <button className="btn btn-primary">Terminer l'entraînement</button>
           </div>
           {workoutItems}
+          <button className="btn btn-primary">Terminer l'entraînement</button>
         </div>
       </div>
     )
