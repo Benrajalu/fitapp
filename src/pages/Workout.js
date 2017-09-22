@@ -16,12 +16,16 @@ class Workout extends Component {
       exercisesDatabase: [], 
       changedRoutine: false, 
       workoutLog: {}, 
-      runningWorkout: true
+      runningWorkout: true, 
+      upgradeRoutine: false,
+      exitingRoutine: false
     };
 
     this.updateRoutine = this.updateRoutine.bind(this);
     this.feedReps = this.feedReps.bind(this);
-    console.log(this.props.history);
+    this.endRoutine = this.endRoutine.bind(this);
+    this.routineUpdateToggle = this.routineUpdateToggle.bind(this)
+    this.closeRoutineModal = this.closeRoutineModal.bind(this);
   }
 
   componentDidMount() {
@@ -91,6 +95,53 @@ class Workout extends Component {
     });
   }
 
+  endRoutine(){
+    // First, check if any set has been completed
+    const log = this.state.workoutLog.exercises, 
+          completedExercises = [];
+    
+    for(let i = 0; i < log.length; i++){
+      let repTarget = parseFloat(log[i].repTarget), 
+          successFullSets = log[i].sets.filter(value => value === repTarget);
+      if(log[i].sets.length === successFullSets.length){
+        // If all repored reps are equal the target, on all sets, then push the exercise index to the array
+        completedExercises.push(i);
+      }
+    }
+
+    if(completedExercises.length !== 0){
+      console.log('Some exercises can upgrade !')
+      this.setState({
+        upgradeRoutine: completedExercises
+      })
+    }
+
+    // Then let's check for changes made to the routine
+    if(this.state.changedRoutine){
+      console.log('routine has been changed !')
+      this.setState({
+        saveRoutine: true
+      })
+    }
+
+
+    this.setState({
+      exitingRoutine:true
+    })
+  }
+
+  routineUpdateToggle(){
+    this.setState({
+      saveRoutine: !this.state.saveRoutine
+    })
+  }
+
+  closeRoutineModal(){
+    this.setState({
+      exitingRoutine: !this.state.exitingRoutine   
+    })
+  }
+
   render() {
     const currentRoutine = this.state.routine;
     const displayLimit = currentRoutine.exercises ? currentRoutine.exercises.length : 0;
@@ -100,17 +151,49 @@ class Workout extends Component {
       <WorkoutDetails key={value.exerciceId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
+    const workoutExit = <div className="popin visible">
+      <div className="contents">
+        <div className="panel panel-success">
+          <div className="panel-heading">
+            <h3 className="panel-title">Terminer l'entraînement ?</h3>
+            <button className="closer" onClick={this.closeRoutineModal}>Close</button>
+          </div>
+          <div className="panel-body">
+            <p>Votre entraînement est terminé ? Félicitations !</p>
+            {this.state.changedRoutine ?  
+              <div>
+                <hr/>
+                <p>Vous avez changé certains poids pour cet entrainement. souhaitez vous enregistrer ces modifications ? </p>
+                <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onClick={this.routineUpdateToggle}/>
+                <label onClick={this.routineUpdateToggle}>Oui</label>
+              </div>
+            : false }
+            {this.state.upgradeRoutine ?  
+              <div>
+                <hr/>
+                <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
+              </div>
+            : false }
+            <hr/>
+            <button className="closer" onClick={this.closeRoutineModal}>Valider</button>
+            <button className="closer" onClick={this.closeRoutineModal}>Annuler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     return (
       <div className="Workout">
         <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
         <div className="container">
           <div className="page-header">
             <h1>Entraînement <small>{currentRoutine.name}</small></h1>
-            <button className="btn btn-primary">Terminer l'entraînement</button>
+            <button className="btn btn-primary" onClick={this.endRoutine}>Terminer l'entraînement</button>
           </div>
           {workoutItems}
-          <button className="btn btn-primary">Terminer l'entraînement</button>
+          <button className="btn btn-primary" onClick={this.endRoutine}>Terminer l'entraînement</button>
         </div>
+        {this.state.exitingRoutine ? workoutExit : false}
       </div>
     )
   }

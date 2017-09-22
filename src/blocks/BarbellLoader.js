@@ -16,7 +16,7 @@ class BarbellLoader extends Component {
     // The actual weight is divided by 2, we only calculate how to fill one side of the barbell 
     const poolSize = rack.length, 
         barbell =  parseFloat(this.props.settings.baseBarbell),
-        actualWeight = (weight - 10)/2; 
+        actualWeight = (weight - barbell)/2; 
 
     if(weight === barbell){
       // All weight has been accounted for ! Yay ! 
