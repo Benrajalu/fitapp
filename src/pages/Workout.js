@@ -5,6 +5,7 @@ import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
 import WorkoutDetails from '../blocks/WorkoutDetails';
+import WorkoutUpdates from '../blocks/WorkoutUpdates';
 
 class Workout extends Component {
   constructor(props, match) {
@@ -24,6 +25,7 @@ class Workout extends Component {
     this.updateRoutine = this.updateRoutine.bind(this);
     this.feedReps = this.feedReps.bind(this);
     this.endRoutine = this.endRoutine.bind(this);
+    this.cancelUpdate = this.cancelUpdate.bind(this);
     this.routineUpdateToggle = this.routineUpdateToggle.bind(this)
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
   }
@@ -101,7 +103,8 @@ class Workout extends Component {
           completedExercises = [];
     
     for(let i = 0; i < log.length; i++){
-      let repTarget = parseFloat(log[i].repTarget), 
+      // Check if this has a repTargt. If it's cardio, the target IS the handicap
+      let repTarget = log[i].repTarget ? parseFloat(log[i].repTarget) : parseFloat(log[i].handicap), 
           successFullSets = log[i].sets.filter(value => value === repTarget);
       if(log[i].sets.length === successFullSets.length){
         // If all repored reps are equal the target, on all sets, then push the exercise index to the array
@@ -130,6 +133,19 @@ class Workout extends Component {
     })
   }
 
+  cancelUpdate(data){
+    let updatables = this.state.upgradeRoutine, 
+          index = updatables.indexOf(data);
+    updatables.splice(index, 1);
+
+    if(updatables.length === 0){
+      updatables = false;
+    }
+    this.setState({
+      upgradeRoutine: updatables
+    });
+  }
+
   routineUpdateToggle(){
     this.setState({
       saveRoutine: !this.state.saveRoutine
@@ -151,6 +167,13 @@ class Workout extends Component {
       <WorkoutDetails key={value.exerciceId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
+    // If some exercise are elehible for updates, we define by how much and set up their comonents
+    const completedExercises = this.state.upgradeRoutine, 
+          allExercises = currentRoutine.exercises;
+    const updates = completedExercises ? completedExercises.map((value, index) => 
+      <WorkoutUpdates key={'log-' + index + '-' + value} completedSet={value} allSets={allExercises} database={this.state.exercisesDatabase} notUpdating={this.cancelUpdate}/>
+    ) : false;
+
     const workoutExit = <div className="popin visible">
       <div className="contents">
         <div className="panel panel-success">
@@ -164,7 +187,7 @@ class Workout extends Component {
               <div>
                 <hr/>
                 <p>Vous avez changé certains poids pour cet entrainement. souhaitez vous enregistrer ces modifications ? </p>
-                <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onClick={this.routineUpdateToggle}/>
+                <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onChange={this.routineUpdateToggle}/>
                 <label onClick={this.routineUpdateToggle}>Oui</label>
               </div>
             : false }
@@ -172,6 +195,7 @@ class Workout extends Component {
               <div>
                 <hr/>
                 <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
+                {updates}
               </div>
             : false }
             <hr/>
