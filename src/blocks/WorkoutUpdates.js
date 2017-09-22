@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class WorkoutUpdates extends Component {
   render() {
     const currentExercise = this.props.allSets[this.props.completedSet], 
-          fullData = this.props.database.filter(obj => obj.id === currentExercise.exerciceId )[0];
+          fullData = this.props.database.filter(obj => obj.id === currentExercise.exerciseId )[0];
 
     let update = 0, 
         unit = "kg";

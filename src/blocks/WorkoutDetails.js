@@ -94,7 +94,7 @@ class WorkoutDetails extends Component {
     // Setting up variables
     const workoutExercise = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
-    const trueExercise = exercisesDatabase.filter(obj => obj.id === workoutExercise.exerciceId )[0];
+    const trueExercise = exercisesDatabase.filter(obj => obj.id === workoutExercise.exerciseId )[0];
     const handicapType = trueExercise.type !== "cardio" ? "kg" : "minutes";
     // We count how many of the sets have been done (1s in the completedSets array)
     const setsDone = this.state.completedSets.filter(value =>  value > 0);

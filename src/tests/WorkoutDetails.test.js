@@ -17,7 +17,7 @@ it('renders without crashing', () => {
   };
 
   const value = {
-    "exerciceId": "ex-04", 
+    "exerciseId": "ex-04", 
     "sets": "5", 
     "reps": "10",
     "handicap": "20"
@@ -38,7 +38,7 @@ it('accurately translate completed sets and reps arrays into values', () => {
   };
 
   const value = {
-    "exerciceId": "ex-04", 
+    "exerciseId": "ex-04", 
     "sets": "5", 
     "reps": "10",
     "handicap": "20"
@@ -67,7 +67,7 @@ it('manages to deal with cardio exercises by remplacing reps with minutes', () =
   };
 
   const value = {
-    "exerciceId": "ex-30",  
+    "exerciseId": "ex-30",  
     "handicap": "40"
   }
 

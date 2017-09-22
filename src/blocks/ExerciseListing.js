@@ -9,7 +9,7 @@ class ExerciseListing extends Component {
 
 
     // Translating exercises ID into proper exercises from the exercise database. 
-    const trueExercise = exercisesDatabase.filter(obj => obj.id === currentExercise.exerciceId )[0];
+    const trueExercise = exercisesDatabase.filter(obj => obj.id === currentExercise.exerciseId )[0];
 
     // Using the Exercise database, determine the handicap unit and type related to the picked exercises
     let unit = false,

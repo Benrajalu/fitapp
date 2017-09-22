@@ -14,29 +14,29 @@
         "lastPerformed": "03/08/2017",
         "exercises": [
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "sets": "5", 
             "reps": "10",
             "handicap": "20"
           },
           {
-            "exerciceId": "ex-06", 
+            "exerciseId": "ex-06", 
             "sets": "8", 
             "reps": "5",
             "handicap": "15"
           },
           {
-            "exerciceId": "ex-30",  
+            "exerciseId": "ex-30",  
             "handicap": "40"
           },
           {
-            "exerciceId": "ex-28", 
+            "exerciseId": "ex-28", 
             "sets": "5", 
             "reps": "10",
             "handicap": "20"
           },
           {
-            "exerciceId": "ex-26", 
+            "exerciseId": "ex-26", 
             "sets": "3", 
             "reps": "8",
             "handicap": false
@@ -51,13 +51,13 @@
         "lastPerformed": "01/09/2017",
         "exercises": [
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "sets": "5", 
             "reps": "10",
             "handicap": "20"
           },
           {
-            "exerciceId": "ex-06", 
+            "exerciseId": "ex-06", 
             "sets": "8", 
             "reps": "5",
             "handicap": "15"
@@ -72,13 +72,13 @@
         "lastPerformed": "03/08/2017",
         "exercises": [
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "sets": "5", 
             "reps": "10",
             "handicap": "20"
           },
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "sets": "5", 
             "reps": "10",
             "handicap": "25"
@@ -93,31 +93,31 @@
         "timestamp": 1504290660, 
         "exercises": [
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "handicap": "20",
             "repTarget": "10",
             "sets": [10, 8, 10, 10, 2]
           },
           {
-            "exerciceId": "ex-06", 
+            "exerciseId": "ex-06", 
             "repTarget": "5",
             "handicap": "15",
             "sets": [5, 5, 5, 5, 5, 4, 3, 2]
           },
           {
-            "exerciceId": "ex-30", 
+            "exerciseId": "ex-30", 
             "repTarget": "40",
             "handicap": "40",
             "sets": [30]
           },
           {
-            "exerciceId": "ex-28", 
+            "exerciseId": "ex-28", 
             "repTarget": "10",
             "handicap": "20",
             "sets": [10, 8, 10, 10, 2]
           },
           {
-            "exerciceId": "ex-26", 
+            "exerciseId": "ex-26", 
             "repTarget": "8",
             "handicap": "0",
             "sets": [8, 8, 8]
@@ -130,13 +130,13 @@
         "timestamp": 1504509483, 
         "exercises": [
           {
-            "exerciceId": "ex-04", 
+            "exerciseId": "ex-04", 
             "repTarget": "10",
             "handicap": "20",
             "sets": [10, 8, 10, 10, 2]
           },
           {
-            "exerciceId": "ex-06", 
+            "exerciseId": "ex-06", 
             "repTarget": "5",
             "handicap": "15",
             "sets": [5, 5, 5, 5, 5, 4, 3, 2]

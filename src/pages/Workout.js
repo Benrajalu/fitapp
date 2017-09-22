@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {Prompt} from 'react-router';
+import {Prompt, Redirect} from 'react-router';
+
+import axios from 'axios';
 
 import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
@@ -12,6 +14,7 @@ class Workout extends Component {
     super(props);
     this.state = {
       routineId: this.props.match ? this.props.match.params.id : undefined, 
+      originalRoutine: {},
       routine: {},
       user: [], 
       exercisesDatabase: [], 
@@ -28,6 +31,7 @@ class Workout extends Component {
     this.cancelUpdate = this.cancelUpdate.bind(this);
     this.routineUpdateToggle = this.routineUpdateToggle.bind(this)
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
+    this.saveRoutine = this.saveRoutine.bind(this);
   }
 
   componentDidMount() {
@@ -40,7 +44,7 @@ class Workout extends Component {
     // ...then mapping the routine's infos into it
     cleanRoutine.exercises.map((value) => 
       logExercises.push({
-        exerciceId: value.exerciceId, 
+        exerciseId: value.exerciseId, 
         repTarget: value.reps ? value.reps : false,
         handicap: value.handicap ? value.handicap : 0
       })
@@ -49,6 +53,7 @@ class Workout extends Component {
     this.setState({
       user: userData[0],
       exercisesDatabase: exercisesDatabase, 
+      originalRoutine: cleanRoutine, 
       routine: cleanRoutine, 
       workoutLog:{
         "id": "log-" + today.getTime(), 
@@ -57,10 +62,6 @@ class Workout extends Component {
         "exercises": logExercises
       }
     });
-
-    this.setState({
-
-    })
   }
 
   updateRoutine(index, event){
@@ -97,42 +98,6 @@ class Workout extends Component {
     });
   }
 
-  endRoutine(){
-    // First, check if any set has been completed
-    const log = this.state.workoutLog.exercises, 
-          completedExercises = [];
-    
-    for(let i = 0; i < log.length; i++){
-      // Check if this has a repTargt. If it's cardio, the target IS the handicap
-      let repTarget = log[i].repTarget ? parseFloat(log[i].repTarget) : parseFloat(log[i].handicap), 
-          successFullSets = log[i].sets.filter(value => value === repTarget);
-      if(log[i].sets.length === successFullSets.length){
-        // If all repored reps are equal the target, on all sets, then push the exercise index to the array
-        completedExercises.push(i);
-      }
-    }
-
-    if(completedExercises.length !== 0){
-      console.log('Some exercises can upgrade !')
-      this.setState({
-        upgradeRoutine: completedExercises
-      })
-    }
-
-    // Then let's check for changes made to the routine
-    if(this.state.changedRoutine){
-      console.log('routine has been changed !')
-      this.setState({
-        saveRoutine: true
-      })
-    }
-
-
-    this.setState({
-      exitingRoutine:true
-    })
-  }
-
   cancelUpdate(data){
     let updatables = this.state.upgradeRoutine, 
           index = updatables.indexOf(data);
@@ -158,57 +123,190 @@ class Workout extends Component {
     })
   }
 
+  endRoutine(){
+    // First, check if any set has been completed
+    const log = this.state.workoutLog.exercises, 
+          completedExercises = [];
+    
+    for(let i = 0; i < log.length; i++){
+      // Check if this has a repTargt. If it's cardio, the target IS the handicap
+      let repTarget = log[i].repTarget ? parseFloat(log[i].repTarget) : parseFloat(log[i].handicap), 
+          successFullSets = log[i].sets.filter(value => value === repTarget);
+      if(log[i].sets.length === successFullSets.length){
+        // If all repored reps are equal the target, on all sets, then push the exercise index to the array
+        completedExercises.push(i);
+      }
+    }
+
+    if(completedExercises.length !== 0){
+      // Some exercises can upgrade !
+      this.setState({
+        upgradeRoutine: completedExercises
+      })
+    }
+
+    // Then let's check for changes made to the routine
+    if(this.state.changedRoutine){
+      // routine has been changed !
+      this.setState({
+        saveRoutine: true
+      })
+    }
+    
+    // Show the exit pop-in
+    this.setState({
+      exitingRoutine:true
+    })
+  }
+
+  saveRoutine(){
+    const userId = this.state.user.id, 
+          _this = this, 
+          workout = this.state.workoutLog, 
+          today = new Date();
+    
+    const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
+          mm = today.getMonth()+1 < 10 ? '0' + (today.getMonth()+1) : today.getMonth()+1,
+          yyyy = today.getFullYear(),
+          fullDate = dd+'/'+mm+'/'+yyyy;
+    
+    // This is the basic payload, saved whatever happens
+    // routineId and timestamp update the targeted routine so users know it's the most recently used
+    // workout saves into the workout logs so this workout is part of the user's history
+    let serverPayload = {
+      method: 'post', 
+      url: '../data/users.json',
+      data: {
+        userId: userId, 
+        workout: workout, 
+        routineId: this.state.routine.id, 
+        timestamp: fullDate
+      }  
+    }
+
+    // First, if the routine was changed (handicaps) and the user wants that saved, save it
+    if(this.state.saveRoutine){
+      serverPayload.data.updateRoutine = this.state.routine;
+    }
+
+    // If there are some exercises the user wants to upgrade, then we work out which ones and by how much...
+    if(this.state.upgradeRoutine){
+      const routine = this.state.saveRoutine === true ? this.state.routine : this.state.originalRoutine, 
+            areUpdatable = this.state.upgradeRoutine;
+      
+      for(var x = 0; x < areUpdatable.length; x ++){
+        let current = routine.exercises[areUpdatable[x]], 
+            type = this.state.exercisesDatabase.filter(obj => obj.id === current.exerciseId)[0].type;
+
+
+        if(type === "cardio"){
+          routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 10;
+        }
+        else if (type === "barbell" || type === "calisthenics"){
+          routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 5;
+        }
+        else{
+          routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 2;  
+        }
+      }
+      this.setState({
+        routine: routine
+      });
+
+      // ... then we add to the payload
+      serverPayload.data.updateRoutine = this.state.routine;
+    }
+
+    // Regardless of all that, we save the workoutLog then exit to home
+    axios(serverPayload)
+    .then(function(response){
+      console.log("Workout is done ! Use the sequence mocked below !");
+      console.log(response);
+    })
+    .catch(function(error){
+      console.log("That's a FALSE pass : " + error.message);
+      console.log(serverPayload);
+      // Mock success still 
+      _this.setState({
+        runningWorkout:false
+      });
+      setTimeout(() => {
+        _this.setState({
+          successRedirect:true
+        });
+      }, 1500);
+    })
+
+  }
+
   render() {
     const currentRoutine = this.state.routine;
     const displayLimit = currentRoutine.exercises ? currentRoutine.exercises.length : 0;
     
     // For each exercise in the routine, we display a workoutDetails element that will enable users to track their routine
     const workoutItems = currentRoutine.exercises ? currentRoutine.exercises.slice(0, displayLimit).map((value, index) => 
-      <WorkoutDetails key={value.exerciceId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
+      <WorkoutDetails key={value.exerciseId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
-    // If some exercise are elehible for updates, we define by how much and set up their comonents
+    // If some exercise are elegible for updates, we define by how much and set up their comonents
     const completedExercises = this.state.upgradeRoutine, 
-          allExercises = currentRoutine.exercises;
+          allExercises = this.state.saveRoutine ? currentRoutine.exercises : this.state.originalRoutine.exercises;
     const updates = completedExercises ? completedExercises.map((value, index) => 
       <WorkoutUpdates key={'log-' + index + '-' + value} completedSet={value} allSets={allExercises} database={this.state.exercisesDatabase} notUpdating={this.cancelUpdate}/>
     ) : false;
 
+    // We build the exit pop-in here
     const workoutExit = <div className="popin visible">
-      <div className="contents">
-        <div className="panel panel-success">
-          <div className="panel-heading">
-            <h3 className="panel-title">Terminer l'entraînement ?</h3>
-            <button className="closer" onClick={this.closeRoutineModal}>Close</button>
-          </div>
-          <div className="panel-body">
-            <p>Votre entraînement est terminé ? Félicitations !</p>
-            {this.state.changedRoutine ?  
-              <div>
-                <hr/>
-                <p>Vous avez changé certains poids pour cet entrainement. souhaitez vous enregistrer ces modifications ? </p>
-                <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onChange={this.routineUpdateToggle}/>
-                <label onClick={this.routineUpdateToggle}>Oui</label>
-              </div>
-            : false }
-            {this.state.upgradeRoutine ?  
-              <div>
-                <hr/>
-                <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
-                {updates}
-              </div>
-            : false }
-            <hr/>
-            <button className="closer" onClick={this.closeRoutineModal}>Valider</button>
-            <button className="closer" onClick={this.closeRoutineModal}>Annuler</button>
+      {this.state.runningWorkout ? 
+        <div className="contents">
+          <div className="panel panel-success">
+            <div className="panel-heading">
+              <h3 className="panel-title">Terminer l'entraînement ?</h3>
+              <button className="closer" onClick={this.closeRoutineModal}>Close</button>
+            </div>
+            <div className="panel-body">
+              <p>Votre entraînement est terminé ? Félicitations !</p>
+              {this.state.changedRoutine ?  
+                <div>
+                  <hr/>
+                  <p>Vous avez changé certains poids pour cet entrainement, souhaitez vous enregistrer ces modifications ? </p>
+                  <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onChange={this.routineUpdateToggle}/>
+                  <label onClick={this.routineUpdateToggle}>Enregistrer les modifications</label>
+                </div>
+              : false }
+              {this.state.upgradeRoutine ?  
+                <div>
+                  <hr/>
+                  <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
+                  {updates}
+                </div>
+              : false }
+              <hr/>
+              <button className="closer" onClick={this.saveRoutine}>Valider</button>
+              <button className="closer" onClick={this.closeRoutineModal}>Annuler</button>
+            </div>
           </div>
         </div>
-      </div>
+        :
+        <div className="contents">
+          <div className="panel panel-success">
+            <div className="panel-heading">
+              <h3 className="panel-title">Bravo !</h3>
+              <button className="closer" onClick={this.closeRoutineModal}>Close</button>
+            </div>
+            <div className="panel-body">
+              {this.state.saveRoutine || this.state.upgradeRoutine ? <p>Vos choix ont bien été enregistrés !</p> : false}
+              <p>Nos vous redirigons vers le dashboard !</p>
+            </div>
+          </div>
+        </div>
+      }
     </div>
 
     return (
       <div className="Workout">
         <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
+        {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
         <div className="container">
           <div className="page-header">
             <h1>Entraînement <small>{currentRoutine.name}</small></h1>
