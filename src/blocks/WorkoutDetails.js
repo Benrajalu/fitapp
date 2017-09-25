@@ -32,9 +32,9 @@ class WorkoutDetails extends Component {
     // We create a setList in which the requirements for a full exercise to be successful are counted. 
     //If any entry is not a 1, then the exercise isn't 100% done
     const setArrays = [[], []];
-    if(this.props.contents.sets){
+    if(this.props.contents.setsTarget){
       let y = 0, 
-          totalSets = parseInt(this.props.contents.sets, 10);
+          totalSets = parseInt(this.props.contents.setsTarget, 10);
       for(y; y < totalSets; y++){
         setArrays[0].push(0);
         setArrays[1].push(0);
@@ -65,7 +65,7 @@ class WorkoutDetails extends Component {
     // And we compare that value to the requested amount of reps. if it's equal to it, then the set is marked completed
     const completion = this.state.completedSets;
     const setsSnapshot = this.state.sets;
-    const ceiling = this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10);
+    const ceiling = this.props.contents.repTarget ? parseInt(this.props.contents.repTarget, 10) : parseInt(this.props.contents.handicap, 10);
     if(data[0] === ceiling){
       completion[data[1]] = 1;
     }
@@ -102,7 +102,7 @@ class WorkoutDetails extends Component {
     // Let's build the sets (ranger sliders to say how many reps you've done in that set)
     let sets = false;
     sets = this.state.sets.map((value, index) => 
-      <SetCounter reps={this.props.contents.reps ? parseInt(this.props.contents.reps, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.reps ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
+      <SetCounter reps={this.props.contents.repTarget ? parseInt(this.props.contents.repTarget, 10) : parseInt(this.props.contents.handicap, 10)} repUnit={this.props.contents.repTarget ? "reps" : "minutes"} index={index} key={index} onCompletion={this.setCompletion} value={value} />
     );
     
     // Let's plan warm-ups if the exercise is relevant to warm-ups and feed the resulting variables with required DOM
@@ -125,7 +125,7 @@ class WorkoutDetails extends Component {
     return (
       <div className="panel panel-default routine-card">
         <div className="panel-heading">
-          <h3 className="panel-title">{trueExercise.name} {setsDone.length}/{this.props.contents.sets ? this.props.contents.sets : 1}</h3>
+          <h3 className="panel-title">{trueExercise.name} {setsDone.length}/{this.props.contents.setsTarget ? this.props.contents.setsTarget : 1}</h3>
           <button onClick={this.changeDisplay} className="btn btn-primary">{this.state.visible ? "Hide" : "Show"} routine</button>
         </div>
         { this.state.visible ? // If the user so chosses, that part of the routine is hidden

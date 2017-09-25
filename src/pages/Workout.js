@@ -14,12 +14,11 @@ class Workout extends Component {
     super(props);
     this.state = {
       routineId: this.props.match ? this.props.match.params.id : undefined, 
-      originalRoutine: {},
       routine: {},
       user: [], 
       exercisesDatabase: [], 
-      changedRoutine: false, 
       workoutLog: {}, 
+      changedRoutine: false, 
       runningWorkout: true, 
       upgradeRoutine: false,
       exitingRoutine: false
@@ -37,7 +36,7 @@ class Workout extends Component {
   componentDidMount() {
     // We start by timestamping and getting the clean routine from the user DB using the URL param
     const today = new Date(), 
-          cleanRoutine = userData[0].routines.filter(obj => obj.id === this.state.routineId )[0];
+          cleanRoutine = userData[0].routines.filter(obj => obj.id === this.props.match.params.id )[0];
     
     // Setting up a mock version of the workout log (for history) of the current exercises...
     let logExercises = [];
@@ -46,14 +45,14 @@ class Workout extends Component {
       logExercises.push({
         exerciseId: value.exerciseId, 
         repTarget: value.reps ? value.reps : false,
+        setsTarget: value.sets ? value.sets : false,
         handicap: value.handicap ? value.handicap : 0
       })
-    )
+    );
 
     this.setState({
       user: userData[0],
       exercisesDatabase: exercisesDatabase, 
-      originalRoutine: cleanRoutine, 
       routine: cleanRoutine, 
       workoutLog:{
         "id": "log-" + today.getTime(), 
@@ -67,22 +66,19 @@ class Workout extends Component {
   updateRoutine(index, event){
     // When the workout detail component wants to update handicaps, we do it here
     let changedName = event.target["name"],
-          changedValue = event.target.value;
+        changedValue = event.target.value;
 
     if(changedName === "handicap" && changedValue <= 0){
       changedValue = 1;
     }
 
-    const routineSnapshot = this.state.routine,
-          logSnapshot = this.state.workoutLog;
+    const logSnapshot = this.state.workoutLog;
 
-    routineSnapshot.exercises[index][changedName] = changedValue;
     logSnapshot.exercises[index][changedName] = changedValue;
     
     // Updating the routine has "changed" flags it for a possible overwrite of the old routine in the DB later on
     // We update both the routine (because we'll offer to save its new format) and the change into the workout log for posterity
     this.setState({
-      routine: routineSnapshot, 
       workoutLog: logSnapshot, 
       changedRoutine: true
     });
@@ -99,6 +95,7 @@ class Workout extends Component {
   }
 
   cancelUpdate(data){
+    // Whe users want to cancel a planned upgrade to one of their sets, we use this tu remove the set from the upgradeRoutine array
     let updatables = this.state.upgradeRoutine, 
           index = updatables.indexOf(data);
     updatables.splice(index, 1);
@@ -138,17 +135,16 @@ class Workout extends Component {
       }
     }
 
-    console.log(completedExercises);
-
     if(completedExercises.length !== 0 && !this.state.changedRoutine){
       // Some exercises can upgrade !
       this.setState({
         upgradeRoutine: completedExercises,
-        exitingRoutine:true
+        exitingRoutine:true,
+        saveRoutine: false 
       })
     }
     else if(completedExercises.length !== 0 && this.state.changedRoutine){
-      // Then let's check for changes made to the routine
+      // Then let's check for changes made to the routine AND some have been maxed out
       this.setState({
         upgradeRoutine: completedExercises,
         saveRoutine: true, 
@@ -188,7 +184,7 @@ class Workout extends Component {
     // workout saves into the workout logs so this workout is part of the user's history
     let serverPayload = {
       method: 'post', 
-      url: '../data/users.json',
+      url: '',
       data: {
         userId: userId, 
         workout: workout, 
@@ -199,12 +195,23 @@ class Workout extends Component {
 
     // First, if the routine was changed (handicaps) and the user wants that saved, save it
     if(this.state.saveRoutine){
+      const routineSnapshot = this.state.routine, 
+            workout = this.state.workoutLog;
+
+      workout.exercises.map((value, index) => {
+        return routineSnapshot.exercises[index].handicap = value.handicap;
+      })
+
+      this.setState({
+        routine: routineSnapshot
+      })
+
       serverPayload.data.updateRoutine = this.state.routine;
     }
 
     // If there are some exercises the user wants to upgrade, then we work out which ones and by how much...
     if(this.state.upgradeRoutine){
-      const routine = this.state.saveRoutine === true ? this.state.routine : this.state.originalRoutine, 
+      const routine = this.state.routine, 
             areUpdatable = this.state.upgradeRoutine;
       
       for(var x = 0; x < areUpdatable.length; x ++){
@@ -253,17 +260,16 @@ class Workout extends Component {
   }
 
   render() {
-    const currentRoutine = this.state.routine;
-    const displayLimit = currentRoutine.exercises ? currentRoutine.exercises.length : 0;
+    const currentRoutine = this.state.workoutLog;
     
     // For each exercise in the routine, we display a workoutDetails element that will enable users to track their routine
-    const workoutItems = currentRoutine.exercises ? currentRoutine.exercises.slice(0, displayLimit).map((value, index) => 
+    const workoutItems = currentRoutine.exercises ? currentRoutine.exercises.map((value, index) => 
       <WorkoutDetails key={value.exerciseId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
-    // If some exercise are elegible for updates, we define by how much and set up their comonents
+    // If some exercise are elegible for updates, we set up their comonents
     const completedExercises = this.state.upgradeRoutine, 
-          allExercises = this.state.saveRoutine ? currentRoutine.exercises : this.state.originalRoutine.exercises;
+          allExercises = this.state.saveRoutine ? currentRoutine.exercises : this.state.routine.exercises;
     const updates = completedExercises ? completedExercises.map((value, index) => 
       <WorkoutUpdates key={'log-' + index + '-' + value} completedSet={value} allSets={allExercises} database={this.state.exercisesDatabase} notUpdating={this.cancelUpdate}/>
     ) : false;
