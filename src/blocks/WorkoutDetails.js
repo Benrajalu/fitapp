@@ -155,7 +155,11 @@ class WorkoutDetails extends Component {
 
 WorkoutDetails.propTypes = {
   contents: PropTypes.object.isRequired,
-  exercisesDatabase: PropTypes.array.isRequired
+  exercisesDatabase: PropTypes.array.isRequired,
+  index: PropTypes.number.isRequired,
+  onUpdate: PropTypes.func.isRequired, 
+  onReps: PropTypes.func.isRequired, 
+  settings: PropTypes.object.isRequired
 }
 
 export default WorkoutDetails;
