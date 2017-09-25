@@ -138,25 +138,38 @@ class Workout extends Component {
       }
     }
 
-    if(completedExercises.length !== 0){
+    console.log(completedExercises);
+
+    if(completedExercises.length !== 0 && !this.state.changedRoutine){
       // Some exercises can upgrade !
       this.setState({
-        upgradeRoutine: completedExercises
+        upgradeRoutine: completedExercises,
+        exitingRoutine:true
       })
     }
-
-    // Then let's check for changes made to the routine
-    if(this.state.changedRoutine){
-      // routine has been changed !
+    else if(completedExercises.length !== 0 && this.state.changedRoutine){
+      // Then let's check for changes made to the routine
       this.setState({
-        saveRoutine: true
+        upgradeRoutine: completedExercises,
+        saveRoutine: true, 
+        exitingRoutine:true
       })
     }
-    
-    // Show the exit pop-in
-    this.setState({
-      exitingRoutine:true
-    })
+    else if(this.state.changedRoutine){
+      // routine has been changed but no set has been completed
+      this.setState({
+        saveRoutine: true, 
+        exitingRoutine:true,
+        upgradeRoutine:false
+      })
+    }
+    else{
+      this.setState({
+        exitingRoutine:true,
+        upgradeRoutine:false,
+        saveRoutine: false 
+      })   
+    }
   }
 
   saveRoutine(){
