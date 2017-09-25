@@ -110,7 +110,11 @@ class WorkoutDetails extends Component {
         warmupWindow = false;
     if(trueExercise.type === "barbell" || trueExercise.type === "dumbbell" || trueExercise.type === "cable"){
       warmupButton = <li role="presentation"><a onClick={this.displayModal.bind(this, 'warmup')}>Échauffement</a></li>;
-      warmupWindow = <WarmUp closeModal={this.displayModal.bind(this, 'warmup')} shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'} name={trueExercise.name} weight={workoutExercise.handicap} maxReps={workoutExercise.reps ? workoutExercise.reps : false} type={trueExercise.type} settings={this.props.settings}/>;
+      warmupWindow = <WarmUp closeModal={this.displayModal.bind(this, 'warmup')} 
+                              shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'} 
+                              name={trueExercise.name} 
+                              weight={workoutExercise.handicap} 
+                              maxReps={workoutExercise.repTarget ? workoutExercise.repTarget : false} type={trueExercise.type} settings={this.props.settings}/>;
     }
     
     // Let's plan a helper window to load your barbell with requisite weights if needed

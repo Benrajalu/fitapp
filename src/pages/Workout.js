@@ -7,7 +7,7 @@ import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
 import WorkoutDetails from '../blocks/WorkoutDetails';
-import WorkoutUpdates from '../blocks/WorkoutUpdates';
+import WorkoutExit from '../blocks/WorkoutExit';
 
 class Workout extends Component {
   constructor(props, match) {
@@ -267,68 +267,24 @@ class Workout extends Component {
       <WorkoutDetails key={value.exerciseId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
-    // If some exercise are elegible for updates, we set up their comonents
-    const completedExercises = this.state.upgradeRoutine, 
-          allExercises = this.state.saveRoutine ? currentRoutine.exercises : this.state.routine.exercises;
-    const updates = completedExercises ? completedExercises.map((value, index) => 
-      <WorkoutUpdates key={'log-' + index + '-' + value} completedSet={value} allSets={allExercises} database={this.state.exercisesDatabase} notUpdating={this.cancelUpdate}/>
-    ) : false;
-
-    // We build the exit pop-in here
-    const workoutExit = <div className="popin visible">
-      {this.state.runningWorkout ? 
-        <div className="contents">
-          <div className="panel panel-success">
-            <div className="panel-heading">
-              <h3 className="panel-title">Terminer l'entraînement ?</h3>
-              <button className="closer" onClick={this.closeRoutineModal}>Close</button>
-            </div>
-            <div className="panel-body">
-              <p>Votre entraînement est terminé ? Félicitations !</p>
-              {this.state.changedRoutine ?  
-                <div>
-                  <hr/>
-                  <p>Vous avez changé certains poids pour cet entrainement, souhaitez vous enregistrer ces modifications ? </p>
-                  <input type="checkbox" name="saveRoutine" value="yes" checked={this.state.saveRoutine ? true : false} onChange={this.routineUpdateToggle}/>
-                  <label onClick={this.routineUpdateToggle}>Enregistrer les modifications</label>
-                </div>
-              : false }
-              {this.state.upgradeRoutine ?  
-                <div>
-                  <hr/>
-                  <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
-                  {updates}
-                </div>
-              : false }
-              <hr/>
-              <button className="closer" onClick={this.saveRoutine}>Valider</button>
-              <button className="closer" onClick={this.closeRoutineModal}>Annuler</button>
-            </div>
-          </div>
-        </div>
-        :
-        <div className="contents">
-          <div className="panel panel-success">
-            <div className="panel-heading">
-              <h3 className="panel-title">Bravo !</h3>
-              <button className="closer" onClick={this.closeRoutineModal}>Close</button>
-            </div>
-            <div className="panel-body">
-              {this.state.saveRoutine || this.state.upgradeRoutine ? <p>Vos choix ont bien été enregistrés !</p> : false}
-              <p>Nos vous redirigons vers le dashboard !</p>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-
+    let workoutExit = <WorkoutExit runningStatus={this.state.runningWorkout} 
+                                   closeRoutineModal={this.closeRoutineModal} 
+                                   changedRoutine={this.state.changedRoutine} 
+                                   saveRoutine={this.state.saveRoutine ? this.state.saveRoutine : false} 
+                                   routineUpdateToggle={this.routineUpdateToggle}
+                                   upgradeRoutine={this.state.upgradeRoutine}
+                                   currentRoutine={this.state.workoutLog}
+                                   originalRoutine={this.state.routine}
+                                   exercisesDatabase={this.state.exercisesDatabase}
+                                   cancelUpdate={this.cancelUpdate}
+                                   writeRoutine={this.saveRoutine} />;
     return (
       <div className="Workout">
         <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
         {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
         <div className="container">
           <div className="page-header">
-            <h1>Entraînement <small>{currentRoutine.name}</small></h1>
+            <h1>Entraînement <small>{this.state.routine.name}</small></h1>
             <button className="btn btn-primary" onClick={this.endRoutine}>Terminer l'entraînement</button>
           </div>
           {workoutItems}

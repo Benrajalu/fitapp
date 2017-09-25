@@ -39,8 +39,9 @@ it('accurately translate completed sets and reps arrays into values', () => {
 
   const value = {
     "exerciseId": "ex-04", 
-    "sets": "5", 
-    "reps": "10",
+    "sets": [0,0,0,0,0], 
+    "repTarget": "10",
+    "setsTarget" : "5",
     "handicap": "20"
   }
 
