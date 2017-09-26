@@ -40,7 +40,7 @@ class AllRoutines extends Component {
             <h1>Mes entraînements</h1>
             <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
           </div>
-          <Routines list={routines} exercisesDatabase={this.state.exercises} />
+          <Routines list={routines} exercisesDatabase={this.state.exercises} editable="true" />
         </div>
       </div>
     )

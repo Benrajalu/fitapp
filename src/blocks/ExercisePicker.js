@@ -11,13 +11,22 @@ class ExercisePicker extends Component {
     super(props);
 
     this.state = {
-      exercises: []
+      exercises: this.props.pickedExercises ? this.props.pickedExercises : [] 
     };
 
     this.closeModal = this.closeModal.bind(this);
     this.addExercise = this.addExercise.bind(this);
     this.removeExercise = this.removeExercise.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.pickedExercises){
+      this.setState({
+        exercises: nextProps.pickedExercises
+      })
+    }
+  }
+
   closeModal() {
     // References the parent method for displaying a modal that's in Dashboard.js
     this.props.modalCloser();
@@ -28,7 +37,7 @@ class ExercisePicker extends Component {
     this.setState({
       exercises: currentExercises
     });
-    this.props.exercises(this.state.exercises);
+    this.props.updateExercises(this.state.exercises);
   }
   removeExercise(data) {
     console.log(data);
@@ -44,7 +53,7 @@ class ExercisePicker extends Component {
     this.setState({
       exercises: currentExercises
     });
-    this.props.exercises(this.state.exercises);
+    this.props.updateExercises(this.state.exercises);
   }
 
   render() {

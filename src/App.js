@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard.js';
 import Settings from './pages/Settings.js';
 import History from './pages/History.js';
 import AllRoutines from './pages/AllRoutines.js';
+import EditRoutine from './pages/EditRoutine.js';
 import NewRoutine from './pages/NewRoutine.js';
 import Workout from './pages/Workout.js';
 import NoMatch from './pages/NoMatch.js';
@@ -39,6 +40,7 @@ class App extends Component {
               <Route exact path="/settings" component={Settings}/>
               <Route exact path="/history" component={History}/>
               <Route exact path="/all-routines" component={AllRoutines}/>
+              <Route path="/edit/:id" component={EditRoutine}/>
               <Route exact path="/new-routine" component={NewRoutine}/>
               <Route path="/workout/:id" component={Workout}/>
               <Redirect from="/workout" to="/all-routines"/>

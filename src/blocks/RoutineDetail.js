@@ -20,7 +20,8 @@ class RoutineDetail extends Component {
             <h3 className="panel-title">{this.props.contents.name}</h3>
           </div>
           <div className="col-md-4 text-right">
-            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>
+            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>&nbsp;
+            {this.props.editable ? <Link to={'/edit/' + this.props.contents.id} className="btn btn-default">Edit</Link> : false}
           </div>
         </div>
         <div className="panel-body">

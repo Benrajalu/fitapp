@@ -43,7 +43,7 @@ class ExerciseCustomizer extends Component {
           {sets}
           {reps}
           <div className="col-xs-4">
-            <input type="number" name="handicap" value={this.props.currentExercise.handicap} onChange={this.props.newValues.bind(this, this.props.index)}/>
+            <input type="number" name="handicap" value={this.props.currentExercise.handicap ? this.props.currentExercise.handicap : 0} onChange={this.props.newValues.bind(this, this.props.index)}/>
             <p>{handicapType}</p>
           </div>
   

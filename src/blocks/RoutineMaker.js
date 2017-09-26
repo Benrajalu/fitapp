@@ -13,6 +13,12 @@ class RoutineMaker extends Component {
     super(props);
     const timestamp = new Date();
 
+    const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
+          mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
+          yyyy = timestamp.getFullYear(),
+          fullDate = dd+'/'+mm+'/'+yyyy;
+    
+
     // Defaults
     this.state = {
       user: {}, 
@@ -20,7 +26,9 @@ class RoutineMaker extends Component {
       newRoutine: {
         routineId: timestamp.getTime(),
         color : "#67E658", 
-        exercises : []
+        exercises : [], 
+        dateCreated: fullDate,
+        lastPerformed: fullDate
       },
       errors:{}
     }
@@ -38,6 +46,24 @@ class RoutineMaker extends Component {
       user: users[0],
       exercisesDatabase: exercisesDatabase
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const timestamp = new Date();
+
+    const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
+          mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
+          yyyy = timestamp.getFullYear(),
+          fullDate = dd+'/'+mm+'/'+yyyy;
+    
+
+    if(nextProps.editRoutine){
+      const nextRoutineShot = nextProps.editRoutine;
+      nextRoutineShot.lastPerformed = fullDate;
+      this.setState({
+        newRoutine: nextRoutineShot
+      })
+    }
   }
 
   validate(event){
@@ -233,8 +259,9 @@ class RoutineMaker extends Component {
           exercisesDatabase={this.state.exercisesDatabase} 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
           modalCloser={this.displayModal}
-          exercises={this.updateExercises}
-          settings={this.state.user} />
+          updateExercises={this.updateExercises}
+          settings={this.state.user}
+          pickedExercises={this.state.newRoutine.exercises} />
       </div>
     )
   }
