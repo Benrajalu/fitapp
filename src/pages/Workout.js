@@ -285,10 +285,10 @@ class Workout extends Component {
         <div className="container">
           <div className="page-header">
             <h1>Entraînement <small>{this.state.routine.name}</small></h1>
-            <button className="btn btn-primary" onClick={this.endRoutine}>Terminer l'entraînement</button>
+            <button className="btn btn-primary end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
           </div>
           {workoutItems}
-          <button className="btn btn-primary" onClick={this.endRoutine}>Terminer l'entraînement</button>
+          <button className="btn btn-primary end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
         </div>
         {this.state.exitingRoutine ? workoutExit : false}
       </div>
