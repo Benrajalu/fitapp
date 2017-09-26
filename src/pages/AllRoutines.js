@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import Routines from '../blocks/Routines';
 
 import userData from '../data/users.json';
@@ -36,6 +38,7 @@ class AllRoutines extends Component {
         <div className="container">
           <div className="page-header">
             <h1>Mes entraînements</h1>
+            <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
           </div>
           <Routines list={routines} exercisesDatabase={this.state.exercises} />
         </div>
