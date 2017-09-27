@@ -142,6 +142,25 @@
             "sets": [5, 5, 5, 5, 5, 4, 3, 2]
           }
         ]
+      },
+      {
+        "id": "log-1506506991378-01", 
+        "routineName": "Routine B", 
+        "timestamp": 1506507487822, 
+        "exercises": [
+          {
+            "exerciseId": "ex-04", 
+            "repTarget": "10",
+            "handicap": "20",
+            "sets": [10, 8, 10, 10, 2]
+          },
+          {
+            "exerciseId": "ex-06", 
+            "repTarget": "5",
+            "handicap": "15",
+            "sets": [5, 5, 5, 5, 5, 4, 3, 2]
+          }
+        ]
       }
     ], 
     "personalRecords":[
