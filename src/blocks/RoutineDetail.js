@@ -52,7 +52,6 @@ class RoutineDetail extends Component {
   }
 
   render() {
-    console.log(this.props.contents);
     const routineExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
     const listExercises = routineExercices.map((value, index) => {

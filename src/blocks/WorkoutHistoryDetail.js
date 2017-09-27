@@ -22,7 +22,7 @@ class WorkoutHistoryDetail extends Component {
           {listExercises}
         </div>
         <div className="panel-footer">
-          <Timestamper timestamp={this.props.contents.timestamp * 1000} />
+          <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
         </div>
       </div>
     )
