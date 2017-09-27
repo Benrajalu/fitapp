@@ -9,8 +9,8 @@ class RecordsLog extends Component {
     const exercisesDatabase = this.props.exercisesDatabase;
     const displayLimit= this.props.limit ? this.props.limit : recordsList.length;
 
-    const recordsItems = recordsList.slice(0, displayLimit).map((value) => 
-      <RecordBadge key={value.exerciseId} contents={value} exercisesDatabase={exercisesDatabase} />
+    const recordsItems = recordsList.slice(0, displayLimit).map((value, index) => 
+      <RecordBadge key={value.exerciseId + '-' + index} contents={value} exercisesDatabase={exercisesDatabase} />
     );
 
     return (

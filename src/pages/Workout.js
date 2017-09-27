@@ -15,6 +15,7 @@ class Workout extends Component {
     this.state = {
       routineId: this.props.match ? this.props.match.params.id : undefined, 
       routine: {},
+      records: [],
       user: [], 
       exercisesDatabase: [], 
       workoutLog: {}, 
@@ -54,6 +55,7 @@ class Workout extends Component {
       user: userData[0],
       exercisesDatabase: exercisesDatabase, 
       routine: cleanRoutine, 
+      records: userData[0].personalRecords,
       workoutLog:{
         "id": "log-" + today.getTime(), 
         "routineName": userData[0].routines.filter(obj => obj.id === this.state.routineId )[0].name, 
@@ -209,16 +211,19 @@ class Workout extends Component {
       serverPayload.data.updateRoutine = this.state.routine;
     }
 
-    // If there are some exercises the user wants to upgrade, then we work out which ones and by how much...
+    // If there are some exercises the user can upgrade, then we work out which ones and by how much...
     if(this.state.upgradeRoutine){
       const routine = this.state.routine, 
             areUpdatable = this.state.upgradeRoutine;
+
+      // It's also time to update the personal recoards, you great great warrior
+      const records = this.state.records;
       
       for(var x = 0; x < areUpdatable.length; x ++){
         let current = routine.exercises[areUpdatable[x]], 
             type = this.state.exercisesDatabase.filter(obj => obj.id === current.exerciseId)[0].type;
 
-
+        // Updating the routine...
         if(type === "cardio"){
           routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 10;
         }
@@ -228,13 +233,41 @@ class Workout extends Component {
         else{
           routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 2;  
         }
+        
+        // Updating the records...
+        if(type === "barbell" || type === "cable" || type === "dumbbell"){
+          const newRecordValue = parseFloat(routine.exercises[areUpdatable[x]].handicap);
+
+          // Check if that exercise is already in records 
+          const recordsHistory = records.findIndex(obj => obj.exerciseId === current.exerciseId ); 
+          if(recordsHistory >= 0){
+            const oldValue = parseFloat(records[recordsHistory].record.replace('kg', ''));
+            if(oldValue < newRecordValue){
+              records[recordsHistory].record = newRecordValue + 'kg';
+              records[recordsHistory].timestamp = Date.now();
+            }
+          }
+          else{
+            const newRecord = {
+              exerciseId: current.exerciseId, 
+              record: newRecordValue + 'kg',
+              timestamp:  Date.now()
+            }
+            records.push(newRecord);
+          }
+        }
       }
+
+
       this.setState({
-        routine: routine
+        records: records,
+        routine: routine 
       });
+
 
       // ... then we add to the payload
       serverPayload.data.updateRoutine = this.state.routine;
+      serverPayload.data.updateRecords = this.state.records;
     }
 
     // Regardless of all that, we save the workoutLog then exit to home
