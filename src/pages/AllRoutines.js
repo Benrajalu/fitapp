@@ -13,13 +13,15 @@ class AllRoutines extends Component {
     super(props);
     this.state = {
       routinesList:[], 
-      exercises: []
+      exercises: [], 
+      user:{}
     }
   }
   componentDidMount() {
     this.setState({
       routinesList: userData[0].routines, 
       exercises: exercisesDatabase, 
+      user:userData[0]
     });
   }
   
@@ -40,7 +42,7 @@ class AllRoutines extends Component {
             <h1>Mes entraînements</h1>
             <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
           </div>
-          <Routines list={routines} exercisesDatabase={this.state.exercises} editable="true" />
+          <Routines list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} />
         </div>
       </div>
     )

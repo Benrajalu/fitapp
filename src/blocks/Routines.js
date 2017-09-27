@@ -8,7 +8,7 @@ class Routines extends Component {
     const routineList = this.props.list;
     const exercisesDatabase = this.props.exercisesDatabase;
     const routineItems = routineList.map((value) => 
-      <RoutineDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} editable={this.props.editable}/>
+      <RoutineDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} editable={this.props.editable} user={this.props.user}/>
     );
 
     return (
