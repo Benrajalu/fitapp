@@ -19,7 +19,7 @@ class RecordBadge extends Component {
           <p><strong>{data.record}</strong></p>
         </div>
         <div className="panel-footer">
-          <Timestamper timestamp={data.timestamp * 1000} />
+          <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
         </div>
       </div>
     )
