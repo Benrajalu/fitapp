@@ -10,12 +10,15 @@ import '../styles/ReactCrop.css';
 class Settings extends Component {
   constructor(props) {
     super(props);
+
     this.updateWeights = this.updateWeights.bind(this);
     this.updateBarbell = this.updateBarbell.bind(this);
     this.updateAccount = this.updateAccount.bind(this);
     this.updateImage = this.updateImage.bind(this);
     this.handleCrop = this.handleCrop.bind(this);
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+
     this.state = {
       userName : '',
       userPic: false,
@@ -151,7 +154,6 @@ class Settings extends Component {
     this.setState({
       crop: crop
     });
-    console.log(crop);
   }
 
   handleDefaultCrop(image){
@@ -191,6 +193,59 @@ class Settings extends Component {
       this.setState({
         crop: defaultCrop
       });
+    }
+  }
+
+  handleFormSubmit(event){
+    console.log("coucou");
+    if(this.state.wrongEmail || this.state.userName.length === 0){
+      // Don't submit, there's something wrong with email
+      return false;
+    }
+    else{
+      event.preventDefault();
+      this.setState({
+        saving: "Patientez..."
+      });
+      const serverPayload = {
+        method: 'post', 
+        url: '',
+        data: {
+          userName: this.state.userName,
+          userEmail: this.state.userEmail
+        }  
+      }, 
+      _this = this;
+
+      axios(serverPayload)
+        .then(function(response){
+          console.log("Congrats, settings saved !");
+          console.log(response);
+          setTimeout(() => {
+            _this.setState({
+              saving: "Modifications enregistrées !"
+            })
+          }, 500);
+          setTimeout(() => {
+            _this.setState({
+              saving: false
+            })
+          }, 1500);
+        })
+        .catch(function(error){
+          console.log("That's a FALSE setting saved : " + error.message);
+          console.log(serverPayload);
+          setTimeout(() => {
+            _this.setState({
+              saving: "Modifications enregistrées !"
+            })
+          }, 500);
+          setTimeout(() => {
+            _this.setState({
+              saving: false
+            })
+          }, 1500);
+        });
     }
   }
 
@@ -239,7 +294,7 @@ class Settings extends Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Paramètres du compte</h3>
               </div>
-              <form className="panel-body form">
+              <form className="panel-body form" onSubmit={this.handleFormSubmit}>
                 { this.state.newPic ? 
                   <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
                   :
@@ -258,7 +313,11 @@ class Settings extends Component {
                   <label>Image de profil</label>
                   <input type="file" name="userImage" onChange={this.updateImage} />
                 </div>
-                <button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ? true : false}>Valider</button>
+                {this.state.saving ? 
+                  <button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> 
+                  :
+                  <button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button>
+                }
               </form>
             </div>
           </div>
