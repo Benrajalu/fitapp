@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Redirect} from 'react-router';
 import axios from 'axios';
 import ReactCrop from 'react-image-crop';
 
@@ -18,6 +19,9 @@ class Settings extends Component {
     this.handleCrop = this.handleCrop.bind(this);
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.togglePopin = this.togglePopin.bind(this);
+    this.activateAccountDelete = this.activateAccountDelete.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
 
     this.state = {
       userName : '',
@@ -249,6 +253,46 @@ class Settings extends Component {
     }
   }
 
+  togglePopin(){
+    this.setState({
+      deletePopin: !this.state.deletePopin
+    })
+  }
+
+  activateAccountDelete(){
+    this.setState({
+      accountDelete: !this.state.accountDelete
+    })
+  }
+
+  deleteAccount(){
+    const userId = userData[0].id;
+    const serverPayload = {
+      method: 'post', 
+      url: '',
+      data: {
+        removeUser: userId,
+      }  
+    }, 
+    _this = this;
+
+    axios(serverPayload)
+      .then(function(response){
+        console.log("SADNESS, user has been deleted");
+        console.log(response);
+        _this.setState({
+          disconnecting: true
+        })
+      })
+      .catch(function(error){
+        console.log("That's a FALSE user removed : " + error.message);
+        console.log(serverPayload);
+        _this.setState({
+          disconnecting: true
+        })
+      });
+  }
+
   render() {
     return (
       <div className="Settings">
@@ -314,14 +358,34 @@ class Settings extends Component {
                   <input type="file" name="userImage" onChange={this.updateImage} />
                 </div>
                 {this.state.saving ? 
-                  <button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> 
+                  <p><button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> </p>
                   :
-                  <button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button>
+                  <p><button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button></p>
                 }
+                <p><button type="button" className="btn btn-danger" onClick={this.togglePopin}>Supprimer ce compte</button></p>
               </form>
+              {this.state.deletePopin ? 
+                <div className="popin">
+                  <div className="contents panel panel-danger">
+                    <div className="panel-heading">
+                      <h3 className="panel-title">Supprimer votre compte ? </h3>
+                      <button className="closer" onClick={this.togglePopin}>Close modal</button>
+                    </div>
+                    <div className="panel-body">
+                      <p><strong>Attention ! Cette action est irréversible et entraînera la supression de votre compte et de toutes les informations sauvegardées !</strong></p>
+                      <p><input type="checkbox" onChange={this.activateAccountDelete} id="security-checkbox" /> <label htmlFor="security-checkbox">Je souhaite supprimer mon compte</label></p>
+                      <p><button className="btn btn-default" onClick={this.togglePopin}>Annuler</button></p>
+                      <p><button className="btn btn-danger" onClick={this.deleteAccount} disabled={this.state.accountDelete ? false : true}>Supprimer mon compte</button></p>
+                    </div>
+                  </div>
+                </div>
+                :
+                false
+              }
             </div>
           </div>
         </div>
+        {this.state.disconnecting ? <Redirect push to={{ pathname:'/disconnect' }} /> : false}
       </div>
     )
   }
