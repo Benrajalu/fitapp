@@ -294,6 +294,48 @@ class Settings extends Component {
   }
 
   render() {
+    let previewImage = false;
+    const loadImage = (src, callback) => {
+      var image = new Image();
+      image.onload = function(e) {
+        callback(image);
+        image = null;
+      };
+      image.src = src;
+    };
+
+    const cropImage = (imgSrc, crop) => {
+
+      var image = new Image();
+      image.onload = function(e) {
+        image = null;
+      };
+      image.src = imgSrc;
+
+      var imageWidth = image.naturalWidth;
+      var imageHeight = image.naturalHeight;
+
+      var cropX = (crop.x / 100) * imageWidth;
+      var cropY = (crop.y / 100) * imageHeight;
+
+      var cropWidth = (crop.width / 100) * imageWidth;
+      var cropHeight = (crop.height / 100) * imageHeight;
+
+      var canvas = document.createElement('canvas');
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+      var ctx = canvas.getContext('2d');
+
+      ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+      console.log("here :");
+      console.log(canvas.toDataURL('image/jpeg'));
+      return canvas.toDataURL('image/jpeg');
+    }
+
+    if(this.state.newPic){
+      previewImage = <img src={cropImage(this.state.newPic, this.state.crop)} alt="" className="img-circle  img-responsive" />;
+    }
+
     return (
       <div className="Settings">
         <div className="container">
@@ -340,7 +382,10 @@ class Settings extends Component {
               </div>
               <form className="panel-body form" onSubmit={this.handleFormSubmit}>
                 { this.state.newPic ? 
-                  <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
+                  <div>
+                    <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
+                    {previewImage}
+                  </div>
                   :
                   <img src={this.state.userPic !== false ? this.state.userPic : defaultAvatar} alt={this.state.userName} className="img-circle  img-responsive"/>
                 }
@@ -355,7 +400,7 @@ class Settings extends Component {
                 </div>
                 <div className="form-group">
                   <label>Image de profil</label>
-                  <input type="file" name="userImage" onChange={this.updateImage} />
+                  <input type="file" accept="image/*" name="userImage" onChange={this.updateImage} />
                 </div>
                 {this.state.saving ? 
                   <p><button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> </p>
