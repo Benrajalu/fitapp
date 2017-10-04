@@ -17,6 +17,7 @@ class Settings extends Component {
     this.updateAccount = this.updateAccount.bind(this);
     this.updateImage = this.updateImage.bind(this);
     this.handleCrop = this.handleCrop.bind(this);
+    this.handePreviewImage = this.handePreviewImage.bind(this);
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.togglePopin = this.togglePopin.bind(this);
@@ -34,7 +35,8 @@ class Settings extends Component {
         baseBarbell: 0, 
         availableWeights: []
       }, 
-      wrongEmail: false
+      wrongEmail: false,
+      previewImage: false
     }
   }
 
@@ -123,7 +125,6 @@ class Settings extends Component {
       if(updatedField === "userEmail"){
         const regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         let isValid = regex.test(value);
-        console.log(isValid);
         if(isValid === false){
           stateSnapshot.wrongEmail = true;
         }
@@ -134,7 +135,6 @@ class Settings extends Component {
       stateSnapshot[updatedField] = value;
       this.setState(stateSnapshot);
     }
-    console.log(this.state);
   }
 
   updateImage(event){
@@ -158,6 +158,7 @@ class Settings extends Component {
     this.setState({
       crop: crop
     });
+    this.handePreviewImage();
   }
 
   handleDefaultCrop(image){
@@ -196,12 +197,47 @@ class Settings extends Component {
 
       this.setState({
         crop: defaultCrop
+      }, () => {
+        this.handePreviewImage();
       });
     }
   }
 
+  handePreviewImage(){
+    const cropImage = (imgSrc, crop) => {
+
+      var image = new Image();
+      image.onload = function(e) {
+        image = null;
+      };
+      image.src = imgSrc;
+
+      var imageWidth = image.naturalWidth;
+      var imageHeight = image.naturalHeight;
+
+      var cropX = (crop.x / 100) * imageWidth;
+      var cropY = (crop.y / 100) * imageHeight;
+
+      var cropWidth = (crop.width / 100) * imageWidth;
+      var cropHeight = (crop.height / 100) * imageHeight;
+
+      var canvas = document.createElement('canvas');
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+      var ctx = canvas.getContext('2d');
+
+      ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+      return canvas.toDataURL('image/jpeg');
+    }
+
+    const preview = cropImage(this.state.newPic, this.state.crop);
+
+    this.setState({
+      previewImage: preview
+    });
+  }
+
   handleFormSubmit(event){
-    console.log("coucou");
     if(this.state.wrongEmail || this.state.userName.length === 0){
       // Don't submit, there's something wrong with email
       return false;
@@ -216,7 +252,8 @@ class Settings extends Component {
         url: '',
         data: {
           userName: this.state.userName,
-          userEmail: this.state.userEmail
+          userEmail: this.state.userEmail, 
+          userPic: this.state.previewImage ? this.state.previewImage : this.state.userPic
         }  
       }, 
       _this = this;
@@ -232,7 +269,9 @@ class Settings extends Component {
           }, 500);
           setTimeout(() => {
             _this.setState({
-              saving: false
+              saving: false,
+              newPic: false, 
+              userPic: _this.state.previewImage
             })
           }, 1500);
         })
@@ -246,7 +285,9 @@ class Settings extends Component {
           }, 500);
           setTimeout(() => {
             _this.setState({
-              saving: false
+              saving: false,
+              newPic: false, 
+              userPic: _this.state.previewImage
             })
           }, 1500);
         });
@@ -294,47 +335,7 @@ class Settings extends Component {
   }
 
   render() {
-    let previewImage = false;
-    const loadImage = (src, callback) => {
-      var image = new Image();
-      image.onload = function(e) {
-        callback(image);
-        image = null;
-      };
-      image.src = src;
-    };
-
-    const cropImage = (imgSrc, crop) => {
-
-      var image = new Image();
-      image.onload = function(e) {
-        image = null;
-      };
-      image.src = imgSrc;
-
-      var imageWidth = image.naturalWidth;
-      var imageHeight = image.naturalHeight;
-
-      var cropX = (crop.x / 100) * imageWidth;
-      var cropY = (crop.y / 100) * imageHeight;
-
-      var cropWidth = (crop.width / 100) * imageWidth;
-      var cropHeight = (crop.height / 100) * imageHeight;
-
-      var canvas = document.createElement('canvas');
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-      var ctx = canvas.getContext('2d');
-
-      ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-      console.log("here :");
-      console.log(canvas.toDataURL('image/jpeg'));
-      return canvas.toDataURL('image/jpeg');
-    }
-
-    if(this.state.newPic){
-      previewImage = <img src={cropImage(this.state.newPic, this.state.crop)} alt="" className="img-circle  img-responsive" />;
-    }
+    let previewImage = this.state.previewImage ? this.state.previewImage : false;
 
     return (
       <div className="Settings">
@@ -382,10 +383,7 @@ class Settings extends Component {
               </div>
               <form className="panel-body form" onSubmit={this.handleFormSubmit}>
                 { this.state.newPic ? 
-                  <div>
-                    <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
-                    {previewImage}
-                  </div>
+                   <img src={previewImage} alt="" className="img-circle  img-responsive" />
                   :
                   <img src={this.state.userPic !== false ? this.state.userPic : defaultAvatar} alt={this.state.userName} className="img-circle  img-responsive"/>
                 }
@@ -400,7 +398,13 @@ class Settings extends Component {
                 </div>
                 <div className="form-group">
                   <label>Image de profil</label>
-                  <input type="file" accept="image/*" name="userImage" onChange={this.updateImage} />
+                  <input type="file" accept="image/x-png,image/gif,image/jpeg" name="userImage" onChange={this.updateImage} />
+                  { this.state.newPic ? 
+                    <div>
+                      <hr/>
+                      <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
+                    </div>
+                    : false }
                 </div>
                 {this.state.saving ? 
                   <p><button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> </p>
