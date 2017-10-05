@@ -25,9 +25,10 @@ class App extends Component {
 
   componentDidMount() {
     const isLogged = isLoggedIn();
+  
     this.setState({
       loggedIn: isLogged
-    })
+    });
   }
 
   render() {

@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const CLIENT_ID = 'U023xJ2RXySNUBS7uJRYVZ98N6sv6B23';
 const CLIENT_DOMAIN = 'fitapp.eu.auth0.com';
 const REDIRECT = 'http://localhost:3000/callback';
-const SCOPE = 'read:alldata';
+const SCOPE = 'openid profile email';
 const AUDIENCE = 'http://www.fit-app.com';
 
 var auth = new auth0.WebAuth({
@@ -35,10 +35,15 @@ export function requireAuth(nextState, replace) {
   }
 }
 
-export function userInfo() {
-  const token = getIdToken();
-  auth.client.userInfo(token, function(err, user) {
-    console.log(err);
+export let userData = false;
+
+export function getUserInfo(cb) {
+  let accessToken = getAccessToken();
+  auth.client.userInfo(accessToken, (err, profile) => {
+    if (profile) {
+      userData = profile;
+    }
+    cb(err, profile);
   });
 }
 
