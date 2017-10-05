@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { login, logout, isLoggedIn } from '../utils/AuthService';
 import UserLog from './UserLog';
 
 import '../styles/nav.css';
@@ -34,14 +35,20 @@ class Nav extends Component {
           </div>
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav">
-              <li><NavLink className="nav-link" to="/">Dashboard</NavLink></li>
-              <li><NavLink className="nav-link" to="/all-routines">Mes entraînements</NavLink></li>
-              <li><NavLink className="nav-link" to="/history">Historique</NavLink></li>
-              <li><NavLink className="nav-link" to="/settings">Paramètres</NavLink></li>
-              <li><Link to="/">Déconnexion</Link></li>
-            </ul>
-            <UserLog user={this.state.user} />
+            { (isLoggedIn()) ? 
+              <ul className="nav navbar-nav">
+                <li><NavLink className="nav-link" to="/">Dashboard</NavLink></li>
+                <li><NavLink className="nav-link" to="/all-routines">Mes entraînements</NavLink></li>
+                <li><NavLink className="nav-link" to="/history">Historique</NavLink></li>
+                <li><NavLink className="nav-link" to="/settings">Paramètres</NavLink></li>
+                {( isLoggedIn() ) ?<li><button className="btn btn-danger" onClick={() => logout()}>Déconnexion</button></li> : <li><button className="btn btn-primary" onClick={() => login()}>Connexion</button></li> }
+              </ul>
+            : 
+              <ul className="nav navbar-nav">
+                <li><button className="btn btn-primary" onClick={() => login()}>Connexion</button></li>
+              </ul>
+            }
+            {( isLoggedIn() ) ? <UserLog user={this.state.user} /> : false}
           </div>
         </div>
       </nav>

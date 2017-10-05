@@ -22,6 +22,9 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    if(this.props.onEnter){
+      console.log(this.props.onEnter);
+    };
     this.setState({
       routinesList: userData[0].routines,
       workoutList: userData[0].workoutLog, 
