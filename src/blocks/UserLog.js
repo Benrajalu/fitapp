@@ -29,7 +29,7 @@ class UserLog extends Component {
   render() {
     return (
       <div className="UserLog">
-        <img src={this.props.user['profile-picture'] || this.state.profile.picture ? this.state.profile.picture : defaultAvatar } alt="" />
+        <img src={this.props.user['profile-picture'] || this.state.profile.picture ? this.props.user['profile-picture'] || this.state.profile.picture : defaultAvatar } alt="" />
         <p>Hello, {this.props.user["display-name"]}</p>
       </div>
     )

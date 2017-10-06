@@ -38,13 +38,17 @@ export function requireAuth(nextState, replace) {
 export let userData = false;
 
 export function getUserInfo(cb) {
-  let accessToken = getAccessToken();
-  auth.client.userInfo(accessToken, (err, profile) => {
-    if (profile) {
-      userData = profile;
+  if(isLoggedIn()){
+    let accessToken = getAccessToken();
+    if(accessToken){
+      auth.client.userInfo(accessToken, (err, profile) => {
+        if (profile) {
+          userData = profile;
+        }
+        cb(err, profile);
+      });
     }
-    cb(err, profile);
-  });
+  }
 }
 
 export function getIdToken() {
