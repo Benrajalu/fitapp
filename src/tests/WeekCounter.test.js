@@ -10,7 +10,7 @@ const testTimestamp = 1504290660,
       todayStamp = + new Date(), 
       fakeRoutines = [
         {
-          "timestamp": todayStamp / 1000
+          timestamp: todayStamp
         }
       ];
 
