@@ -11,7 +11,7 @@ class WeekCounter extends Component {
     let registeredWorkouts = 0;
 
     workoutsList.map((value) => {
-      if(value.timestamp.toString().length !== 13){
+      if(value.timestamp && value.timestamp.toString().length !== 13){
         value.timestamp = value.timestamp * 1000;
       }
 
