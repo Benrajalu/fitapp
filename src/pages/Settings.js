@@ -251,9 +251,9 @@ class Settings extends Component {
         method: 'post', 
         url: '',
         data: {
-          userName: this.state.userName,
-          userEmail: this.state.userEmail, 
-          userPic: this.state.previewImage ? this.state.previewImage : this.state.userPic
+          'display-name': this.state.userName,
+          'contact-email': this.state.userEmail, 
+          'profile-picture': this.state.previewImage ? this.state.previewImage : this.state.userPic
         }  
       }, 
       _this = this;
@@ -271,7 +271,7 @@ class Settings extends Component {
             _this.setState({
               saving: false,
               newPic: false, 
-              userPic: _this.state.previewImage
+              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
             })
           }, 1500);
         })
@@ -287,7 +287,7 @@ class Settings extends Component {
             _this.setState({
               saving: false,
               newPic: false, 
-              userPic: _this.state.previewImage
+              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
             })
           }, 1500);
         });

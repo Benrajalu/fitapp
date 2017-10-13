@@ -11,9 +11,12 @@ class WeekCounter extends Component {
     let registeredWorkouts = 0;
 
     workoutsList.map((value) => {
+      if(value.timestamp.toString().length !== 13){
+        value.timestamp = value.timestamp * 1000;
+      }
 
       // Get the date of the current workout being looped on
-      const workoutTimestamp = new Date(value.timestamp * 1000);
+      const workoutTimestamp = new Date(value.timestamp);
 
       // Asset its distance with today and correct any timezone offset it may have suffered
       let distance = (workoutTimestamp - now) / 1000 / 60 / 60 / 24;

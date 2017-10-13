@@ -61,7 +61,8 @@ class RoutineMaker extends Component {
       const nextRoutineShot = nextProps.editRoutine;
       nextRoutineShot.lastPerformed = fullDate;
       this.setState({
-        newRoutine: nextRoutineShot
+        newRoutine: nextRoutineShot, 
+        isEdit: true
       })
     }
   }
@@ -87,20 +88,38 @@ class RoutineMaker extends Component {
       // If it's still false, then we proceed
       if (!this.state.errors){
         console.log("Congrats, built this new routine :");
-        console.log(this.state.newRoutine);
 
         const userId = this.state.user.id, 
               addedRoutine = this.state.newRoutine, 
-              _this = this;
+              _this = this, 
+              verb= this.state.isEdit ? 'put' : 'post';
 
-        axios({
-          method: 'post', 
-          url: '../data/users.json',
-          data: {
-            userId: userId,
-            newRoutine: addedRoutine
-          }
-        })
+        let payload = {};
+
+        if(verb === "post"){
+          payload = {
+            method: "post", 
+            url: '../data/users.json',
+            data: {
+              userId: userId,
+              newRoutine: addedRoutine
+            }
+          };
+        }
+        else if(verb === "put"){
+          payload = {
+            method: "put", 
+            url: '../data/users.json',
+            data: {
+              routineId: addedRoutine.id,
+              routine: addedRoutine
+            }
+          };  
+        }
+
+        console.log(payload);
+
+        axios(payload)
         .then(function(response){
           console.log("that's a pass!");
           console.log(response);
