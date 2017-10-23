@@ -31,7 +31,7 @@ class BarbellLoader extends Component {
       });
     }
     else if(actualWeight - rack[startingPoint] < 0){
-      // Moving down the ract to try and shave off the weight objective (current weight too big!)
+      // Moving down the rack to try and shave off the weight objective (current weight too big!)
       this.decomposeWeight(rack, weight, startingPoint + 1, container);
     }
     else if(actualWeight - rack[startingPoint] >= 0){
@@ -80,9 +80,9 @@ class BarbellLoader extends Component {
   }
 
   render() {
-    // We must forst ensure that discs are sorted by lightest to heaviest
+    // We must first ensure that discs are sorted by lightest to heaviest
     // So I take the raw output (unsorted object)
-    // and sort its keys
+    // and sort its keys (which are weights - weight: numberofuses)
     let unorderedLoads = this.state.finalLoads,
         orderedKeys = Object.keys(unorderedLoads).sort((a,b) => {return a - b}),
         loadsToUse= [];

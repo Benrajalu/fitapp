@@ -96,7 +96,7 @@
             "exerciseId": "ex-04", 
             "handicap": "20",
             "repTarget": "10",
-            "sets": [10, 8, 10, 10, 2]
+            "sets": [10, 8, 10, 10, 0]
           },
           {
             "exerciseId": "ex-06", 
