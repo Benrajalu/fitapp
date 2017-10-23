@@ -74,7 +74,7 @@ class ExerciseListing extends Component {
           numberOfReps = setValues[i];
 
           // We calculate the percentage of fullfillment for the set by comparing the registered number of reps vs the required total
-          const progress = (numberOfReps * 100) / repsTarget;
+          const progress = numberOfReps > 0 ? ((numberOfReps * 100) / repsTarget) : 0;
 
           sets.push(
             <div className={"status " + status} key={i + trueExercise.name}>
