@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import {firebaseAuth, database} from './utils/fire';
 
 import Dashboard from './pages/Dashboard.js';
 import Settings from './pages/Settings.js';
@@ -8,6 +9,7 @@ import AllRoutines from './pages/AllRoutines.js';
 import EditRoutine from './pages/EditRoutine.js';
 import NewRoutine from './pages/NewRoutine.js';
 import Workout from './pages/Workout.js';
+import Login from './pages/Login.js';
 import NoMatch from './pages/NoMatch.js';
 import MainNav from './blocks/Nav.js';
 
@@ -17,36 +19,122 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: false
-    }
+      loading:true,
+      loggedIn: false, 
+      user: false
+    };
+
+    this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
+  }
+
+  initiateDefaultUser(user){
+    const query = database.collection('users'), 
+          email = user.email, 
+          name = user.displayName ? user.displayName : user.email, 
+          photo = user.photoURL ? user.photoURL : false, 
+          _this = this;
+
+    query.doc(user.uid).set({
+      displayName: name, 
+      signinEmail: email,
+      contactEmail: email,
+      profilePicture: photo
+    }).then(() => {
+      console.log("yas");
+      let newQuery = database.collection('users').doc(user.uid);
+      newQuery.get().then((doc) => {
+        _this.setState({
+          user: doc.data()
+        })
+      })
+    });
+  }
+
+  componentWillMount() {
+    const _this = this;
+    firebaseAuth.onAuthStateChanged(function(user) {
+      if(user){
+        const query = database.collection('users').doc(user.uid);
+        query.get().then((doc) => {
+          if(!doc.exists){
+            console.log('not found');
+            _this.initiateDefaultUser(user);
+          }
+          else{
+            _this.setState({
+              user: doc.data()
+            })
+          }
+        });
+
+        _this.setState({
+          loggedIn: true
+        })
+      }
+      else{
+        _this.setState({
+          loggedIn: false
+        });
+      }
+    });
   }
 
   componentDidMount() {
-    var scope = this;
-    setTimeout(function(){
-      // Mucking-up a log-in
-      scope.setState({loggedIn: true});
-    },400);
+    const _this = this;
+    if(firebaseAuth.currentUser || !this.state.loggedIn){
+      _this.setState({
+        loading:false,
+        loggedIn: true
+      })
+    }
+    else{
+      firebaseAuth.onAuthStateChanged(function(user) {
+        if(user){
+          _this.setState({
+            loading:false,
+            loggedIn: true
+          })
+        }
+        else{
+          _this.setState({
+            loading:false,
+            loggedIn: false
+          });
+          console.log("not logged in yet")
+        }
+      });
+    }
   }
 
   render() {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          <MainNav />
-          <main id="mainContents">
-            <Switch>
-              <Route exact path="/" component={Dashboard}/>
-              <Route exact path="/settings" component={Settings}/>
-              <Route exact path="/history" component={History}/>
-              <Route exact path="/all-routines" component={AllRoutines}/>
-              <Route path="/edit/:id" component={EditRoutine}/>
-              <Route exact path="/new-routine" component={NewRoutine}/>
-              <Route path="/workout/:id" component={Workout}/>
-              <Redirect from="/workout" to="/all-routines"/>
-              <Route component={NoMatch}/>
-            </Switch>
-          </main>
+          {this.state.user && this.state.loggedIn ? <MainNav user={this.state.user}/> : false}
+          {this.state.loading ? <p>Loading</p> :
+            <main id="mainContents">
+              {this.state.loggedIn ? 
+                <Switch>
+                  <Route exact path="/" component={Dashboard}/>
+                  <Route exact path="/settings" component={Settings}/>
+                  <Route exact path="/history" component={History}/>
+                  <Route exact path="/all-routines" component={AllRoutines}/>
+                  <Route path="/edit/:id" component={EditRoutine}/>
+                  <Route exact path="/new-routine" component={NewRoutine}/>
+                  <Route path="/workout/:id" component={Workout}/>
+                  <Redirect from="/workout" to="/all-routines"/>
+                  <Redirect from="/login" to="/"/>
+                  <Route component={NoMatch}/>
+                </Switch>
+              :
+                <Switch>
+                  <Route exact path="/login" component={Login}/>
+                  <Redirect from="/" to="/login"/>
+                  <Route component={NoMatch}/>
+                </Switch>
+              }
+            </main>
+          }
         </div>
       </BrowserRouter>
     );

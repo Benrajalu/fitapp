@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import UserLog from './UserLog';
 
+import {firebaseAuth} from '../utils/fire';
+
 import '../styles/nav.css';
 
 import users from '../data/users.json';
@@ -11,11 +13,17 @@ class Nav extends Component {
     super(props);
     this.state = {
       user: {}
-    }
+    };
+    this.logOff = this.logOff.bind(this);
   }
 
   componentDidMount() {
     this.setState({user: users[0]});
+  }
+
+  logOff(event){
+    event.preventDefault();
+    firebaseAuth.signOut();
   }
 
 
@@ -39,9 +47,9 @@ class Nav extends Component {
               <li><NavLink className="nav-link" to="/all-routines">Mes entraînements</NavLink></li>
               <li><NavLink className="nav-link" to="/history">Historique</NavLink></li>
               <li><NavLink className="nav-link" to="/settings">Paramètres</NavLink></li>
-              <li><Link to="/">Déconnexion</Link></li>
+              <li><button onClick={this.logOff} className="btn btn-danger">Déconnexion</button></li>
             </ul>
-            <UserLog user={this.state.user} />
+            <UserLog user={this.props.user} />
           </div>
         </div>
       </nav>
