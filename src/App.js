@@ -25,6 +25,7 @@ class App extends Component {
     };
 
     this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
+    this.resetUser = this.resetUser.bind(this);
   }
 
   initiateDefaultUser(user){
@@ -48,6 +49,12 @@ class App extends Component {
         })
       })
     });
+  }
+
+  resetUser(){
+    this.setState({
+      user: false
+    })
   }
 
   componentWillMount() {
@@ -110,7 +117,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          {this.state.user && this.state.loggedIn ? <MainNav user={this.state.user}/> : false}
+          {this.state.user && this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} /> : false}
           {this.state.loading ? <p>Loading</p> :
             <main id="mainContents">
               {this.state.loggedIn ? 

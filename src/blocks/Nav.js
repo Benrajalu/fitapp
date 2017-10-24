@@ -24,6 +24,7 @@ class Nav extends Component {
   logOff(event){
     event.preventDefault();
     firebaseAuth.signOut();
+    this.props.resetUser();
   }
 
 
