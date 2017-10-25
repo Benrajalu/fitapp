@@ -33,7 +33,8 @@ describe('when managing settings', () => {
     settings: userData[0].settings,
     userName : userData[0]["displayName"],
     userPic: userData[0]["profilePicture"],
-    userEmail: userData[0]["contactEmail"]
+    userEmail: userData[0]["contactEmail"], 
+    loading: false
   });
 
   test("it displays the user's current settings", () => {

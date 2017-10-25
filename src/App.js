@@ -33,13 +33,18 @@ class App extends Component {
           email = user.email, 
           name = user.displayName ? user.displayName : user.email.split('@')[0], 
           photo = user.photoURL ? user.photoURL : false, 
+          settings = {
+            baseBarbell : 20, 
+            availableWeights : [25,20,15,10,5,2.5,1.25,1,0.5,0.25]
+          },
           _this = this;
 
     query.doc(user.uid).set({
       displayName: name, 
       signinEmail: email,
       contactEmail: email,
-      profilePicture: photo
+      profilePicture: photo,
+      settings: settings
     }).then(() => {
       console.log("yas");
       let newQuery = database.collection('users').doc(user.uid);
