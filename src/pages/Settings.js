@@ -72,14 +72,7 @@ class Settings extends Component {
   }
 
   updateWeights(event){
-    let target = parseFloat(event.target.value), 
-        serverPayload = {
-          method: 'post', 
-          url: '',
-          data: {
-            settings: {}
-          }  
-        };
+    let target = parseFloat(event.target.value);
 
     const currentWeights = this.state.settings;
     if(this.state.settings.availableWeights.indexOf(target) !== -1){
@@ -91,30 +84,35 @@ class Settings extends Component {
     }
 
     this.setState({
-      settings: currentWeights
+      settings: currentWeights,
+      savingWeights: "Enregistrement..."
     }, () => {
-      serverPayload.data.settings.availableWeights = this.state.settings.availableWeights;
-      axios(serverPayload)
+      const updateQuery = database.collection('users').doc(this.state.user.uid), 
+            value = this.state.settings.availableWeights, 
+            _this = this;
+
+      updateQuery.update({
+        "settings.availableWeights" : value
+      })
       .then(function(response){
         console.log("Congrats, settings saved !");
-        console.log(response);
+        _this.setState({
+          savingWeights: 'Enregistré !'
+        });
+        setTimeout(function(){
+          _this.setState({
+            savingWeights: false
+          });
+        }, 2000);
       })
       .catch(function(error){
         console.log("That's a FALSE setting saved : " + error.message);
-        console.log(serverPayload);
-      })
+      });
     })
   }
 
   updateBarbell(event){
-    let target = parseFloat(event.target.value), 
-        serverPayload = {
-          method: 'post', 
-          url: '',
-          data: {
-            settings: {}
-          }  
-        };
+    let target = parseFloat(event.target.value);
 
     const currentSettings = this.state.settings;
     currentSettings.baseBarbell = target === 0 ? 1 : target;
@@ -124,7 +122,6 @@ class Settings extends Component {
       settings: currentSettings, 
       savingBarbell: "Enregistrement..."
     }, () => {
-      serverPayload.data.settings.baseBarbell = this.state.settings.baseBarbell;
       const updateQuery = database.collection('users').doc(this.state.user.uid), 
             value = this.state.settings.baseBarbell, 
             _this = this;
@@ -145,7 +142,7 @@ class Settings extends Component {
       })
       .catch(function(error){
         console.log("That's a FALSE setting saved : " + error.message);
-      })
+      });
     })
   }
 
@@ -384,14 +381,14 @@ class Settings extends Component {
             <h3>Gestion des poids (barbell)</h3>
             <div className="panel panel-default">
               <div className="panel-heading">
-                <h3 className="panel-title">Poids de la barre à vide</h3>
+                <h3 className="panel-title">Poids de la barre à vide {this.state.savingBarbell ? <span className="badge">{this.state.savingBarbell}</span> : false}</h3>
               </div>
               <form action="#" className="panel-body">
               { this.state.loading ? 
                 <p>Chargement...</p> 
                 : 
                 <div>
-                  <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg {this.state.savingBarbell ? '- ' + this.state.savingBarbell : false}
+                  <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg
                 </div>
               }
               </form>
@@ -399,7 +396,7 @@ class Settings extends Component {
 
             <div className="panel panel-default">
               <div className="panel-heading">
-                <h3 className="panel-title">Poids libres disponibles</h3>
+                <h3 className="panel-title">Poids libres disponibles {this.state.savingWeights ? <span className="badge">{this.state.savingWeights}</span> : false}</h3>
               </div>
               { this.state.loading ? 
                 <div className="panel-body">
