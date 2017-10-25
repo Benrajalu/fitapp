@@ -31,7 +31,7 @@ class App extends Component {
   initiateDefaultUser(user){
     const query = database.collection('users'), 
           email = user.email, 
-          name = user.displayName ? user.displayName : user.email, 
+          name = user.displayName ? user.displayName : user.email.split('@')[0], 
           photo = user.photoURL ? user.photoURL : false, 
           _this = this;
 
@@ -117,7 +117,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          {this.state.user && this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} /> : false}
+          {this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} /> : false}
           {this.state.loading ? <p>Loading</p> :
             <main id="mainContents">
               {this.state.loggedIn ? 

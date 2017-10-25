@@ -9,7 +9,7 @@ const config = {
 
 firebase.initializeApp(config);
 
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+//firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.NONE);
 
 export const fire = firebase;
 export const database = firebase.firestore();

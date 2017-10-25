@@ -31,9 +31,9 @@ describe('when managing settings', () => {
 
   settings.setState({
     settings: userData[0].settings,
-    userName : userData[0]["display-name"],
-    userPic: userData[0]["profile-picture"],
-    userEmail: userData[0]["contact-email"]
+    userName : userData[0]["displayName"],
+    userPic: userData[0]["profilePicture"],
+    userEmail: userData[0]["contactEmail"]
   });
 
   test("it displays the user's current settings", () => {

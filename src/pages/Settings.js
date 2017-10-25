@@ -43,9 +43,9 @@ class Settings extends Component {
   componentDidMount() {
     this.setState({
       settings: userData[0].settings,
-      userName : userData[0]["display-name"],
-      userPic: userData[0]["profile-picture"],
-      userEmail: userData[0]["contact-email"]
+      userName : userData[0]["displayName"],
+      userPic: userData[0]["profilePicture"],
+      userEmail: userData[0]["contactEmail"]
     })
   }
 
@@ -251,9 +251,9 @@ class Settings extends Component {
         method: 'post', 
         url: '',
         data: {
-          'display-name': this.state.userName,
-          'contact-email': this.state.userEmail, 
-          'profile-picture': this.state.previewImage ? this.state.previewImage : this.state.userPic
+          'displayName': this.state.userName,
+          'contactEmail': this.state.userEmail, 
+          'profilePicture': this.state.previewImage ? this.state.previewImage : this.state.userPic
         }  
       }, 
       _this = this;

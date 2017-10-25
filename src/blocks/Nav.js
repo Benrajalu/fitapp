@@ -50,7 +50,7 @@ class Nav extends Component {
               <li><NavLink className="nav-link" to="/settings">Paramètres</NavLink></li>
               <li><button onClick={this.logOff} className="btn btn-danger">Déconnexion</button></li>
             </ul>
-            <UserLog user={this.props.user} />
+            {this.props.user ? <UserLog user={this.props.user} /> : false}
           </div>
         </div>
       </nav>
