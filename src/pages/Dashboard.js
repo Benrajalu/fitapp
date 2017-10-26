@@ -35,8 +35,9 @@ class Dashboard extends Component {
             output.push(data);
           });
           _this.setState({
-            routinesList: output
-          })
+            routinesList: output.length > 0 ? output : false
+          });
+          console.log(_this.state.routinesList);
         });
         
         database.collection('exercises').get().then((snapshot) => {
@@ -154,9 +155,9 @@ class Dashboard extends Component {
                   <div>
                     <div className="alert alert-warning">Nous n'avez enregistré aucun entrainement pour l'instant !</div>
                     {this.state.routinesList ? 
-                      <button className="btn btn-primary btn-lg btn-block" onClick={this.displayModal}>Lancer un entraînement</button>
+                      <button className="btn btn-primary" onClick={this.displayModal}>Lancer un entraînement</button>
                       :
-                      <Link to='/new-routine' className="btn btn-default btn-lg">Créer un entraînement</Link>
+                      <Link to='/new-routine' className="btn btn-default">Créer un entraînement</Link>
                     }
                   </div>
                 }

@@ -122,7 +122,7 @@ class RoutineMaker extends Component {
         let payload = {};
 
         if(verb === "post"){
-          database.collection('users').doc(userId).collection('routines').add(addedRoutine).then(() => {
+          database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).set(addedRoutine).then(() => {
             _this.setState({
               successRedirect:true
             });
