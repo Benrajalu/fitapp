@@ -4,7 +4,7 @@ import RoutineMaker from '../blocks/RoutineMaker';
 class NewRoutine extends Component {
   constructor(props) {
     super(props);
-    this.handeleFormPost = this.handleFormPost.bind(this);
+    this.handleFormPost = this.handleFormPost.bind(this);
   }
 
   handleFormPost(event, data) {

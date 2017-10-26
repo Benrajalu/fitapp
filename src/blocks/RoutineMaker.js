@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {Redirect} from 'react-router';
-
-import users from '../data/users.json';
-import exercisesDatabase from '../data/exercises.json';
+import {firebaseAuth, database} from '../utils/fire';
 
 import ExercisePicker from '../blocks/ExercisePicker';
 import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
@@ -42,9 +40,36 @@ class RoutineMaker extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      user: users[0],
-      exercisesDatabase: exercisesDatabase
+    const _this = this;
+    firebaseAuth.onAuthStateChanged(function(user) {
+      if (user) {
+        const userQuery = database.collection('users').doc(user.uid);
+        
+        database.collection('exercises').get().then((snapshot) => {
+          const output = [];
+          snapshot.forEach((doc) => {
+            output.push(doc.data());
+          });
+          _this.setState({
+            exercisesDatabase: output
+          })
+        });
+
+        userQuery.get().then((doc) => {
+          if(doc.exists){
+            const userObj = doc.data();
+            userObj.uid = user.uid;
+            _this.setState({
+              user:userObj
+            });
+          }
+          else{
+            firebaseAuth.signOut();
+          }
+        })
+      } else {
+        firebaseAuth.signOut();
+      }
     });
   }
 
@@ -89,22 +114,19 @@ class RoutineMaker extends Component {
       if (!this.state.errors){
         console.log("Congrats, built this new routine :");
 
-        const userId = this.state.user.id, 
+        const userId = this.state.user.uid, 
               addedRoutine = this.state.newRoutine, 
               _this = this, 
-              verb= this.state.isEdit ? 'put' : 'post';
+              verb = this.state.isEdit ? 'put' : 'post';
 
         let payload = {};
 
         if(verb === "post"){
-          payload = {
-            method: "post", 
-            url: '../data/users.json',
-            data: {
-              userId: userId,
-              newRoutine: addedRoutine
-            }
-          };
+          database.collection('users').doc(userId).collection('routines').add(addedRoutine).then(() => {
+            _this.setState({
+              successRedirect:true
+            });
+          })
         }
         else if(verb === "put"){
           payload = {
@@ -116,26 +138,6 @@ class RoutineMaker extends Component {
             }
           };  
         }
-
-        console.log(payload);
-
-        axios(payload)
-        .then(function(response){
-          console.log("that's a pass!");
-          console.log(response);
-        })
-        .catch(function(error){
-          console.log("that's a fail : " + error.message);
-          // Mock success still 
-          _this.setState({
-            success:true
-          });
-          setTimeout(() => {
-            _this.setState({
-              successRedirect:true
-            });
-          }, 1500);
-        })
       }
     })
   }

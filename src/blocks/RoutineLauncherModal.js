@@ -23,7 +23,11 @@ class RoutineLauncherModal extends Component {
         <div className="contents">
           Here will be routines
           <button className="closer" onClick={this.closeModal}>Close modal</button>
-          <Routines list={this.props.routinesList} exercisesDatabase={this.props.exercises} />
+          { this.props.routinesList.length !== 0 ?
+            <Routines list={this.props.routinesList} exercisesDatabase={this.props.exercises} />
+          :
+            <div className="alert alert-warning">Vous n'avez pas créé d'entrainement</div> 
+          }
         </div>
       </div>
     )

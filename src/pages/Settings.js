@@ -61,10 +61,9 @@ class Settings extends Component {
               userPic: userObj.profilePicture,
               userEmail: userObj.contactEmail
             });
-            console.log(_this.state.userId);
           }
           else{
-
+            firebaseAuth.signOut();
           }
         })
       } else {
