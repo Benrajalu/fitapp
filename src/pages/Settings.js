@@ -26,6 +26,7 @@ class Settings extends Component {
     this.deleteAccount = this.deleteAccount.bind(this);
 
     this.state = {
+      userId:false,
       loading: true,
       userName : '',
       userPic: false,
@@ -54,12 +55,13 @@ class Settings extends Component {
             userObj.uid = user.uid;
             _this.setState({
               loading:false,
-              user: userObj,
+              userId: userObj.uid,
               settings: userObj.settings,
               userName : userObj.displayName,
               userPic: userObj.profilePicture,
               userEmail: userObj.contactEmail
-            })
+            });
+            console.log(_this.state.userId);
           }
           else{
 
@@ -87,7 +89,7 @@ class Settings extends Component {
       settings: currentWeights,
       savingWeights: "Enregistrement..."
     }, () => {
-      const updateQuery = database.collection('users').doc(this.state.user.uid), 
+      const updateQuery = database.collection('users').doc(this.state.userId), 
             value = this.state.settings.availableWeights, 
             _this = this;
 
@@ -122,7 +124,7 @@ class Settings extends Component {
       settings: currentSettings, 
       savingBarbell: "Enregistrement..."
     }, () => {
-      const updateQuery = database.collection('users').doc(this.state.user.uid), 
+      const updateQuery = database.collection('users').doc(this.state.userId), 
             value = this.state.settings.baseBarbell, 
             _this = this;
 
@@ -278,7 +280,7 @@ class Settings extends Component {
       this.setState({
         saving: "Patientez..."
       });
-      const updateQuery = database.collection('users').doc(this.state.user.uid),
+      const updateQuery = database.collection('users').doc(this.state.userId),
             displayName = this.state.userName,
             contactEmail = this.state.userEmail, 
             profilePicture = this.state.previewImage ? this.state.previewImage : this.state.userPic, 

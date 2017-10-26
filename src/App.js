@@ -102,6 +102,25 @@ class App extends Component {
     else{
       firebaseAuth.onAuthStateChanged(function(user) {
         if(user){
+          const query = database.collection('users').doc(user.uid);
+          query.get().then((doc) => {
+            if(!doc.exists){
+              console.log('not found');
+              _this.initiateDefaultUser(user);
+              _this.setState({
+                loading:false,
+                loggedIn: true
+              });
+            }
+            else{
+              _this.setState({
+                user: doc.data(),
+                loading:false,
+                loggedIn: true
+              })
+            }
+          });
+
           _this.setState({
             loading:false,
             loggedIn: true

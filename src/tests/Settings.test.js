@@ -16,7 +16,7 @@ it('renders without crashing', () => {
 });
 
 test('displays the test message', () => {
-  const dash = shallow(
+  const dash = mount(
     <Settings />
   );
   
@@ -30,11 +30,12 @@ describe('when managing settings', () => {
   );  
 
   settings.setState({
+    loading: false,
+    userId:"01",
     settings: userData[0].settings,
     userName : userData[0]["displayName"],
     userPic: userData[0]["profilePicture"],
-    userEmail: userData[0]["contactEmail"], 
-    loading: false
+    userEmail: userData[0]["contactEmail"]
   });
 
   test("it displays the user's current settings", () => {
@@ -44,10 +45,16 @@ describe('when managing settings', () => {
 
   test("it updates settings flawlessly", () => {
     // Checking the first disc weight, making it available
-    settings.find('input[type="checkbox"]').first().simulate('change');
+    let settingsTest={baseBarbell: 10, availableWeights:[25]};
+    settings.setState({
+      settings: settingsTest,
+    });
     expect(settings.find('input[type="checkbox"]').first().props().checked).toBeTruthy();
     // Unchecking it
-    settings.find('input[type="checkbox"]').first().simulate('change');
+    settingsTest={baseBarbell: 10, availableWeights:[20]};
+    settings.setState({
+      settings: settingsTest,
+    });
     expect(settings.find('input[type="checkbox"]').first().props().checked).not.toBeTruthy();
   });
 
@@ -64,4 +71,5 @@ describe('when managing settings', () => {
     settings.find('input[name="userEmail"]').simulate('change');
     expect(settings.find('button[type="submit"]').props().disabled).not.toBeTruthy();
   });
+  
 });
