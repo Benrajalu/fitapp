@@ -278,50 +278,33 @@ class Settings extends Component {
       this.setState({
         saving: "Patientez..."
       });
-      const serverPayload = {
-        method: 'post', 
-        url: '',
-        data: {
-          'displayName': this.state.userName,
-          'contactEmail': this.state.userEmail, 
-          'profilePicture': this.state.previewImage ? this.state.previewImage : this.state.userPic
-        }  
-      }, 
-      _this = this;
+      const updateQuery = database.collection('users').doc(this.state.user.uid),
+            displayName = this.state.userName,
+            contactEmail = this.state.userEmail, 
+            profilePicture = this.state.previewImage ? this.state.previewImage : this.state.userPic, 
+            _this = this;
 
-      axios(serverPayload)
-        .then(function(response){
-          console.log("Congrats, settings saved !");
-          console.log(response);
-          setTimeout(() => {
-            _this.setState({
-              saving: "Modifications enregistrées !"
-            })
-          }, 500);
-          setTimeout(() => {
-            _this.setState({
-              saving: false,
-              newPic: false, 
-              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
-            })
-          }, 1500);
-        })
-        .catch(function(error){
-          console.log("That's a FALSE setting saved : " + error.message);
-          console.log(serverPayload);
-          setTimeout(() => {
-            _this.setState({
-              saving: "Modifications enregistrées !"
-            })
-          }, 500);
-          setTimeout(() => {
-            _this.setState({
-              saving: false,
-              newPic: false, 
-              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
-            })
-          }, 1500);
+      updateQuery.update({
+        displayName : displayName,
+        contactEmail : contactEmail,
+        profilePicture : profilePicture,
+      })
+      .then(function(response){
+        console.log("Congrats, settings saved !");
+        _this.setState({
+          saving: "Modifications enregistrées !"
         });
+        setTimeout(function(){
+          _this.setState({
+            saving: false,
+            newPic: false, 
+            userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
+          });
+        }, 2000);
+      })
+      .catch(function(error){
+        console.log("That's a FALSE setting saved : " + error.message);
+      });
     }
   }
 
