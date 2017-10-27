@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import RoutineMaker from '../blocks/RoutineMaker';
+import {firebaseAuth, database} from '../utils/fire';
 
-import userData from '../data/users.json';
+import RoutineMaker from '../blocks/RoutineMaker';
 
 class EditRoutine extends Component {
   constructor(props) {
@@ -9,15 +9,34 @@ class EditRoutine extends Component {
     this.handeleFormPost = this.handleFormPost.bind(this);
 
     this.state = {
-      routineId: this.props.match ? this.props.match.params.id : undefined, 
-      routine: false
+      routine: false,
+      loading: true
     }
   }
 
   componentDidMount() {
-    const realRoutine = userData[0].routines.filter(obj => obj.id === this.props.match.params.id )[0];
-    this.setState({
-      routine: realRoutine
+    const _this = this;
+    firebaseAuth.onAuthStateChanged(function(user) {
+      if (user) {
+        const routineQuery = database.collection('users').doc(user.uid).collection('routines').doc(_this.props.match.params.id);
+        routineQuery.get().then((doc) => {
+          if(doc.exists){
+            const realRoutine = doc.data();
+            _this.setState({
+              routine: realRoutine, 
+              loading: false
+            });
+          }
+          else{
+            _this.setState({
+              routine: false, 
+              loading: false
+            });
+          }
+        })
+      } else {
+        firebaseAuth.signOut();
+      }
     });
   }
 
@@ -33,9 +52,7 @@ class EditRoutine extends Component {
             <h1>Modifier ce programme</h1>
           </div>
         </div>
-        
-        <RoutineMaker postHandler={this.handleFormPost} editRoutine={this.state.routine}/>
-
+        {this.state.routine ? <RoutineMaker postHandler={this.handleFormPost} editRoutine={this.state.routine ? this.state.routine : "empty"} /> : <div className="container"><p>Chargement du programme...</p></div>}
       </div>
     )
   }

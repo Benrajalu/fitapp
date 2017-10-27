@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import {Redirect} from 'react-router';
 import {firebaseAuth, database} from '../utils/fire';
 
@@ -71,6 +70,21 @@ class RoutineMaker extends Component {
         firebaseAuth.signOut();
       }
     });
+    if(this.props.editRoutine){  
+      const timestamp = new Date();
+
+      const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
+            mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
+            yyyy = timestamp.getFullYear(),
+            fullDate = dd+'/'+mm+'/'+yyyy;
+
+      const nextRoutineShot = this.props.editRoutine;
+      nextRoutineShot.lastPerformed = fullDate;
+      this.setState({
+        newRoutine: nextRoutineShot, 
+        isEdit: true
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -82,13 +96,15 @@ class RoutineMaker extends Component {
           fullDate = dd+'/'+mm+'/'+yyyy;
     
 
-    if(nextProps.editRoutine){
+    if(nextProps.editRoutine && nextProps.editRoutine !== "empty"){
       const nextRoutineShot = nextProps.editRoutine;
       nextRoutineShot.lastPerformed = fullDate;
       this.setState({
         newRoutine: nextRoutineShot, 
         isEdit: true
-      })
+      });
+
+      console.log(this.state.newRoutine);
     }
   }
 
@@ -129,14 +145,11 @@ class RoutineMaker extends Component {
           })
         }
         else if(verb === "put"){
-          payload = {
-            method: "put", 
-            url: '../data/users.json',
-            data: {
-              routineId: addedRoutine.id,
-              routine: addedRoutine
-            }
-          };  
+          database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).update(addedRoutine).then(() => {
+            _this.setState({
+              successRedirect:true
+            });
+          })  
         }
       }
     })
@@ -238,43 +251,49 @@ class RoutineMaker extends Component {
 
     return (
       <div id="RoutineMaker">
-        <form onSubmit={this.validate} className="container">
-          <div className={this.state.errors.name ? "form-group has-error" : "form-group"}>
-            <label>Routine name</label>
-            <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} />
-            {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
+        {this.state.loading ? 
+          <div className="container">
+            <p>Chargement de l'entrainement...</p>
           </div>
-          <div className="form-group">
-            <label>Routine color</label>
-            <div className="radio">
-                <label>
-                  <input type="radio" name="color" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
-                </label>
+          :
+          <form onSubmit={this.validate} className="container">
+            <div className={this.state.errors.name ? "form-group has-error" : "form-group"}>
+              <label>Routine name</label>
+              <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} />
+              {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
             </div>
-            <div className="radio">
-                <label>
-                  <input type="radio" name="color" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
-                </label>
+            <div className="form-group">
+              <label>Routine color</label>
+              <div className="radio">
+                  <label>
+                    <input type="radio" name="color" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
+                  </label>
+              </div>
+              <div className="radio">
+                  <label>
+                    <input type="radio" name="color" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
+                  </label>
+              </div>
+              <div className="radio">
+                  <label>
+                    <input type="radio" name="color" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
+                  </label>
+              </div>
             </div>
-            <div className="radio">
-                <label>
-                  <input type="radio" name="color" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
-                </label>
+            <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
+              <label>Exercices</label>
+              {listExercises}
+              {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
+              <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
             </div>
-          </div>
-          <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
-            <label>Exercices</label>
-            {listExercises}
-            {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
-            <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
-          </div>
-          <hr/>
-          <div className="form-group">
-            <button type="submit" className="btn btn-default">Submit</button>
-            {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
-          </div>
-          {this.state.successRedirect ? <Redirect push to={{ pathname:'/', state:{newRoutine:true} }} /> : false}
-        </form>
+            <hr/>
+            <div className="form-group">
+              <button type="submit" className="btn btn-default">Submit</button>
+              {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
+            </div>
+            {this.state.successRedirect ? <Redirect push to={{ pathname:'/', state:{newRoutine:true} }} /> : false}
+          </form>
+        }
 
         <ExercisePicker 
           exercisesDatabase={this.state.exercisesDatabase} 

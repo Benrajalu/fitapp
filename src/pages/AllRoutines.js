@@ -4,10 +4,6 @@ import {firebaseAuth, database} from '../utils/fire';
 
 import Routines from '../blocks/Routines';
 
-import userData from '../data/users.json';
-import exercisesDatabase from '../data/exercises.json';
-
-
 
 class AllRoutines extends Component {
   constructor(props) {
