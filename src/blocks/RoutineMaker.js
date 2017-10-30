@@ -135,8 +135,6 @@ class RoutineMaker extends Component {
               _this = this, 
               verb = this.state.isEdit ? 'put' : 'post';
 
-        let payload = {};
-
         if(verb === "post"){
           database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).set(addedRoutine).then(() => {
             _this.setState({
@@ -291,7 +289,7 @@ class RoutineMaker extends Component {
               <button type="submit" className="btn btn-default">Submit</button>
               {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
             </div>
-            {this.state.successRedirect ? <Redirect push to={{ pathname:'/', state:{newRoutine:true} }} /> : false}
+            {this.state.successRedirect ? <Redirect push to={{ pathname:'/all-routines', state:{newRoutine:true} }} /> : false}
           </form>
         }
 

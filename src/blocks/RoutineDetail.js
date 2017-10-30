@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { database} from '../utils/fire';
 
 import ExerciseListing from '../blocks/ExerciseListing';
 
@@ -22,33 +22,17 @@ class RoutineDetail extends Component {
     })
   }
   deleteRoutine(){
-    const serverPayload = {
-      method: 'post', 
-      url: '',
-      data: {
-        userId: this.props.user.id, 
-        routineId: this.props.contents.id, 
-        operation: 'remove'
-      }  
-    }, 
-    _this = this;
-
-    axios(serverPayload)
-    .then(function(response){
+    const _this = this;
+    database.collection("users").doc(this.props.user.id).collection('routines').doc(this.props.contents.id).delete().then(() => {
       console.log("Kill order confirmed on routine " + this.props.contents.id);
-      console.log(response);
-    })
-    .catch(function(error){
-      console.log("That's a FALSE delete : " + error.message);
-      console.log(serverPayload);
-      // Mock success still 
+      this.props.rebuild();
       _this.setState({
         killConfirmed:true
       });
       setTimeout(() => {
        _this.togglePopin();
       }, 1500);
-    })
+    });
   }
 
   render() {

@@ -13,9 +13,44 @@ class AllRoutines extends Component {
       routinesList:[], 
       exercises: [], 
       user:{}
-    }
+    };
+
+    this.refreshRoutines = this.refreshRoutines.bind(this);
   }
   componentDidMount() {
+    const _this = this;
+    firebaseAuth.onAuthStateChanged(function(user) {
+      if (user) {
+        database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
+          const output = [];
+          snapshot.forEach((doc) => {
+            let data = doc.data();
+                data.id = doc.id;
+            output.push(data);
+          });
+          _this.setState({
+            routinesList: output.length > 0 ? output : false, 
+            user: {id: user.uid}
+          });
+        });
+
+        database.collection('exercises').get().then((snapshot) => {
+          const output = [];
+          snapshot.forEach((doc) => {
+            output.push(doc.data());
+          });
+          _this.setState({
+            exercises: output,
+            loading: false
+          })
+        });
+      } else {
+        firebaseAuth.signOut();
+      }
+    });
+  }
+
+  refreshRoutines(){
     const _this = this;
     firebaseAuth.onAuthStateChanged(function(user) {
       if (user) {
@@ -46,7 +81,7 @@ class AllRoutines extends Component {
       } else {
         firebaseAuth.signOut();
       }
-    });
+    });  
   }
   
   render() {
@@ -74,7 +109,7 @@ class AllRoutines extends Component {
             :
             <div>
               {this.state.routinesList.length > 0 && this.state.routinesList ? 
-                <Routines list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} />
+                <Routines rebuild={this.refreshRoutines} list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} />
                 :
                 <div className="alert alert-warning">Vous n'avez pas encore créé d'entraînement !</div>
               }
