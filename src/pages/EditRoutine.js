@@ -9,35 +9,43 @@ class EditRoutine extends Component {
     this.handeleFormPost = this.handleFormPost.bind(this);
 
     this.state = {
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
       routine: false,
       loading: true
     }
   }
 
-  componentDidMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        const routineQuery = database.collection('users').doc(user.uid).collection('routines').doc(_this.props.match.params.id);
-        routineQuery.get().then((doc) => {
-          if(doc.exists){
-            const realRoutine = doc.data();
-            _this.setState({
-              routine: realRoutine, 
-              loading: false
-            });
-          }
-          else{
-            _this.setState({
-              routine: false, 
-              loading: false
-            });
-          }
-        })
-      } else {
-        firebaseAuth.signOut();
+  routineListener(){
+    const _this = this, 
+          user = this.state.user, 
+          routine = this.props.match.params.id;
+
+    this.fireRoutineListener = database.collection('users').doc(user.uid).collection('routines').doc(routine).get().then((doc) => {
+      if(doc.exists){
+        const realRoutine = doc.data();
+        _this.setState({
+          routine: realRoutine, 
+          loading: false
+        });
+      }
+      else{
+        _this.setState({
+          routine: false, 
+          loading: false
+        });
       }
     });
+  }
+
+  componentWillMount() {
+    // Binding the listeners created above to this component
+    this.routineListener = this.routineListener.bind(this);
+    this.routineListener();
+  }
+
+  compontentWillUnmout(){
+    // Removing the bindings and stopping the events from poluting the state
+    this.routinesListener = undefined;
   }
 
   handleFormPost(event, data) {

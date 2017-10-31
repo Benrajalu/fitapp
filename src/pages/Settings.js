@@ -26,6 +26,7 @@ class Settings extends Component {
     this.deleteAccount = this.deleteAccount.bind(this);
 
     this.state = {
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
       userId:false,
       loading: true,
       userName : '',
@@ -43,33 +44,35 @@ class Settings extends Component {
     }
   }
 
-  componentDidMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        const userQuery = database.collection('users').doc(user.uid);
+  userListener(){
+    const _this = this, 
+          user = this.state.user;
 
-        userQuery.get().then((doc) => {
-          if(doc.exists){
-            const userObj = doc.data();
-            userObj.uid = user.uid;
-            _this.setState({
-              loading:false,
-              userId: userObj.uid,
-              settings: userObj.settings,
-              userName : userObj.displayName,
-              userPic: userObj.profilePicture,
-              userEmail: userObj.contactEmail
-            });
-          }
-          else{
-            firebaseAuth.signOut();
-          }
-        })
-      } else {
-        firebaseAuth.signOut();
+    this.fireUserListener = database.collection('users').doc(user.uid).get().then((doc) => {
+      if(doc.exists){
+        const userObj = doc.data();
+        userObj.uid = user.uid;
+        _this.setState({
+          loading:false,
+          userId: userObj.uid,
+          settings: userObj.settings,
+          userName : userObj.displayName,
+          userPic: userObj.profilePicture,
+          userEmail: userObj.contactEmail
+        });
       }
     });
+  }
+
+  componentWillMount() {
+    // Binding the listeners created above to this component
+    this.userListener = this.userListener.bind(this);
+    this.userListener();
+  }
+
+  compontentWillUnmout(){
+    // Removing the bindings and stopping the events from poluting the state
+    this.userListener = undefined;
   }
 
   updateWeights(event){

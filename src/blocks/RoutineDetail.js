@@ -15,6 +15,9 @@ class RoutineDetail extends Component {
     };
     this.togglePopin = this.togglePopin.bind(this);
     this.deleteRoutine = this.deleteRoutine.bind(this);
+    if(this.props.user){
+      this.userRef = database.collection('users').doc(this.props.user.id);
+    }
   }
   togglePopin(){
     this.setState({
@@ -23,15 +26,14 @@ class RoutineDetail extends Component {
   }
   deleteRoutine(){
     const _this = this;
-    database.collection("users").doc(this.props.user.id).collection('routines').doc(this.props.contents.id).delete().then(() => {
-      console.log("Kill order confirmed on routine " + this.props.contents.id);
-      this.props.rebuild();
+    this.userRef.collection('routines').doc(this.props.contents.id).delete().then(() => {
       _this.setState({
         killConfirmed:true
+      }, () => {
+        setTimeout(() => {
+         _this.props.refresh();
+        }, 1500);
       });
-      setTimeout(() => {
-       _this.togglePopin();
-      }, 1500);
     });
   }
 

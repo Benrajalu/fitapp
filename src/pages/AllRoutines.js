@@ -12,76 +12,66 @@ class AllRoutines extends Component {
       loading:true,
       routinesList:[], 
       exercises: [], 
-      user:{}
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"} 
     };
-
     this.refreshRoutines = this.refreshRoutines.bind(this);
   }
-  componentDidMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            let data = doc.data();
-                data.id = doc.id;
-            output.push(data);
-          });
-          _this.setState({
-            routinesList: output.length > 0 ? output : false, 
-            user: {id: user.uid}
-          });
-        });
 
-        database.collection('exercises').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            output.push(doc.data());
-          });
-          _this.setState({
-            exercises: output,
-            loading: false
-          })
-        });
-      } else {
-        firebaseAuth.signOut();
-      }
+  routinesListener(){
+    const _this = this, 
+          user = this.state.user;
+
+    this.fireRoutinesListener = database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
+      const output = [];
+      snapshot.forEach((doc) => {
+        let data = doc.data();
+            data.id = doc.id;
+        output.push(data);
+      });
+      _this.setState({
+        routinesList: output.length > 0 ? output : false
+      });
     });
   }
 
-  refreshRoutines(){
+  exercisesListener(){
     const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            let data = doc.data();
-                data.id = doc.id;
-            output.push(data);
-          });
-          _this.setState({
-            routinesList: output.length > 0 ? output : false, 
-            user: {id: user.uid}
-          });
-          console.log(_this.state.routinesList);
-        });
 
-        database.collection('exercises').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            output.push(doc.data());
-          });
-          _this.setState({
-            exercises: output,
-            loading: false
-          })
-        });
-      } else {
-        firebaseAuth.signOut();
-      }
-    });  
+    this.fireExercisesListener = database.collection('exercises').get().then((snapshot) => {
+      const output = [];
+      snapshot.forEach((doc) => {
+        output.push(doc.data());
+      });
+      _this.setState({
+        exercises: output, 
+        loading:false
+      })
+    });
+  }
+
+
+  componentWillMount() {
+    const user = this.state.user;
+    user.id = user.uid;
+    this.setState({
+      user: user
+    });
+
+    // Binding the listeners created above to this component
+    this.routinesListener = this.routinesListener.bind(this);
+    this.routinesListener();
+
+    this.exercisesListener = this.exercisesListener.bind(this);
+    this.exercisesListener();
+  }
+
+  componentWillUnmount() {
+    this.routinesListener = undefined;
+    this.exercisesListener = undefined;
+  }
+
+  refreshRoutines(){
+    this.routinesListener();
   }
   
   render() {
@@ -109,7 +99,7 @@ class AllRoutines extends Component {
             :
             <div>
               {this.state.routinesList.length > 0 && this.state.routinesList ? 
-                <Routines rebuild={this.refreshRoutines} list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} />
+                <Routines rebuild={this.refreshRoutines} list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} refresh={this.refreshRoutines}/>
                 :
                 <div className="alert alert-warning">Vous n'avez pas encore créé d'entraînement !</div>
               }

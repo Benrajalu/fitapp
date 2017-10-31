@@ -23,9 +23,35 @@ class App extends Component {
       loggedIn: false, 
       user: false
     };
-
     this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
     this.resetUser = this.resetUser.bind(this);
+  }
+
+  authListener(){
+    const _this = this;
+    this.fireBaseListener = firebaseAuth.onAuthStateChanged(function(user) {
+      if(user){
+        const query = database.collection('users').doc(user.uid);
+        query.onSnapshot((doc) => {
+          if(!doc.exists){
+            _this.initiateDefaultUser(user);
+          }
+          else{
+            _this.setState({
+              user: doc.data(), 
+              loggedIn: true, 
+              loading: false
+            })
+          }
+        });
+      }
+      else{
+        _this.setState({
+          loggedIn: false, 
+          loading: false
+        });
+      }
+    });
   }
 
   initiateDefaultUser(user){
@@ -46,11 +72,12 @@ class App extends Component {
       profilePicture: photo,
       settings: settings
     }).then(() => {
-      console.log("yas");
       let newQuery = database.collection('users').doc(user.uid);
       newQuery.get().then((doc) => {
         _this.setState({
-          user: doc.data()
+          user: doc.data(), 
+          loggedIn: true, 
+          loading: false
         })
       })
     });
@@ -58,83 +85,19 @@ class App extends Component {
 
   resetUser(){
     this.setState({
-      user: false
+      user: false, 
+      loggedIn: false
     })
   }
 
   componentWillMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if(user){
-        const query = database.collection('users').doc(user.uid);
-        query.get().then((doc) => {
-          if(!doc.exists){
-            console.log('not found');
-            _this.initiateDefaultUser(user);
-          }
-          else{
-            _this.setState({
-              user: doc.data()
-            })
-          }
-        });
-
-        _this.setState({
-          loggedIn: true
-        })
-      }
-      else{
-        _this.setState({
-          loggedIn: false
-        });
-      }
-    });
+    this.authListener = this.authListener.bind(this);
+    this.authListener();
   }
 
-  componentDidMount() {
-    const _this = this;
-    if(firebaseAuth.currentUser || !this.state.loggedIn){
-      _this.setState({
-        loading:false,
-        loggedIn: true
-      })
-    }
-    else{
-      firebaseAuth.onAuthStateChanged(function(user) {
-        if(user){
-          const query = database.collection('users').doc(user.uid);
-          query.get().then((doc) => {
-            if(!doc.exists){
-              console.log('not found');
-              _this.initiateDefaultUser(user);
-              _this.setState({
-                loading:false,
-                loggedIn: true
-              });
-            }
-            else{
-              _this.setState({
-                user: doc.data(),
-                loading:false,
-                loggedIn: true
-              })
-            }
-          });
-
-          _this.setState({
-            loading:false,
-            loggedIn: true
-          })
-        }
-        else{
-          _this.setState({
-            loading:false,
-            loggedIn: false
-          });
-          console.log("not logged in yet")
-        }
-      });
-    }
+  compontentWillUnmout(){
+    this.fireBaseListener && this.fireBaseListener();
+    this.authListener = undefined;
   }
 
   render() {

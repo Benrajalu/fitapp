@@ -18,7 +18,7 @@ class RoutineMaker extends Component {
 
     // Defaults
     this.state = {
-      user: {}, 
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
       exercisesDatabase: [],
       newRoutine: {
         routineId: timestamp.getTime(),
@@ -38,38 +38,45 @@ class RoutineMaker extends Component {
     this.organizeExercises = this.organizeExercises.bind(this);
   }
 
-  componentDidMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        const userQuery = database.collection('users').doc(user.uid);
-        
-        database.collection('exercises').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            output.push(doc.data());
-          });
-          _this.setState({
-            exercisesDatabase: output
-          })
-        });
+  userListener(){
+    const _this = this, 
+          user = this.state.user;
 
-        userQuery.get().then((doc) => {
-          if(doc.exists){
-            const userObj = doc.data();
-            userObj.uid = user.uid;
-            _this.setState({
-              user:userObj
-            });
-          }
-          else{
-            firebaseAuth.signOut();
-          }
-        })
-      } else {
-        firebaseAuth.signOut();
+    this.fireUserListener = database.collection('users').doc(user.uid).get().then((doc) => {
+      if(doc.exists){
+        const userObj = doc.data();
+        userObj.uid = user.uid;
+        _this.setState({
+          user: userObj
+        });
       }
     });
+  }
+
+  exercisesListener(){
+    const _this = this;
+
+    this.fireExercisesListener = database.collection('exercises').get().then((snapshot) => {
+      const output = [];
+      snapshot.forEach((doc) => {
+        output.push(doc.data());
+      });
+      _this.setState({
+        exercisesDatabase: output, 
+      })
+    });
+  }
+
+  componentWillMount() {
+    // Binding the listeners created above to this component
+    this.userListener = this.userListener.bind(this);
+    this.userListener();
+
+    this.exercisesListener = this.exercisesListener.bind(this);
+    this.exercisesListener();
+  }
+
+  componentDidMount() {
     if(this.props.editRoutine){  
       const timestamp = new Date();
 
@@ -87,6 +94,12 @@ class RoutineMaker extends Component {
     }
   }
 
+  compontentWillUnmout(){
+    // Removing the bindings and stopping the events from poluting the state
+    this.userListener = undefined;
+    this.exercisesListener = undefined;
+  }
+
   componentWillReceiveProps(nextProps) {
     const timestamp = new Date();
 
@@ -94,7 +107,6 @@ class RoutineMaker extends Component {
           mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
           yyyy = timestamp.getFullYear(),
           fullDate = dd+'/'+mm+'/'+yyyy;
-    
 
     if(nextProps.editRoutine && nextProps.editRoutine !== "empty"){
       const nextRoutineShot = nextProps.editRoutine;

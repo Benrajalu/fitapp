@@ -16,62 +16,95 @@ class Dashboard extends Component {
       exercises: [], 
       workoutList: false, 
       records: false, 
-      loading: true
+      loading: true,
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"} 
     };
     this.displayModal = this.displayModal.bind(this);
   }
 
-  componentDidMount() {
-    const _this = this;
-    firebaseAuth.onAuthStateChanged(function(user) {
-      if (user) {
-        const userQuery = database.collection('users').doc(user.uid);
-        
-        database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            let data = doc.data();
-                data.id = doc.id;
-            output.push(data);
-          });
-          _this.setState({
-            routinesList: output.length > 0 ? output : false
-          });
-          console.log(_this.state.routinesList);
-        });
-        
-        database.collection('exercises').get().then((snapshot) => {
-          const output = [];
-          snapshot.forEach((doc) => {
-            output.push(doc.data());
-          });
-          _this.setState({
-            exercises: output
-          })
-        });
+  routinesListener(){
+    const _this = this, 
+          user = this.state.user;
 
-        userQuery.get().then((doc) => {
-          if(doc.exists){
-            const userObj = doc.data();
-            userObj.uid = user.uid;
-
-            const workoutLog = userObj.workoutLog ? userObj.workoutLog : false;
-            const personalRecords = userObj.personalRecords ? userObj.personalRecords : false;
-
-            _this.setState({
-              loading:false,
-              workoutList: workoutLog,
-              records: personalRecords
-            });
-          }
-          else{
-
-          }
-        })
-      } else {
-        firebaseAuth.signOut();
-      }
+    this.fireRoutinesListener = database.collection('users').doc(user.uid).collection('routines').get().then((snapshot) => {
+      const output = [];
+      snapshot.forEach((doc) => {
+        let data = doc.data();
+            data.id = doc.id;
+        output.push(data);
+      });
+      _this.setState({
+        routinesList: output.length > 0 ? output : false
+      });
     });
+  }
+
+  logListener(){
+    const _this = this, 
+          user = this.state.user;
+
+    this.fireLogListener = database.collection('users').doc(user.uid).collection('workoutLog').get().then((snapshot) => {
+      const workoutLog = [];
+      snapshot.forEach((doc) => {
+        workoutLog.push(doc.data());
+      });
+      _this.setState({
+        workoutList: workoutLog.length > 0 ? workoutLog : false
+      });
+    });
+  }
+
+  recordsListener(){
+    const _this = this, 
+          user = this.state.user;
+
+    this.fireRecordsListener = database.collection('users').doc(user.uid).collection('personalRecords').get().then((snapshot) => {
+      const personalRecords = [];
+      snapshot.forEach((doc) => {
+        personalRecords.push(doc.data());
+      });
+      _this.setState({
+        records: personalRecords.length > 0 ? personalRecords : false
+      });
+    });
+  }
+
+  exercisesListener(){
+    const _this = this;
+
+    this.fireExercisesListener = database.collection('exercises').get().then((snapshot) => {
+      const output = [];
+      snapshot.forEach((doc) => {
+        output.push(doc.data());
+      });
+      _this.setState({
+        exercises: output, 
+        loading:false
+      })
+    });
+  }
+
+  componentWillMount() {
+    // Binding the listeners created above to this component
+    this.routinesListener = this.routinesListener.bind(this);
+    this.routinesListener();
+
+    this.logListener = this.logListener.bind(this);
+    this.logListener();
+
+    this.recordsListener = this.recordsListener.bind(this);
+    this.recordsListener();
+
+    this.exercisesListener = this.exercisesListener.bind(this);
+    this.exercisesListener();
+  }
+
+  compontentWillUnmout(){
+    // Removing the bindings and stopping the events from poluting the state
+    this.routinesListener = undefined;
+    this.logListener = undefined;
+    this.recordsListener = undefined;
+    this.exercisesListener = undefined;
   }
 
   displayModal(event) {
