@@ -1,0 +1,10 @@
+$white: #F9F9F9;
+$green: #1FC3AF;
+$greyType:#9397A1;
+
+@mixin mont($size, $type, $color){
+  font-family: "Montserrat";
+  font-size:$size;
+  color:$color;
+  font-weight: $type;
+}

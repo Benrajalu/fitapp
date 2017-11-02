@@ -1,5 +1,87 @@
 @import "styles/_reset.scss";
+@import "styles/_mixins.scss";
 
+body, html{
+  background: #2C3045;
+}
+
+.btn{
+  display: inline-block;
+  border: 1px solid #1FC3AF;
+  border-radius: 3px;
+  text-align: center;
+  padding:10px;
+  background: transparent;
+  transition:all 200ms ease-out;
+  @include mont(12px, 400, $white);
+  cursor: pointer;
+  &:hover{
+    background: $green;
+  }
+
+  &.facebook{
+    background: #3b5998;
+    border-color: #3b5998;
+    &:hover{
+      background: transparent;
+    }
+  }
+  &.google{
+    background: #dd4b39;
+    border-color: #dd4b39;
+    &:hover{
+      background: transparent;
+    }
+  }
+
+  &.btn-size-s{
+    font-size: 10px;
+    padding:5px 10px;
+    letter-spacing: 0.5px;
+  }
+}
+
+.nav-tabs{
+  display: flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:stretch;
+  align-content:stretch;
+  li{
+    text-align: center;
+    flex-grow:1;
+    a{
+      cursor: pointer;
+    }
+  }
+}
+
+.form-group{
+  display: block;
+  margin-bottom: 15px;
+  label{
+    display: block;
+    margin-bottom: 5px;
+    @include mont(10px, 700, $greyType);
+    letter-spacing: 1px;
+  }
+  input[type="text"], input[type="email"], input[type="password"]{
+    display: block;
+    width: 100%;
+    border:1px solid $white;
+    background: $white;
+    margin-bottom: 0px;
+    line-height: 30px;
+    padding:0 10px;
+    height: 30px;
+    @include mont(12px, 400, $greyType);
+    transition:all 200ms ease-out;
+    &:focus{
+      outline:0;
+      border-color: $green;
+    }
+  }
+}
 
 .load{
   position: relative;
@@ -88,3 +170,5 @@
     }
   }
 }
+
+@import "styles/loader";
