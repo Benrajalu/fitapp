@@ -213,12 +213,16 @@ class Dashboard extends Component {
             }
           </div>
         </div>
-
-        <RoutineLauncherModal 
-          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          routinesList={routines ? routines : []} 
-          exercises={this.state.exercises} 
-          modalCloser={this.displayModal} />
+        
+        { this.state.modalDisplay ? 
+          <RoutineLauncherModal 
+            shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+            routinesList={routines ? routines : []} 
+            exercises={this.state.exercises} 
+            modalCloser={this.displayModal} />
+          : 
+          false
+        }
       </div>
     )
   }

@@ -5,6 +5,19 @@ body, html{
   background: #2C3045;
 }
 
+#mainContents{
+  padding-top: 60px;
+  background: #2C3045;
+  position: relative;
+  z-index: 98;
+  min-height: 100vh;
+  transition:all 200ms ease-out;
+  right: 0px;
+  &.menuActive{
+    right: 250px;
+  }
+}
+
 .btn{
   display: inline-block;
   border: 1px solid #1FC3AF;
@@ -169,6 +182,19 @@ body, html{
       background:#232A2C;
     }
   }
+}
+
+
+.container{
+  width: 100%;
+  padding:0 10px;
+  max-width: 1200px;
+  margin:0 auto;
+}
+.container-fluid{
+  width:100%;
+  margin:0 auto;
+  padding:0 10px;
 }
 
 @import "styles/loader";

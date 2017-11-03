@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import {fire, firebaseAuth} from '../utils/fire';
 
+import Loader from "../blocks/Loader.js"; 
+
 import '../styles/login.css';
 
 class Login extends Component {
@@ -194,10 +196,7 @@ class Login extends Component {
             </div>
           </div>
         </div>
-        <div className="loader">
-          <i className="bit"></i>
-          <i className="bit"></i>
-        </div>
+        <Loader />
       </div>
     )
   }
