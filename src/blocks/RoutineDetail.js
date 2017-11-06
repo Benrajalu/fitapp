@@ -45,16 +45,15 @@ class RoutineDetail extends Component {
     });
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading container-fluid">
-          <div className="col-md-8">
-            <h3 className="panel-title">{this.props.contents.name}</h3>
+      <div className="routine-detail">
+        <div className="routine-heading with-actions">
+          <div className="description">
+            <h3 className="title">{this.props.contents.name}</h3>
+            <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
           </div>
-          <div className="col-md-4 text-right">
-            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>
-          </div>
+          <Link to={'/workout/' + this.props.contents.id} className="action">Débuter l'entraînement</Link>
         </div>
-        <div className="panel-body">
+        <div className="routine-body details">
           {listExercises}
         </div>
         {this.props.editable ? 

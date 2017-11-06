@@ -74,6 +74,7 @@ class Workout extends Component {
         _this.setState({
           routine: cleanRoutine, 
           workoutLog:{
+            "color": cleanRoutine.color,
             "id": "log-" + today.getTime(), 
             "routineName": cleanRoutine.name, 
             "timestamp": today.getTime(), 

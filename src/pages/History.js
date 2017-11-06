@@ -152,7 +152,7 @@ class History extends Component {
         </div>
 
         <div className="container">
-          <div className="col-md-9">
+          <div className="large-9 columns">
             <h2>Vos entraînements</h2>
             { this.state.loading ?
               <p>Chargement de vos données...</p>
@@ -179,7 +179,7 @@ class History extends Component {
             }
           </div>
 
-          <div className="col-md-3">
+          <div className="large-3 columns">
             <h2>Vos records</h2>
             { this.state.loading ?
               <p>Chargement de vos données...</p>
@@ -195,11 +195,15 @@ class History extends Component {
           </div>
         </div>
 
-        <RoutineLauncherModal 
+        {this.state.modalDisplay ?
+          <RoutineLauncherModal 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
           routinesList={routines} 
           exercises={this.state.exercises} 
           modalCloser={this.displayModal} />
+          :
+          false
+        }
       </div>
     )
   }

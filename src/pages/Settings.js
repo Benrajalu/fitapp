@@ -364,7 +364,7 @@ class Settings extends Component {
         </div>
 
         <div className="container">
-          <div className="col-md-8">
+          <div className="large-8 columns">
             <h3>Gestion des poids (barbell)</h3>
             <div className="panel panel-default">
               <div className="panel-heading">
@@ -406,7 +406,7 @@ class Settings extends Component {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="large-4 columns">
             <div className="panel panel-default">
               <div className="panel-heading">
                 <h3 className="panel-title">Paramètres du compte</h3>

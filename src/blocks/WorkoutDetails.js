@@ -147,8 +147,8 @@ class WorkoutDetails extends Component {
               <hr/> 
               {sets}
             </div>
-            {warmupWindow ? warmupWindow : false}
-            {weightWindow ? weightWindow : false}
+            {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
+            {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
           </div>
           : false
         }

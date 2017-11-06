@@ -1,10 +1,21 @@
-$white: #F9F9F9;
-$green: #1FC3AF;
-$greyType:#9397A1;
+// breakpoints
+  $tablet:1030px;
+  $mobile:720px;
 
-@mixin mont($size, $type, $color){
-  font-family: "Montserrat";
-  font-size:$size;
-  color:$color;
-  font-weight: $type;
-}
+// Colors
+  $white: #F9F9F9;
+  $green: #1FC3AF;
+  $greyType:#9397A1;
+  $underlines:#494B65;
+  $turquoise:#63AFC0;
+  $red:#FF4E4E;
+  $blue:#62ABD6;
+  $orange:#FCC05A;
+
+// Font
+  @mixin mont($size, $type, $color){
+    font-family: "Montserrat";
+    font-size:$size;
+    color:$color;
+    font-weight: $type;
+  }

@@ -79,10 +79,9 @@ class ExerciseListing extends Component {
 
             sets.push(
               <div className={"status " + status} key={i + trueExercise.name}>
-                <div className="progress">
-                  <div className={progress !== 100 ? 'progress-bar' : 'progress-bar progress-bar-success'}  role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" style={{width: progress + '%'}}>
-                      {numberOfReps} { handicap !== 0 ? repIndicator + (handicap + unit) : 'reps'}
-                  </div>
+                <div className={progress !== 100 ? 'progress' : 'progress progress-success'}>
+                  <p className={progress > 0 ? 'progress-value' : 'progress-value fail'}>{numberOfReps} { handicap !== 0 ? repIndicator + (handicap + unit) : 'reps'}</p>
+                  <div className={progress !== 100 ? 'progress-bar' : 'progress-bar progress-bar-success'}  role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" style={{width: progress + '%'}}></div>
                 </div>
               </div>
             )
@@ -100,8 +99,8 @@ class ExerciseListing extends Component {
         return sets;
       }
       return (
-        <div>
-          <h3>{trueExercise.name}</h3>
+        <div className="routine-log">
+          <h3 className="exercise-name">{trueExercise.name}</h3>
           {setEngine(currentExercise)}
         </div>
       )

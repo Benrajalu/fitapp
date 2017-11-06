@@ -22,7 +22,7 @@ class RoutineMaker extends Component {
       exercisesDatabase: [],
       newRoutine: {
         routineId: timestamp.getTime(),
-        color : "#67E658", 
+        color : "#1FC3AF", 
         exercises : [], 
         dateCreated: fullDate,
         lastPerformed: fullDate
@@ -276,17 +276,17 @@ class RoutineMaker extends Component {
               <label>Routine color</label>
               <div className="radio">
                   <label>
-                    <input type="radio" name="color" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
+                    <input type="radio" name="color" value="#1FC3AF" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#1FC3AF" ? true : false} /> <span style={{ "color": "#1FC3AF" }}>Neon green</span>
                   </label>
               </div>
               <div className="radio">
                   <label>
-                    <input type="radio" name="color" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
+                    <input type="radio" name="color" value="#FCC05A" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FCC05A" ? true : false} /> <span style={{ color: "#FCC05A" }}>Mad orange</span>
                   </label>
               </div>
               <div className="radio">
                   <label>
-                    <input type="radio" name="color" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
+                    <input type="radio" name="color" value="#FC5A5C" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FC5A5C" ? true : false} /> <span style={{ color: "#FC5A5C" }}>Damn red</span>
                   </label>
               </div>
             </div>
@@ -304,14 +304,18 @@ class RoutineMaker extends Component {
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/all-routines', state:{newRoutine:true} }} /> : false}
           </form>
         }
-
-        <ExercisePicker 
-          exercisesDatabase={this.state.exercisesDatabase} 
-          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          modalCloser={this.displayModal}
-          updateExercises={this.updateExercises}
-          settings={this.state.user}
-          pickedExercises={this.state.newRoutine.exercises} />
+        
+        {this.state.modalDisplay ? 
+          <ExercisePicker 
+            exercisesDatabase={this.state.exercisesDatabase} 
+            shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+            modalCloser={this.displayModal}
+            updateExercises={this.updateExercises}
+            settings={this.state.user}
+            pickedExercises={this.state.newRoutine.exercises} />
+          : 
+          false
+        }
       </div>
     )
   }

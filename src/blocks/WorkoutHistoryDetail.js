@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ExerciseListing from '../blocks/ExerciseListing';
 import Timestamper from '../blocks/Timestamper';
 
+import "../styles/routine.css"
+
 class WorkoutHistoryDetail extends Component {
   render() {
     const workoutExercices = this.props.contents.exercises;
@@ -14,15 +16,14 @@ class WorkoutHistoryDetail extends Component {
     });
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading">
-          <h3 className="panel-title">{this.props.contents.routineName}</h3>
-        </div>
-        <div className="panel-body">
-          {listExercises}
-        </div>
-        <div className="panel-footer">
+      <div className="routine-detail">
+        <div className="routine-heading">
           <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
+          <h3 className="title">{this.props.contents.routineName}</h3>
+          <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
+        </div>
+        <div className="routine-body log">
+          {listExercises}
         </div>
       </div>
     )
