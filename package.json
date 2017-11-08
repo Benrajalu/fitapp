@@ -12,14 +12,13 @@
     "react-test-renderer": "^15.6.1"
   },
   "dependencies": {
-    "auth0-js": "^8.9.3",
     "axios": "^0.16.2",
-    "bootstrap": "^3.3.7",
     "firebase": "^4.6.0",
     "grpc": "^1.7.0-pre1",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.1",
     "prop-types": "^15.5.10",
+    "protobufjs": "^5.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-image-crop": "^3.0.0",
@@ -33,6 +32,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
+    "deploy": "npm run build-css && react-scripts build && firebase deploy",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
