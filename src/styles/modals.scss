@@ -48,6 +48,9 @@
     transform: translateY(0);
     opacity:1;
     padding:0 10px;
+    &.alert{
+      background:$red;
+    }
     .container{
       align-items:center;
       height: 60px;

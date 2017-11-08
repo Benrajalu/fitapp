@@ -49,7 +49,7 @@ class Nav extends Component {
           {this.props.user ? 
             <div className="userZone">
               <UserLog user={this.props.user} /> 
-              <button onClick={this.logOff} className="btn btn-danger">Déconnexion</button>
+              <button onClick={this.logOff} className="btn btn-green">Déconnexion</button>
             </div>
             : 
             false

@@ -12,7 +12,7 @@
   transition:all 200ms ease-out;
   @include mont(12px, 400, $white);
   cursor: pointer;
-  &:hover{
+  &:hover:not(:disabled){
     background: $green;
   }
 
@@ -31,10 +31,29 @@
     }
   }
 
+  &.btn-caps{
+    text-transform: uppercase;
+  }
+
   &.btn-green{
     background: $green;
-    &:hover{
+    &:hover:not(:disabled){
       background: transparent;
+    }
+  }
+
+  &.btn-danger{
+    border-color: $red;
+    color:$red;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    &:hover:not(:disabled){
+      background: $red;
+      color:$white;
+    }
+    &:disabled{
+      color:$greyType;
+      border-color: $greyType;
     }
   }
 
@@ -42,6 +61,30 @@
     font-size: 10px;
     padding:5px 10px;
     letter-spacing: 0.5px;
+  }
+
+  &.btn-block{
+    display: block;
+    width: 100%;
+  }
+
+  &.btn-big{
+    padding:15px 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 0px;
+    &.w-radius{
+      border-radius: 3px;
+    }
+    &:hover:not(:disabled){
+      background:$blue;
+      border-color:$blue;
+    }
+  }
+
+  &:disabled{
+    cursor: default;
+    opacity:0.5;
   }
 
   @media (max-width: $mobile){
