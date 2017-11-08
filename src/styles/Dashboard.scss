@@ -3,6 +3,7 @@
 .records-wrap{
   position: relative;
   padding-bottom:30px;
+  margin-bottom: 40px;
   &:after{
     content:"";
     width: 100%;
@@ -32,6 +33,9 @@
       right: 10px;
     }
     .section-title{
+      text-align: left;
+    }
+    .empty-state{
       text-align: left;
     }
   }
