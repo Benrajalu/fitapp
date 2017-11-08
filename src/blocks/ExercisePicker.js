@@ -5,6 +5,7 @@ import ExercisePickerDetails from '../blocks/ExercisePickerDetails';
 import ExercisePickerPick from '../blocks/ExercisePickerPick';
 
 import '../styles/modals.css';
+import '../styles/ExercisePicker.css';
 
 class ExercisePicker extends Component {
   constructor(props) {
@@ -103,7 +104,7 @@ class ExercisePicker extends Component {
 
 
     // Listing any current exercice added to the routine and setting a default message for none. 
-      let currentExercisesList = <p>Aucun exercice selectionné</p>;
+      let currentExercisesList = <p className="empty-state">Aucun exercice selectionné</p>;
       if(this.state.exercises.length > 0){
         currentExercisesList = this.state.exercises.map((value, index) => 
           <ExercisePickerPick database={this.props.exercisesDatabase} currentExercise={value} handleClick={this.removeExercise} key={value.exerciseId + '-' + new Date().getTime() + index}/>
@@ -118,18 +119,24 @@ class ExercisePicker extends Component {
             <button className="closer" onClick={this.closeModal}>Fermer</button>
           </div>
         </div>
-        <div className="modal-contents">
+        <div className="modal-contents" id="ExercisePicker">
           <div className="currentPick">
-            <h4>Exercices sélectionnés</h4>
-            {currentExercisesList}
+            <div className="container">
+              <h4>Exercices sélectionnés</h4>
+              <div className="current-exercises">
+                {currentExercisesList}
+              </div>
+            </div>
           </div>
           <div className="main-list">
-            <h4>Cliquez sur un exercice pour l'ajouter</h4>
-            {showBarbells}
-            {showDumbbells}
-            {showCables}
-            {showCalithenics}
-            {showCardio}
+            <div className="container">
+              <h4>Cliquez sur un exercice pour l'ajouter</h4>
+              {showBarbells}
+              {showDumbbells}
+              {showCables}
+              {showCalithenics}
+              {showCardio}
+            </div>
           </div>
         </div>
       </div>

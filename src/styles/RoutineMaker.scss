@@ -1,0 +1,117 @@
+@import "styles/_mixins.scss";
+
+#RoutineMaker{
+  background: #494B65;
+  border-radius: 5px;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  .routine-labels{
+    display: flex;
+    width: 100%;
+    background: #32374E;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:top;
+    > .form-group{
+      padding:20px 15px;
+      margin-bottom: 0px;
+      .help-block{
+        display: block;
+        @include mont(11px, 400, $red);
+        margin-top: 4px;
+      }
+      label{
+        @include mont(11px, 400, $greyType);
+        text-transform: uppercase;
+        margin-bottom: 15px;
+      }
+      input[type="text"]{
+        border:0px;
+        background: transparent;
+        border-bottom: 1px solid $green;
+        padding:0px;
+        @include mont(16px, 300, $white);
+        max-width: 350px;
+      }
+    }
+    .main{
+      flex-grow:2;
+      padding-right: 30px;
+      border-right: 1px solid #2C3045;
+      + .form-group{
+        padding-left: 30px;
+      }
+    }
+    .colors{
+      display: flex;
+      flex-direction:row;
+      justify-content:flex-start;
+      align-items:center;
+      label{
+        margin-top: 3px;
+        margin-right: 10px;
+        position: relative;
+        cursor: pointer;
+        @include mont(11px, 400, $white);
+        text-transform: none;
+        margin-bottom: 0px;
+        span{
+          display: flex;
+          flex-wrap:nowrap;
+          justify-content:flex-start;
+          align-items:center;
+        }
+        input{
+          position: absolute;
+          visibility: hidden;
+          &:checked{
+            + span .color-point{
+              border-color:$white;
+            }
+          }
+        }
+        .color-point{
+          display: block;
+          vertical-align: middle;
+          min-width: 18px;
+          width: 18px;
+          height: 18px;
+          border-radius: 100%;
+          margin-right: 5px;
+          border:3px solid transparent;
+          transition:all 200ms ease-out;
+        }
+      }
+    }
+
+    @media (max-width: 700px){
+      flex-direction:column;
+      .main{
+        padding-right: 15px;
+        + .form-group{
+          padding-left: 15px;
+          border-left: 0px;
+          border-top: 1px solid #2C3045;
+        }
+      }
+    }
+  }
+
+  .routine-exercises{
+    padding:20px 15px;
+    text-align: center;
+    .help-block{
+      display: block;
+      @include mont(11px, 400, $red);
+      margin-bottom: 15px;
+    }
+    &.empty{
+      padding:60px 30px 30px;
+      p{
+        @include mont(14px, 400, $greyType);
+        margin-bottom: 20px;
+      }
+    }
+  }
+}

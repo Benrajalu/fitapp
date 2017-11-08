@@ -5,6 +5,8 @@ import {firebaseAuth, database} from '../utils/fire';
 import ExercisePicker from '../blocks/ExercisePicker';
 import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
 
+import '../styles/RoutineMaker.css';
+
 class RoutineMaker extends Component {
   constructor(props) {
     super(props);
@@ -262,43 +264,52 @@ class RoutineMaker extends Component {
     return (
       <div id="RoutineMaker">
         {this.state.loading ? 
-          <div className="container">
+          <div>
             <p>Chargement de l'entrainement...</p>
           </div>
           :
-          <form onSubmit={this.validate} className="container">
-            <div className={this.state.errors.name ? "form-group has-error" : "form-group"}>
-              <label>Routine name</label>
-              <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} />
-              {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
-            </div>
-            <div className="form-group">
-              <label>Routine color</label>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#1FC3AF" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#1FC3AF" ? true : false} /> <span style={{ "color": "#1FC3AF" }}>Neon green</span>
-                  </label>
+          <form onSubmit={this.validate}>
+            <div className="routine-labels">
+              <div className={this.state.errors.name ? "form-group main has-error" : "form-group main"}>
+                <label>Nom de l'entraînement</label>
+                <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} placeholder="Ex: Routine du Lundi"/>
+                {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
               </div>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#FCC05A" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FCC05A" ? true : false} /> <span style={{ color: "#FCC05A" }}>Mad orange</span>
-                  </label>
-              </div>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#FC5A5C" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FC5A5C" ? true : false} /> <span style={{ color: "#FC5A5C" }}>Damn red</span>
-                  </label>
+              <div className="form-group">
+                <label>Niveau</label>
+                <div className="colors">
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#1FC3AF" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#1FC3AF" ? true : false} /> 
+                      <span><i className="color-point" style={{ "backgroundColor": "#1FC3AF" }}></i>Normal</span>
+                    </label>
+                  </div>
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#FCC05A" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FCC05A" ? true : false} /> 
+                      <span><i className="color-point" style={{ backgroundColor: "#FCC05A" }}></i>Moyen</span>
+                    </label>
+                  </div>
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#FC5A5C" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FC5A5C" ? true : false} /> 
+                      <span><i className="color-point" style={{ backgroundColor: "#FC5A5C" }}></i>Elevé</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
-              <label>Exercices</label>
-              {listExercises}
-              {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
-              <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
+
+            <div className={this.state.newRoutine.exercises.length === 0 ? " routine-exercises empty" : 'routine-exercises'}>
+              <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
+                {listExercises}
+                {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
+                <button className="btn btn-caps" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
+              </div>
             </div>
-            <hr/>
-            <div className="form-group">
-              <button type="submit" className="btn btn-default">Submit</button>
+            
+            <div className="routine-footer">
+              <button type="submit" className="btn btn-green btn-big btn-block">Créer cet entraînement</button>
               {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
             </div>
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/all-routines', state:{newRoutine:true} }} /> : false}
