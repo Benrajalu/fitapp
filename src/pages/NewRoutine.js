@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import RoutineMaker from '../blocks/RoutineMaker';
 
 class NewRoutine extends Component {
@@ -16,11 +18,14 @@ class NewRoutine extends Component {
       <div className="NewRoutine">
         <div className="container">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard">&lt;</Link>
             <h1>Créer un programme</h1>
           </div>
         </div>
         
-        <RoutineMaker postHandler={this.handleFormPost} />
+        <div className="container">
+          <RoutineMaker postHandler={this.handleFormPost} />
+        </div>
 
       </div>
     )

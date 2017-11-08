@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {firebaseAuth, database} from '../utils/fire';
 
 import RoutineMaker from '../blocks/RoutineMaker';
@@ -57,6 +58,7 @@ class EditRoutine extends Component {
       <div className="EditRoutine">
         <div className="container">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard">&lt;</Link>
             <h1>Modifier ce programme</h1>
           </div>
         </div>

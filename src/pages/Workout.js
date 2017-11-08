@@ -394,6 +394,7 @@ class Workout extends Component {
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
             <div className="container">
               <div className="page-header">
+                <Link to="/" title="Retour au dashboard">&lt;</Link>
                 <h1>Entraînement <small>{this.state.routine.name}</small></h1>
                 <button className="btn btn-primary end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
               </div>
