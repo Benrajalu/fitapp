@@ -185,7 +185,7 @@ describe('when exiting a workout', () => {
 
   test('the exit window apears when the exit button is clicked', () => {
     workout.find('.end-workout').first().simulate('click');
-    expect(workout.find('.popin.visible .panel-title').first().text()).toEqual("Terminer l'entraînement ?");
+    expect(workout.find('.popin .title').first().text()).toEqual("Terminer l'entraînement ?");
   });
 
   test('if some exercise has changed, a prompt to save changes is shown', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
+import PropTypes from 'prop-types';
 import Settings from '../pages/Settings';
 
 import userData from '../data/users.json';
@@ -16,8 +17,27 @@ it('renders without crashing', () => {
 });
 
 test('displays the test message', () => {
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
   const dash = mount(
-    <Settings />
+    <Settings />,
+    MountOptions
   );
   
   // Expecting message not to be empty
@@ -25,8 +45,27 @@ test('displays the test message', () => {
 });
 
 describe('when managing settings', () => {
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
   const settings = mount(
-    <Settings />
+    <Settings />,
+    MountOptions
   );  
 
   settings.setState({
