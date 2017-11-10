@@ -6,6 +6,7 @@
   width: 100%;
   display: block;
   overflow: hidden;
+  margin-bottom: 40px;
   .routine-labels{
     display: flex;
     width: 100%;
@@ -111,6 +112,125 @@
       p{
         @include mont(14px, 400, $greyType);
         margin-bottom: 20px;
+      }
+    }
+  }
+
+  .exercise-tuner{
+    display: flex;
+    flex-flow:row no-wrap;
+    align-items:stretch;
+    justify-content:space-between;
+    width:100%;
+    margin-bottom: 30px;
+    background:#383E59;
+    border-radius: 2px;
+    overflow: hidden;
+    .order{
+      display: flex;
+      flex-flow:column;
+      align-items:stretch;
+      justify-content:space-between;
+      width:40px;
+      border-right: 1px solid #494B65;
+      .btn{
+        flex-grow:1;
+        border:0px;
+        border-radius: 0px;
+        &:first-child{
+          border-bottom: 1px solid #494B65;
+        }
+      }
+    }
+    .description{
+      text-align: left;
+      flex-grow:2;
+      display:flex;
+      flex-flow:column;
+      .heading{
+        padding:10px;
+        @include mont(16px, 300, $white);
+        background: #32374E;
+        text-align: center;
+      }
+      .body{
+        display: flex;
+        flex-flow:row nowrap;
+        justify-content:space-between;
+        align-items:stretch;
+        .col{
+          padding:25px 10px;
+          flex-grow:1;
+          text-align: center;
+          border-right: 1px solid #32374E;
+          position: relative;
+          @include mont(16px, 400, $blue);
+          input{
+            @include mont(26px, 300, $white);
+            background:transparent;
+            width: 90px;
+            border:0px;
+            border-bottom: 1px solid $green;
+            line-height: 30px;
+            display: block;
+            margin:0 auto 10px;
+            text-align: center;
+            padding:0px;
+          }
+          &:after{
+            content:"\f00d";
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: 10px;
+            color:$greyType;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            display:block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 19px;
+            position: absolute;
+            top:50%;
+            right: 0px;
+            transform:translateY(-50%) translateX(50%);
+            background: #32374E;
+            border-radius: 100%;
+          }
+          &:last-child{
+            border-right: 0px;
+            &:after{
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 500px){
+      flex-flow:column;
+      .order{
+        order:2;
+        width: 100%;
+        flex-flow:row nowrap;
+        border-right: 0px;
+        border-top: 1px solid #32374E;
+        .btn:first-child{
+          border-bottom: 0px;
+          border-right: 1px solid #32374E;
+        }
+      }
+      .description{
+        .body{
+          .col{
+            font-size: 12px;
+            input{
+              font-size: 16px;
+              width: 100%;
+              max-width: 90px;
+            }
+          }
+
+        }
       }
     }
   }

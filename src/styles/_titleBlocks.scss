@@ -25,7 +25,6 @@
     margin-right: 8px;
     line-height: 1;
     position: relative;
-    top: -1px;
     left: 0px;
     transition:all 200ms ease-out;
     &:hover{
@@ -40,6 +39,11 @@
     letter-spacing: 0.5px;
     padding-right: 15px;
     white-space: nowrap;
+  }
+  .btn{
+    white-space: nowrap;
+    order:9;
+    margin-left: 15px;
   }
 }
 

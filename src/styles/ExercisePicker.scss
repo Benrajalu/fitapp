@@ -8,47 +8,189 @@
   justify-content:space-bewteen;
   align-items:stretch;
   .currentPick{
-    height: 120px;
-    min-height: 120px;
     box-shadow:inset 0 -2px 5px rgba(0,0,0,0.5);
     display: flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
+    padding:15px 0px;
+    overflow: auto;
+    min-height: 150px;
     .container{
-      display: flex;
-      flex-direction:column;
-      align-items:center;
+      display: block;
+      padding:0px 5px;
       h4{
         @include mont(14px, 300, $white);
         text-transform: uppercase;
         margin-bottom: 20px;
+        text-align: center;
       }
       .current-exercises{
-        display: flex;
-        flex-direction:row;
-        justify-content:center;
-        flex-wrap:wrap;
-        align-items:flex-start;
+        display: block;
+        text-align: center;
+        white-space: nowrap;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
         .exercise-pick{
-          display: flex;
-          flex-flow:row nowrap;
-          justify-content:space-bewteen;
+          display: inline-block;
           align-items:center;
+          background:$blue;
+          border:0px;
+          border-radius: 3px;
+          overflow: hidden;
+          @include mont(13px, 400, $white);
+          margin:0 5px 5px;
+          padding:10px 40px 10px 10px;
+          cursor: pointer;
+          white-space: nowrap;
+          position: relative;
+          &:hover{
+            .remove{
+              color:$white;
+              background: $green;
+            }
+          }
+          .remove{
+            position: absolute;
+            top:50%;
+            right: 10px;
+            transform:translateY(-50%);
+            transition:all 200ms ease-out;
+            border-radius: 100%;
+            text-align: center;
+            color:$green;
+            height: 20px;
+            width: 20px;
+            background: $white;
+            margin-left: 10px;
+            font-size: 14px;
+            i{
+              position: relative;
+              top:0.5px;
+            }
+          }
         }
       }
       .empty-state{
         @include mont(14px, 400, $greyType);
       }
+
+      @media (max-width: 520px){
+        flex-direction:column;
+        > *{
+          width: 100%;
+        }
+        h4{
+          width: 100%;
+          text-align: center;
+        }
+      }
     }
   }
   .main-list{
-    flex-grow:2;
     overflow: auto;
     padding-top: 20px;
     padding-bottom: 40px;
+    flex-grow:2;
     .container{
-      flex-direction:column;
+      flex-direction:row;
+      flex-wrap:wrap;
+      .exercise-panel{
+        width:30%;
+      }
+
+      @media (max-width:970px){
+        max-width: 700px;
+        margin:0 auto;
+        .exercise-panel{
+          width:48%;
+        }
+      }
+
+      @media (max-width:560px){
+        max-width: 420px;
+        .exercise-panel{
+          width:100%;
+        }
+      }
+    }
+  }
+}
+
+.exercise-panel{
+  display: flex;
+  flex-flow:row nowrap;
+  align-items:stretch;
+  justify-content:space-bewteen;
+  margin:0 auto 30px;
+  background: #494B65;
+  border-radius: 3px;
+  overflow: visible;
+  position: relative;
+  .action{
+    position: relative;
+    display: flex;
+    flex-flow:column nowrap;
+    justify-content:center;
+    align-items:stretch;
+    button{
+      background: $green;
+      top:0px;
+      left: 0px;
+      width: 100%;
+      flex-grow:2;
+      border:0px;
+      border-radius:0px 3px 3px 0;
+      padding:5px 10px;
+      font-size: 13px;
+      color:$white;
+      transition:all 200ms ease-out;
+      cursor: pointer;
+      &:focus{
+        outline:0;
+      }
+      &:hover{
+        background: $white;
+        color:$green;
+      }
+    }
+  }
+  .description{
+    flex-grow:2;
+    padding:15px;
+    position: relative;
+  }
+  .exercise-heading{
+    @include mont(12px, 300, $greyType);
+    margin-bottom: 5px;
+  }
+  .exercise-body{
+    @include mont(20px, 300, $white);
+    h3{
+      margin-bottom: 10px;
+    }
+  }
+  .exercise-footer{
+    position: absolute;
+    left: 15px;
+    bottom: 0px;
+    transform:translateY(50%);
+    a{
+      display: inline-block;
+      line-height: 25px;
+      padding:0 8px;
+      z-index: 2;
+      background: #2C3045;
+      @include mont(10px, 400, $white);
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition:all 200ms ease-out;
+      &:hover{
+        color:$green;
+      }
     }
   }
 }
