@@ -104,7 +104,7 @@ class ExercisePicker extends Component {
 
 
     // Listing any current exercice added to the routine and setting a default message for none. 
-      let currentExercisesList = <p className="empty-state">Aucun exercice selectionné</p>;
+      let currentExercisesList = <p className="empty-state">Choisissez vos exercises ci-dessous pour construire votre entraînement</p>;
       if(this.state.exercises.length > 0){
         currentExercisesList = this.state.exercises.map((value, index) => 
           <ExercisePickerPick database={this.props.exercisesDatabase} currentExercise={value} handleClick={this.removeExercise} key={value.exerciseId + '-' + new Date().getTime() + index}/>
@@ -130,7 +130,6 @@ class ExercisePicker extends Component {
           </div>
           <div className="main-list">
             <div className="container">
-              <h4>Cliquez sur un exercice pour l'ajouter</h4>
               {showBarbells}
               {showDumbbells}
               {showCables}

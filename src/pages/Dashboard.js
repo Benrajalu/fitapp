@@ -160,14 +160,17 @@ class Dashboard extends Component {
             <button className="btn btn-lg btn-important" onClick={this.displayModal}>
               <span className="title">Lancer un entraînement</span>
               <span className="desc">Départ rapide</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
             </button>
             <Link to='/new-routine' className="btn btn-lg">
               <span className="title">Créer un entraînement</span>
               <span className="desc">Votre routine sur-mesure</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
             </Link>
             <Link to='/settings' className="btn btn-lg">
               <span className="title">Paramètres</span>
               <span className="desc">Modifiez vos options</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
             </Link>
           </div>
         </div>
@@ -176,7 +179,7 @@ class Dashboard extends Component {
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements récents</h2>
             { this.state.loading ?
-              <p>Chargement de vos données...</p>
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
               :
               <div> 
                 {this.state.workoutList ?
@@ -205,7 +208,7 @@ class Dashboard extends Component {
             <div className="records-wrap">
                 <h2 className="section-title">Vos records</h2>
                 { this.state.loading ?
-                  <p>Chargement de vos données...</p>
+                  <div className="inlineLoader"><p>Chargement de vos données</p></div>
                   : 
                   <div>
                     {this.state.records ?

@@ -109,7 +109,7 @@ class WorkoutDetails extends Component {
     let warmupButton = false, 
         warmupWindow = false;
     if(trueExercise.type === "barbell" || trueExercise.type === "dumbbell" || trueExercise.type === "cable"){
-      warmupButton = <li role="presentation"><a onClick={this.displayModal.bind(this, 'warmup')}>Échauffement</a></li>;
+      warmupButton = <li role="presentation"><button onClick={this.displayModal.bind(this, 'warmup')}>Échauffement</button></li>;
       warmupWindow = <WarmUp closeModal={this.displayModal.bind(this, 'warmup')} 
                               shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'} 
                               name={trueExercise.name} 
@@ -121,34 +121,45 @@ class WorkoutDetails extends Component {
     let weightHelper = false, 
         weightWindow = false;
     if(trueExercise.type === "barbell"){
-      weightHelper = <li role="presentation"><a onClick={this.displayModal.bind(this, 'weightHelper')}>Répartition des poids</a></li>;
+      weightHelper = <li role="presentation"><button onClick={this.displayModal.bind(this, 'weightHelper')}>Répartition des poids</button></li>;
       weightWindow = <WeightHelper closeModal={this.displayModal.bind(this, 'weightHelper')} shouldAppear={this.state.modalDisplay.weightHelper ? 'visible' : 'hidden'} weight={workoutExercise.handicap} settings={this.props.settings} />;
     }
 
+    // If there is no set target, then it's cardio so the set is...1
+    const setTarget = this.props.contents.setsTarget ? this.props.contents.setsTarget : 1;
+
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading">
-          <h3 className="panel-title">{trueExercise.name} {setsDone.length}/{this.props.contents.setsTarget ? this.props.contents.setsTarget : 1}</h3>
-          <button onClick={this.changeDisplay} className="btn btn-primary">{this.state.visible ? "Hide" : "Show"} routine</button>
+      <div className="workout-card">
+        <div className="heading">
+          <h3 className="title">{trueExercise.name} <strong className={parseFloat(setTarget) === setsDone.length ? "done" : ""}>{setsDone.length}/{setTarget}</strong></h3>
+          {this.state.visible ? 
+            <button onClick={this.changeDisplay} className="btn btn-primary" title={this.state.visible ? "Fermer l'exercice" : "Ouvrir l'exercice"}>
+            <i className="fa fa-angle-up"></i></button>
+            :
+            <button onClick={this.changeDisplay} className="btn btn-primary" title={this.state.visible ? "Fermer l'exercice" : "Ouvrir l'exercice"}>
+            <i className="fa fa-angle-down"></i></button>
+          }
         </div>
         { this.state.visible ? // If the user so chosses, that part of the routine is hidden
-          <div>
-            <div className="panel-body">
-              <div className="text-center">
+          <div className="body">
+              <div className="input-zone">
                 <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
                 <p>{handicapType}</p>
               </div>
-              <ul className="nav nav-pills">
-                { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
-                {warmupButton ? warmupButton : false}
-                {weightHelper ? weightHelper : false}
-              </ul>
-              <hr/> 
+              { trueExercise.type !== "cardio" || warmupButton || weightHelper ?
+                <ul className="helper-buttons">
+                  <h4 className="title">Outils :</h4>
+                  { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
+                  {warmupButton ? warmupButton : false}
+                  {weightHelper ? weightHelper : false}
+                </ul>
+                :
+                false
+              }
               {sets}
-            </div>
-            {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
-            {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
+              {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
+              {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
           </div>
           : false
         }

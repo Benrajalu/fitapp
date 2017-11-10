@@ -18,7 +18,7 @@ class NewRoutine extends Component {
       <div className="NewRoutine">
         <div className="container">
           <div className="page-header">
-            <Link to="/" title="Retour au dashboard">&lt;</Link>
+            <Link to="/all-routines" title="Retour aux entraînements"><i className="fa fa-angle-left"></i></Link>
             <h1>Créer un programme</h1>
           </div>
         </div>

@@ -147,7 +147,7 @@ class History extends Component {
       <div className="History">
         <div className="container">
           <div className="page-header">
-            <Link to="/" title="Retour au dashboard">&lt;</Link>
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Historique</h1>
           </div>
         </div>
@@ -156,14 +156,14 @@ class History extends Component {
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements</h2>
             { this.state.loading ?
-              <p>Chargement de vos données...</p>
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
               :
               <div> 
                 {this.state.workoutList ?
                   <div className="past-workouts-list">
                     <div className="container no-padding stats">
                       <WeekCounter list={workouts} />
-                      <Link to="/history" className="btn btn-default">Historique</Link>
+                      <button className="btn btn-green" onClick={this.displayModal}>Commencer un entrainement</button>
                     </div>
                     <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                   </div>
@@ -185,7 +185,7 @@ class History extends Component {
             <div className="records-wrap">
                 <h2 className="section-title">Vos records</h2>
                 { this.state.loading ?
-                  <p>Chargement de vos données...</p>
+                  <div className="inlineLoader"><p>Chargement de vos données</p></div>
                   : 
                   <div>
                     {this.state.records ?

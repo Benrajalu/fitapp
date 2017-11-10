@@ -4,6 +4,8 @@ import {firebaseAuth, database} from '../utils/fire';
 
 import Routines from '../blocks/Routines';
 
+import '../styles/AllRoutines.css';
+
 
 class AllRoutines extends Component {
   constructor(props) {
@@ -91,13 +93,13 @@ class AllRoutines extends Component {
       <div className="AllRoutines">
         <div className="container">
           <div className="page-header">
-            <Link to="/" title="Retour au dashboard">&lt;</Link>
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Mes entraînements</h1>
           </div>
         </div>
           {this.state.loading ? 
-            <div className="container">
-              <p>Chargement de vos données...</p>
+            <div className="container empty">
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
             </div>
             :
             <div className="container">

@@ -357,7 +357,7 @@ class Settings extends Component {
       <div className="Settings" id="Settings">
         <div className="container">
           <div className="page-header">
-            <Link to="/" title="Retour au dashboard">&lt;</Link>
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Paramètres</h1>
           </div>
         </div>

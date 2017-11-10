@@ -6,6 +6,8 @@ import {firebaseAuth, database} from '../utils/fire';
 import WorkoutDetails from '../blocks/WorkoutDetails';
 import WorkoutExit from '../blocks/WorkoutExit';
 
+import '../styles/Workout.css';
+
 class Workout extends Component {
   constructor(props, match) {
     super(props);
@@ -379,31 +381,55 @@ class Workout extends Component {
                                    exercisesDatabase={this.state.exercisesDatabase}
                                    cancelUpdate={this.cancelUpdate}
                                    writeRoutine={this.saveRoutine} />;
+    
     return (
-      <div className="Workout">
+      <div id="Workout">
         { this.state.routine === false ? 
-          <div className="container">
-            <div className="page-header">
-              <h1>Cet entrainement n'existe pas ! </h1>
-              <Link to='/' className="btn btn-primary">Retour à l'accueil</Link>
+          <div>
+            <div className="container">
+              <div className="page-header">
+                <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
+                <h1>Entraînement <small>{this.state.routine.name}</small></h1>
+              </div>
+            </div>
+            <div className="container empty">
+              <div className="panel alert">
+                <div className="panel-body">
+                  <p>Cet entraînement n'existe pas !</p>
+                  <Link to="/" className="btn btn-green">Retour à l'accueil</Link>
+                </div>
+              </div> 
             </div>
           </div>
           :
-          <div>
+          <div className="hard-lock">
             <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
             <div className="container">
               <div className="page-header">
-                <Link to="/" title="Retour au dashboard">&lt;</Link>
+                <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
                 <h1>Entraînement <small>{this.state.routine.name}</small></h1>
-                <button className="btn btn-primary end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
               </div>
+            </div>
+            <div className="container workout-wrapper">
               {this.state.loading || this.state.routine.exercises.length < 1 || this.state.exercisesDatabase.length < 1 ? 
-                <p>Chargement du programme...</p>
+                <div className="container empty workout-list">
+                  <div className="inlineLoader"><p>Chargement du programme...</p></div>
+                </div>
                 :
-                workoutItems 
+                <div className="routine-detail">
+                  <div className="routine-heading with-actions">
+                    <div className="description">
+                      <h3 className="title">{this.state.routine.name}</h3>
+                      <i className="color-spot" style={{"backgroundColor" : this.state.routine.color}}></i>
+                    </div>
+                    <button className="action" onClick={this.endRoutine}>Terminer l'entraînement</button>
+                  </div>
+                  <div className="routine-body workout">
+                    {workoutItems}
+                  </div>
+                </div>
               }
-              <button className="btn btn-primary end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
             </div>
             {this.state.exitingRoutine ? workoutExit : false}
           </div>

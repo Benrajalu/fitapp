@@ -142,16 +142,19 @@ class RoutineMaker extends Component {
     }, () => {
       // If it's still false, then we proceed
       if (!this.state.errors){
-        console.log("Congrats, built this new routine :");
-
         const userId = this.state.user.uid, 
               addedRoutine = this.state.newRoutine, 
               _this = this, 
               verb = this.state.isEdit ? 'put' : 'post';
 
+        this.setState({
+          saving: true
+        });
+
         if(verb === "post"){
           database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).set(addedRoutine).then(() => {
             _this.setState({
+              saving: false,
               successRedirect:true
             });
           })
@@ -159,6 +162,7 @@ class RoutineMaker extends Component {
         else if(verb === "put"){
           database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).update(addedRoutine).then(() => {
             _this.setState({
+              saving: false,
               successRedirect:true
             });
           })  
@@ -264,8 +268,8 @@ class RoutineMaker extends Component {
     return (
       <div id="RoutineMaker">
         {this.state.loading ? 
-          <div>
-            <p>Chargement de l'entrainement...</p>
+          <div className="container empty">
+            <div className="inlineLoader"><p>Sauvegarde en cours...</p></div>
           </div>
           :
           <form onSubmit={this.validate}>
@@ -304,14 +308,24 @@ class RoutineMaker extends Component {
               <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
                 {listExercises}
                 {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
-                <button className="btn btn-caps" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
+                <button className="btn btn-caps" type="button" onClick={this.displayModal}>{this.state.newRoutine.exercises.length > 0 ? "Modifier les exercices" : "Ajouter un exercice"}</button>
               </div>
             </div>
             
-            <div className="routine-footer">
-              <button type="submit" className="btn btn-green btn-big btn-block">Créer cet entraînement</button>
-              {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
-            </div>
+            { this.state.saving ?
+              <div className="routine-footer align-center">
+                <div className="inlineLoader"><p>Sauvegarde en cours...</p></div>
+              </div>
+              :
+              <div className="routine-footer">
+                {this.state.isEdit  ? 
+                  <button type="submit" className="btn btn-green btn-big btn-block">Modifier cet entraînement</button>
+                  :
+                  <button type="submit" className="btn btn-green btn-big btn-block">Créer cet entraînement</button>
+                }
+                {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
+              </div>
+            }
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/all-routines', state:{newRoutine:true} }} /> : false}
           </form>
         }
