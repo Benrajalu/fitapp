@@ -44,32 +44,44 @@ class WorkoutExit extends Component {
 
     if(this.props.runningStatus){
       contents = <div className="contents">
-          <div className="modal-header">
+          <div className="modal-header green">
             <div className="container">
               <p className="title">Terminer l'entraînement ?</p>
               <button className="closer" onClick={this.closeModal}>Fermer</button>
             </div>
           </div>
           <div className="modal-contents">
-            <p>Votre entraînement est terminé ? Félicitations !</p>
-            {this.props.changedRoutine ?  
-              <div>
-                <hr/>
-                <p>Vous avez changé certains poids pour cet entrainement, souhaitez vous enregistrer ces modifications ? </p>
-                <input type="checkbox" name="saveRoutine" value="yes" checked={this.props.saveRoutine ? true : false} onChange={this.props.routineUpdateToggle}/>
-                <label onClick={this.props.routineUpdateToggle}>Enregistrer les modifications</label>
-              </div>
-            : false }
-            {this.props.upgradeRoutine ?  
-              <div>
-                <hr/>
-                <p>Vous avez atteint vos objectifs ! souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
-                {updates}
-              </div>
-            : false }
-            <hr/>
-            <button className="closer" onClick={this.props.writeRoutine}>Valider</button>
-            <button className="closer" onClick={this.closeModal}>Annuler</button>
+             <div className="container">
+               <div className="panel end-workout">
+                  <div className="panel-body">
+                    <p className="title align-center">Votre entraînement est terminé ? Félicitations !</p>
+                    {!this.props.changedRoutine && !this.props.upgradeRoutine ?
+                      <i className="fa fa-thumbs-up"></i>
+                      :
+                      false
+                    }
+                    {this.props.changedRoutine ?  
+                      <div className="interaction">
+                        <p>Vous avez changé certains poids pour cet entrainement, souhaitez vous enregistrer ces modifications ? </p>
+                        <div className="change-saver">
+                          <input type="checkbox" name="saveRoutine" value="yes" checked={this.props.saveRoutine ? true : false} onChange={this.props.routineUpdateToggle}/>
+                          <label onClick={this.props.routineUpdateToggle}>Enregistrer les modifications</label>
+                        </div>
+                      </div>
+                    : false }
+                    {this.props.upgradeRoutine ?  
+                      <div className="interaction">
+                        <p>Vous avez atteint vos objectifs ! <br/>Souhaitez-vous augmenter la difficulté de cet entrainement ?</p>
+                        {updates}
+                      </div>
+                    : false }
+                    <div className="buttons">
+                      <button className="btn btn-green" onClick={this.props.writeRoutine}>Enregistrer l'entraînement</button>
+                      <button className="btn btn-transparent" onClick={this.closeModal}>Annuler</button>
+                    </div>
+                  </div>
+               </div>
+             </div>
           </div>
         </div>
     }
@@ -81,8 +93,14 @@ class WorkoutExit extends Component {
             </div>
           </div>
           <div className="modal-contents">
-            {this.props.saveRoutine || this.props.upgradeRoutine ? <p>Vos choix ont bien été enregistrés !</p> : false}
-            <p>Nos vous redirigons vers le dashboard !</p>
+            <div className="container">
+              <div className="panel end-workout">
+               <div className="panel-body">
+                  {this.props.saveRoutine || this.props.upgradeRoutine ? <p>Vos choix ont bien été enregistrés !</p> : false}
+                  <p>Nos vous redirigons vers le dashboard !</p>
+               </div>
+              </div>
+            </div>
           </div>
         </div>
     }

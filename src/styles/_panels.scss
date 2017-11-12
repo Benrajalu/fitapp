@@ -176,4 +176,144 @@
       }
     }
   }
+
+  &.end-workout{
+    width:auto;
+    max-width: 900px;
+    margin:0 auto 30px;
+    .panel-body{
+      padding:25px 0px 0px;
+      p{
+        @include mont(13px, 400, $white);
+        line-height: 1.5;
+        padding:0 25px;
+        &.title{
+          font-size: 18px;
+          margin-bottom: 30px;
+          + .fa{
+            display: block;
+            text-align: center;
+            margin:30px auto 45px;
+            font-size: 57px;
+            color:$blue;
+          }
+        }
+      }
+
+      .interaction{
+        border-top: 1px solid #2C3045;
+        padding:15px;
+        p{
+          text-align: center;
+          margin-bottom: 10px;
+          padding:0px;
+          max-width: 500px;
+        }
+      }
+      
+      .change-saver{
+        padding:10px;
+        label{
+          @include mont(12px, 400, $greyType);
+          display: flex;
+          align-items:center;
+          justify-content:center;
+          cursor: pointer;
+          &:before{
+            content: "";
+            width: 20px;
+            height: 20px;
+            border:2px solid $green;
+            background:transparent;;
+            display: block;
+            margin-right: 8px;
+            border-radius: 2px;
+            transition:all 200ms ease-out;
+            cursor: pointer;
+          }
+        }
+        input{
+          position: absolute;
+          visibility: hidden;
+          &:checked{
+            + label{
+              color:$green;
+              &:before{
+                background: $white;
+                content:"\f00c";
+                color:$green;
+                font-size: 10px;
+                line-height: 20px;
+                text-align: center;
+                font-family: "FontAwesome"
+              }
+            }
+          }
+        }
+      }
+
+      .workout-update{
+        display: flex;
+        border-radius: 4px;
+        background: #2C3045;
+        flex-flow:row nowrap;
+        justify-content:space-between;
+        align-items:stretch;
+        max-width: 500px;
+        margin:20px auto 15px;
+        &:last-child{
+          margin-bottom: 0px;
+        }
+        div, button{
+          flex-grow:1;
+          margin-bottom: 0px;
+        }
+        button{
+          flex-grow:2;
+          line-height: 35px;
+          padding:0 10px;
+          max-width: 100px;
+          border-radius: 0px 4px 4px 0px;
+        }
+        div{
+          padding:5px 20px;
+          display: flex;
+          align-items:center;
+          text-align: left;
+          justify-content:flex-start;
+          p{
+            margin-bottom: 0px;
+            text-align: left;
+            padding:0px;
+          }
+          strong{
+            color:$blue;
+            padding:0 3px;
+          }
+        }
+      }
+
+      .buttons{
+        display: flex;
+        flex-flow:row nowrap;
+        justify-content:space-between;
+        align-items:center;
+        border-top: 1px solid #2C3045;
+        padding-top: 0px;
+        margin-top: 20px;
+        .btn{
+          margin:0 auto 0px;
+          display: block;
+          flex-grow:1;
+          border-radius: 0px;
+          line-height: 35px;
+          padding:0 10px;
+        }
+        .btn-green{
+          flex-grow:2;
+          order:2;
+        }
+      }
+    }
+  }
 }

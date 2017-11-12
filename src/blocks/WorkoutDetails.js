@@ -11,6 +11,8 @@ class WorkoutDetails extends Component {
     this.changeDisplay = this.changeDisplay.bind(this);
     this.setCompletion = this.setCompletion.bind(this);
     this.displayModal = this.displayModal.bind(this);
+    this.removeHandicap = this.removeHandicap.bind(this);
+    this.addHandicap = this.addHandicap.bind(this);
     this.state = {
       visible: false,
       sets: [],
@@ -90,6 +92,30 @@ class WorkoutDetails extends Component {
     })
   }
 
+  addHandicap(index){
+    const currentValue = parseFloat(this.props.contents.handicap), 
+          valueObject = {
+            target: {
+              name: "handicap", 
+              value: currentValue + 1 
+            }
+          };
+    console.log(valueObject.target.name);
+    this.props.onUpdate(index, valueObject);
+  }
+
+  removeHandicap(index){
+    const currentValue = parseFloat(this.props.contents.handicap), 
+          valueObject = {
+            target: {
+              name: "handicap", 
+              value: currentValue > 0 ? currentValue - 1 : 0
+            }
+          };
+    console.log(valueObject.target.name);
+    this.props.onUpdate(index, valueObject);
+  }
+
   render() {
     // Setting up variables
     const workoutExercise = this.props.contents;
@@ -131,7 +157,7 @@ class WorkoutDetails extends Component {
 
     return (
       <div className="workout-card">
-        <div className="heading">
+        <div className="heading" onClick={this.changeDisplay}>
           <h3 className="title">{trueExercise.name} <strong className={parseFloat(setTarget) === setsDone.length ? "done" : ""}>{setsDone.length}/{setTarget}</strong></h3>
           {this.state.visible ? 
             <button onClick={this.changeDisplay} className="btn btn-primary" title={this.state.visible ? "Fermer l'exercice" : "Ouvrir l'exercice"}>
@@ -143,13 +169,8 @@ class WorkoutDetails extends Component {
         </div>
         { this.state.visible ? // If the user so chosses, that part of the routine is hidden
           <div className="body">
-              <div className="input-zone">
-                <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
-                <p>{handicapType}</p>
-              </div>
               { trueExercise.type !== "cardio" || warmupButton || weightHelper ?
                 <ul className="helper-buttons">
-                  <h4 className="title">Outils :</h4>
                   { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
                   {warmupButton ? warmupButton : false}
                   {weightHelper ? weightHelper : false}
@@ -157,6 +178,14 @@ class WorkoutDetails extends Component {
                 :
                 false
               }
+              <div className="input-zone">
+                <button className="value-button" onClick={this.removeHandicap.bind(this, this.props.index)}><i className="fa fa-minus"></i></button>
+                <div className="input">
+                  <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
+                  <p>{handicapType}</p>
+                </div>
+                <button className="value-button" onClick={this.addHandicap.bind(this, this.props.index)}><i className="fa fa-plus"></i></button>
+              </div>
               {sets}
               {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
               {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}

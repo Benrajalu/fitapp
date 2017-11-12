@@ -154,6 +154,7 @@ class Workout extends Component {
   }
 
   updateRoutine(index, event){
+    console.log("coucou");
     // When the workout detail component wants to update handicaps, we do it here
     let changedName = event.target["name"],
         changedValue = event.target.value;

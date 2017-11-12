@@ -16,21 +16,45 @@
     }
   }
 
+  .value-button{
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background: #32374E;
+    border-radius: 100%;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+    color:$greyType;
+    transition:all 200ms ease-out;
+    cursor: pointer;
+    padding:0px;
+    border:0px;
+    &:hover{
+      color:$green;
+      background: $white;
+    }
+    &:focus{
+      outline:0;
+    }
+  }
+
 
   .workout-card{
     width: 100%;
     display: block;
-    border-bottom: 15px solid #2C3045;
-    &:first-child{
-      border-top: 15px solid #2C3045;
-    }
+    background:#383E59;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    overflow: hidden;
     > .heading{
       text-align: center;
       display:flex;
       flex-flow:row nowrap;
       justify-content:space-bewteen;
       align-items:center;
-      box-shadow:0px 2px 6px rgba(0,0,0,0.3);
+      border-radius:3px 3px 0 0;
+      overflow: hidden;
       .title{
         flex-grow:1;
         @include mont(18px, 300, $white);
@@ -40,7 +64,7 @@
           letter-spacing: 1px;
           color:$greyType;
           &.done{
-            color:$blue;
+            color:$green;
           }
         }
       }
@@ -55,14 +79,21 @@
       }
     }
     .body{
-      padding:15px 0px 0px;
-
+      padding:0px 0px;
+      border-top: 1px solid #494B65;
       .input-zone{
         text-align: center;
-        border-bottom: 1px solid #32374E;
         position: relative;
         @include mont(16px, 400, $blue);
-        padding-bottom: 15px;
+        margin-bottom: 25px;
+        padding: 15px 5px;
+        display: flex;
+        flex-flow:row nowrap;
+        justify-content:center;
+        align-items:center;
+        .input{
+          margin:0 10px;
+        }
         input{
           @include mont(26px, 300, $white);
           background:transparent;
@@ -78,32 +109,52 @@
       }
 
       .helper-buttons{
+        background: #32374E;
         display: flex;
         width: 100%;
-        padding:5px 15px;
+        padding:5px 0px;
         flex-flow:row nowrap;
         justify-content:flex-start;
         align-items:center;
-        margin-bottom: 10px;
-        .title{
-          @include mont(10px, 400, $greyType);
-          margin-right: 10px;
-        }
+        border-bottom: 1px solid #494B65;
         a, button{
+          white-space: nowrap;
           display: inline-block;
-          height: 20px;
-          line-height: 20px;
-          padding:0 5px;
-          border:0px;
-          background: #2C3045;
-          @include mont(10px, 400, $white);
+          @include mont(9px, 400, $white);
           text-transform: uppercase;
           text-decoration: none;
-          border-radius: 4px;
           transition:all 200ms ease-out;
-          margin:0px 5px 0 0;
+          line-height: 1;
+          margin:0px;
+          padding:0 10px;
+          line-height: 20px;
+          background: transparent;
+          border:0px;
+          border-radius: 0px;
           &:hover{
             color:$green;
+          }
+        }
+        @media (max-width: 450px){
+          flex-flow:row wrap;
+          justify-content:space-between;
+          padding:0px;
+          a, button{
+            line-height: 35px;
+            display: block;
+            width: 100%;
+            text-align: center;
+          }
+          li{
+            width:50%;
+            &:nth-child(2){
+              border-right: 1px solid #494B65;
+            }
+            &:first-child{
+              border-top: 1px solid #494B65;
+              width: 100%;
+              order:3;
+            }
           }
         }
       }
@@ -112,19 +163,34 @@
         padding:0px 0px;
         .set-heading{
           text-align: center;
-          background:#383E59;
-          padding:8px 10px;
+          padding:0px 10px;
           @include mont(14px, 300, $white);
+          h4{
+            display: inline-block;
+            background: #32374E;
+            border-radius: 8px;
+            padding:5px 10px;
+          }
           strong{
             color:$greyType;
             transition:all 200ms ease-out;
+            font-weight: 400;
+            letter-spacing: 1px;
           }
         }
         .set-body{
-          padding:15px 15px;
+          padding:20px 15px;
+          display: flex;
+          flex-flow:row nowrap;
+          align-items:center;
+          justify-content:space-between;
+          .rangeslider{
+            flex-grow:2;
+            margin:0 10px;
+          }
         }
         &:last-child{
-          border-bottom: 0px;
+          margin-bottom: 20px;
         }
 
         &.completed{
@@ -171,6 +237,9 @@
           transition:background 200ms ease-out;
         }
       }
+    }
+    &:last-child{
+      margin-bottom: 0px;
     }
   }
 }

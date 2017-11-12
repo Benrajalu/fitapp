@@ -124,6 +124,10 @@
       overflow: auto;
     }
 
+    &.workout{
+      padding:10px;
+    }
+
     &.details{
       display: flex;
       flex-direction:row;

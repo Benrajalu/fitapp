@@ -57,6 +57,14 @@
     }
   }
 
+  &.btn-transparent{
+    border-color: transparent;
+    &:hover{
+      color:$green;
+      background-color: transparent;
+    }
+  }
+
   &.btn-size-s{
     font-size: 10px;
     padding:5px 10px;
