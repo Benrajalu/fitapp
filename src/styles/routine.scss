@@ -90,8 +90,7 @@
   .routine-body{
     flex-grow:2;
     .routine-log{
-      width:40%;
-      flex:0 0 40%;
+      flex:0 1 170px;
       padding: 15px 15px 30px;
       border-right: 1px solid #32374E;
       &:last-child{
@@ -100,6 +99,7 @@
       .exercise-name{
         @include mont(15px, 400, $white);
         margin-bottom: 10px;
+        white-space: nowrap;
         @media (max-width: $mobile){
           font-size: 13px;
         }
@@ -119,7 +119,7 @@
       flex-wrap:nowrap;
       -webkit-overflow-scrolling: touch;
       -ms-overflow-style: -ms-autohiding-scrollbar;
-      justify-content:space-between;
+      justify-content:flex-start;
       align-items:stretch;
       overflow: auto;
     }
