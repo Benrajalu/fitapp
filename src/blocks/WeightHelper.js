@@ -45,7 +45,16 @@ class WeightHelper extends Component {
           </div>
         </div>
         <div className="modal-contents">
-          <BarbellLoader settings={this.props.settings} weight={handicap} />
+          <div className="container">
+            <div className="panel warmup">
+              <div className="panel-heading">
+                <h3 className="title">Arrangement final de la barre</h3>
+              </div>
+              <div className="panel-body">
+                <BarbellLoader settings={this.props.settings} weight={handicap} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
