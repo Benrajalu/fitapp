@@ -26,7 +26,7 @@ class ExerciseListing extends Component {
         break;
 
         case 'cardio':
-          unit = 'minutes';
+          unit = 'min';
           type = 'cardio';
         break;
 
@@ -53,7 +53,7 @@ class ExerciseListing extends Component {
         else if(status === 'past'){
           numberOfSets = data.sets ? data.sets.length : 1;
           setValues = data.sets ? data.sets : [];
-          repsTarget = data.repTarget;
+          repsTarget = data.repTarget ? data.repTarget : data.handicap;
         }
 
         
