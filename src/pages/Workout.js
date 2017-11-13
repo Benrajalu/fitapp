@@ -23,7 +23,7 @@ class Workout extends Component {
       exercisesDatabase: [], 
       workoutLog: {}, 
       changedRoutine: false, 
-      runningWorkout: true, 
+      runningWorkout: "running", 
       upgradeRoutine: false,
       exitingRoutine: false
     };
@@ -262,6 +262,10 @@ class Workout extends Component {
   saveRoutine(){
     const _this = this, 
           today = new Date();
+
+    this.setState({
+      runningWorkout: "saving"
+    });
     
     const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
           mm = today.getMonth()+1 < 10 ? '0' + (today.getMonth()+1) : today.getMonth()+1,
@@ -371,7 +375,7 @@ class Workout extends Component {
       <WorkoutDetails key={value.exerciseId + '-' + index} contents={value} exercisesDatabase={this.state.exercisesDatabase} index={index} onUpdate={this.updateRoutine} onReps={this.feedReps} settings={this.state.user.settings}/>
     ) : false;
 
-    let workoutExit = <WorkoutExit runningStatus={this.state.runningWorkout} 
+    let workoutExit = <WorkoutExit runningStatus={this.state.runningWorkout ? this.state.runningWorkout : "exiting"} 
                                    closeRoutineModal={this.closeRoutineModal} 
                                    changedRoutine={this.state.changedRoutine} 
                                    saveRoutine={this.state.saveRoutine ? this.state.saveRoutine : false} 
@@ -404,7 +408,7 @@ class Workout extends Component {
           </div>
           :
           <div className="hard-lock">
-            <Prompt when={this.state.runningWorkout} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
+            <Prompt when={this.state.runningWorkout ? true : false} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
             <div className="container">
               <div className="page-header">

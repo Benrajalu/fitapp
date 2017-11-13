@@ -42,7 +42,7 @@ class WorkoutExit extends Component {
 
     let contents = <div className="contents"></div>;
 
-    if(this.props.runningStatus){
+    if(this.props.runningStatus === "running"){
       contents = <div className="contents">
           <div className="modal-header green">
             <div className="container">
@@ -56,7 +56,7 @@ class WorkoutExit extends Component {
                   <div className="panel-body">
                     <p className="title align-center">Votre entraînement est terminé ? Félicitations !</p>
                     {!this.props.changedRoutine && !this.props.upgradeRoutine ?
-                      <i className="fa fa-thumbs-up"></i>
+                      <i className="fa fa-thumbs-up large-icon"></i>
                       :
                       false
                     }
@@ -85,6 +85,24 @@ class WorkoutExit extends Component {
           </div>
         </div>
     }
+    else if(this.props.runningStatus === "saving"){
+      contents =  <div className="contents">
+          <div className="modal-header">
+            <div className="container">
+              <p className="title">Fin de l'entraînement</p>
+            </div>
+          </div>
+          <div className="modal-contents">
+            <div className="container">
+              <div className="panel end-workout">
+               <div className="panel-body">
+                  <div className="inlineLoader"><p>Sauvegarde en cours...</p></div>
+               </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    }
     else{
       contents =  <div className="contents">
           <div className="modal-header">
@@ -96,8 +114,9 @@ class WorkoutExit extends Component {
             <div className="container">
               <div className="panel end-workout">
                <div className="panel-body">
-                  {this.props.saveRoutine || this.props.upgradeRoutine ? <p>Vos choix ont bien été enregistrés !</p> : false}
-                  <p>Nos vous redirigons vers le dashboard !</p>
+                  {this.props.saveRoutine || this.props.upgradeRoutine ? <p className="title align-center">Vos choix ont bien été enregistrés !</p> : false}
+                  <i className="fa fa-check large-icon"></i>
+                  <p className="title align-center">Nous vous redirigons vers le dashboard !</p>
                </div>
               </div>
             </div>
@@ -114,7 +133,7 @@ class WorkoutExit extends Component {
 }
 
 WorkoutExit.propTypes = {
-  runningStatus: PropTypes.bool.isRequired,
+  runningStatus: PropTypes.string.isRequired,
 } 
 
 export default WorkoutExit;
