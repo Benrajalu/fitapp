@@ -99,3 +99,26 @@
     font-size: 11px;
   }
 }
+
+.value-button{
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background: #32374E;
+  border-radius: 100%;
+  line-height: 30px;
+  text-align: center;
+  font-size: 13px;
+  color:$greyType;
+  transition:all 200ms ease-out;
+  cursor: pointer;
+  padding:0px;
+  border:0px;
+  &:hover{
+    color:$green;
+    background: $white;
+  }
+  &:focus{
+    outline:0;
+  }
+}

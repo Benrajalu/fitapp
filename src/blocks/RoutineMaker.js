@@ -117,8 +117,6 @@ class RoutineMaker extends Component {
         newRoutine: nextRoutineShot, 
         isEdit: true
       });
-
-      console.log(this.state.newRoutine);
     }
   }
 

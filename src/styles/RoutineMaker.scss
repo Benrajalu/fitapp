@@ -165,6 +165,13 @@
           border-right: 1px solid #32374E;
           position: relative;
           @include mont(16px, 400, $blue);
+          display:flex;
+          flex-flow:row nowrap;
+          align-items:center;
+          justify-content:center;
+          .input{
+            padding:0 5px;
+          }
           input{
             @include mont(26px, 300, $white);
             background:transparent;
@@ -188,7 +195,7 @@
             width: 20px;
             height: 20px;
             text-align: center;
-            line-height: 19px;
+            line-height: 20px;
             position: absolute;
             top:50%;
             right: 0px;
@@ -200,6 +207,21 @@
             border-right: 0px;
             &:after{
               display: none;
+            }
+          }
+        }
+
+        @media (max-width: 660px){
+          flex-flow:column;
+          .col{
+            border-right: 0px;
+            border-bottom: 1px solid #32374E;
+            &:after{
+              right: 50%;
+              top:100%;
+            }
+            &:last-child{
+              border-bottom: 0px;
             }
           }
         }
