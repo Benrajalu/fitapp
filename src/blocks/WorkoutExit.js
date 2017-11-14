@@ -33,10 +33,10 @@ class WorkoutExit extends Component {
 
 
   render() {
-    const completedExercises = this.props.upgradeRoutine, 
+    const upgradeExercises = this.props.upgradeRoutine, 
           allExercises = this.props.saveRoutine ? this.props.currentRoutine.exercises : this.props.originalRoutine.exercises;
 
-    const updates = completedExercises ? completedExercises.map((value, index) => 
+    const updates = upgradeExercises ? upgradeExercises.map((value, index) => 
       <WorkoutUpdates key={'log-' + index + '-' + value} completedSet={value} allSets={allExercises} database={this.props.exercisesDatabase} notUpdating={this.props.cancelUpdate}/>
     ) : false;
 

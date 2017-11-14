@@ -35,6 +35,7 @@ class Workout extends Component {
     this.routineUpdateToggle = this.routineUpdateToggle.bind(this)
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
     this.saveRoutine = this.saveRoutine.bind(this);
+    this.getCompletedSets = this.getCompletedSets.bind(this);
   }
 
   userListener(){
@@ -98,14 +99,16 @@ class Workout extends Component {
           user = this.state.user;
 
     this.fireRecordsListener = database.collection('users').doc(user.uid).collection('personalRecords').get().then((snapshot) => {
-      if(snapshot && snapshot.length > 0){
+      console.log(snapshot);
+      if(snapshot){
         const output = [];
         snapshot.forEach((doc) => {
           output.push(doc.data());
         });
         _this.setState({
           records: output
-        })
+        });
+        console.log(_this.state.records);
       }
       else{
         _this.setState({
@@ -154,7 +157,6 @@ class Workout extends Component {
   }
 
   updateRoutine(index, event){
-    console.log("coucou");
     // When the workout detail component wants to update handicaps, we do it here
     let changedName = event.target["name"],
         changedValue = event.target.value;
@@ -195,7 +197,8 @@ class Workout extends Component {
       updatables = false;
     }
     this.setState({
-      upgradeRoutine: updatables
+      upgradeRoutine: updatables, 
+      completedExercises: this.getCompletedSets()
     });
   }
 
@@ -211,8 +214,7 @@ class Workout extends Component {
     })
   }
 
-  endRoutine(){
-    // First, check if any set has been completed
+  getCompletedSets(){
     const log = this.state.workoutLog.exercises, 
           completedExercises = [];
     
@@ -226,37 +228,48 @@ class Workout extends Component {
       }
     }
 
-    if(completedExercises.length !== 0 && !this.state.changedRoutine){
-      // Some exercises can upgrade !
-      this.setState({
-        upgradeRoutine: completedExercises,
-        exitingRoutine:true,
-        saveRoutine: false 
-      })
-    }
-    else if(completedExercises.length !== 0 && this.state.changedRoutine){
-      // Then let's check for changes made to the routine AND some have been maxed out
-      this.setState({
-        upgradeRoutine: completedExercises,
-        saveRoutine: true, 
-        exitingRoutine:true
-      })
-    }
-    else if(this.state.changedRoutine){
-      // routine has been changed but no set has been completed
-      this.setState({
-        saveRoutine: true, 
-        exitingRoutine:true,
-        upgradeRoutine:false
-      })
-    }
-    else{
-      this.setState({
-        exitingRoutine:true,
-        upgradeRoutine:false,
-        saveRoutine: false 
-      })   
-    }
+    return completedExercises;
+  }
+
+  endRoutine(){
+    // First, check if any set has been completed
+    const completedExercises = this.getCompletedSets();
+
+    this.setState({
+      completedExercises: completedExercises
+    }, () => {
+      if(this.state.completedExercises.length !== 0 && !this.state.changedRoutine){
+        // Some exercises can upgrade !
+        this.setState({
+          upgradeRoutine: completedExercises,
+          exitingRoutine:true,
+          saveRoutine: false 
+        })
+      }
+      else if(this.state.completedExercises.length !== 0 && this.state.changedRoutine){
+        // Then let's check for changes made to the routine AND some have been maxed out
+        this.setState({
+          upgradeRoutine: completedExercises,
+          saveRoutine: true, 
+          exitingRoutine:true
+        })
+      }
+      else if(this.state.changedRoutine){
+        // routine has been changed but no set has been completed
+        this.setState({
+          saveRoutine: true, 
+          exitingRoutine:true,
+          upgradeRoutine:false
+        })
+      }
+      else{
+        this.setState({
+          exitingRoutine:true,
+          upgradeRoutine:false,
+          saveRoutine: false 
+        })   
+      }
+    })
   }
 
   saveRoutine(){
@@ -271,14 +284,71 @@ class Workout extends Component {
           mm = today.getMonth()+1 < 10 ? '0' + (today.getMonth()+1) : today.getMonth()+1,
           yyyy = today.getFullYear(),
           fullDate = dd+'/'+mm+'/'+yyyy;
+
+    // If some sets have been completed, then we update the user's personal records because they did good
+    if(this.state.completedExercises && this.state.completedExercises.length > 0){
+      const routine = this.state.workoutLog, 
+            areUpdatable = this.state.completedExercises,
+            records = this.state.records;
+      
+      for(var xb = 0; xb < areUpdatable.length; xb ++){
+        let current = routine.exercises[areUpdatable[xb]], 
+            type = this.state.exercisesDatabase.filter(obj => obj.id === current.exerciseId)[0].type;
+        
+        // Updating the records...
+        if(type === "barbell" || type === "cable" || type === "dumbbell"){
+          const newRecordValue = parseFloat(routine.exercises[areUpdatable[xb]].handicap);
+
+          // Check if that exercise is already in records 
+          const recordsHistory = records.findIndex(obj => obj.exerciseId === current.exerciseId ); 
+          if(recordsHistory >= 0){
+            const oldValue = parseFloat(records[recordsHistory].record.replace('kg', ''));
+            if(oldValue < newRecordValue){
+              records[recordsHistory].record = newRecordValue + 'kg';
+              records[recordsHistory].timestamp = Date.now();
+            }
+          }
+          else{
+            console.log(this.state.records);
+            const newRecord = {
+              exerciseId: current.exerciseId, 
+              record: newRecordValue + 'kg',
+              timestamp:  Date.now()
+            }
+            records.push(newRecord);
+          }
+        }
+      }
+
+      this.setState({
+        records: records
+      });
+
+      this.state.records.map((obj) => {
+        return database.collection('users').doc(_this.state.user.uid).collection('personalRecords').doc(obj.exerciseId).set(obj, { merge: true });
+      });
+    }
     
+    
+
+    // If the routine was changed (handicaps) and the user wants that saved, save it
+    if(this.state.saveRoutine){
+      const routineSnapshot = this.state.routine, 
+            workout = this.state.workoutLog;
+      workout.exercises.map((value, index) => {
+        return routineSnapshot.exercises[index].handicap = value.handicap;
+      })
+      this.setState({
+        routine: routineSnapshot
+      }, () => {
+        database.collection('users').doc(_this.state.user.uid).collection('routines').doc(_this.state.routine.routineId.toString()).set(_this.state.routine);
+      });
+    }
+
     // If there are some exercises the user can upgrade, then we work out which ones and by how much...
     if(this.state.upgradeRoutine){
       const routine = this.state.routine, 
             areUpdatable = this.state.upgradeRoutine;
-
-      // It's also time to update the personal recoards, you great great warrior
-      const records = this.state.records;
       
       for(var x = 0; x < areUpdatable.length; x ++){
         let current = routine.exercises[areUpdatable[x]], 
@@ -294,56 +364,14 @@ class Workout extends Component {
         else{
           routine.exercises[areUpdatable[x]].handicap = parseFloat(routine.exercises[areUpdatable[x]].handicap) + 2;  
         }
-        
-        // Updating the records...
-        if(type === "barbell" || type === "cable" || type === "dumbbell"){
-          const newRecordValue = parseFloat(routine.exercises[areUpdatable[x]].handicap);
-
-          // Check if that exercise is already in records 
-          const recordsHistory = records.findIndex(obj => obj.exerciseId === current.exerciseId ); 
-          if(recordsHistory >= 0){
-            const oldValue = parseFloat(records[recordsHistory].record.replace('kg', ''));
-            if(oldValue < newRecordValue){
-              records[recordsHistory].record = newRecordValue + 'kg';
-              records[recordsHistory].timestamp = Date.now();
-            }
-          }
-          else{
-            const newRecord = {
-              exerciseId: current.exerciseId, 
-              record: newRecordValue + 'kg',
-              timestamp:  Date.now()
-            }
-            records.push(newRecord);
-          }
-        }
       }
 
 
       this.setState({
-        records: records,
         routine: routine 
-      });
-
-
-      // ... then we add to the payload
-      this.state.records.map((obj) => {
-        return database.collection('users').doc(_this.state.user.uid).collection('personalRecords').doc(obj.exerciseId).set(obj, { merge: true });
-      });
-      database.collection('users').doc(this.state.user.uid).collection('routines').doc(this.state.routine.routineId.toString()).set(this.state.routine, { merge: true });
-    }
-
-    // If the routine was changed (handicaps) and the user wants that saved, save it
-    if(this.state.saveRoutine){
-      const routineSnapshot = this.state.routine, 
-            workout = this.state.workoutLog;
-      workout.exercises.map((value, index) => {
-        return routineSnapshot.exercises[index].handicap = value.handicap;
-      })
-      this.setState({
-        routine: routineSnapshot
       }, () => {
-        database.collection('users').doc(_this.state.user.uid).collection('routines').doc(_this.state.routine.routineId.toString()).set(_this.state.routine);
+        // ... then we add to the payload
+        database.collection('users').doc(this.state.user.uid).collection('routines').doc(this.state.routine.routineId.toString()).set(this.state.routine, { merge: true });
       });
     }
     
