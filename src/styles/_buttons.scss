@@ -1,3 +1,12 @@
+button{
+  cursor: pointer;
+  &:focus{
+    outline:0;
+  }
+  &:disabled{
+    cursor:default;
+  }
+}
 .btn{
   padding:0px;
   line-height: 1;
