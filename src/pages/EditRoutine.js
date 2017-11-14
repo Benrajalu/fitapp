@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {firebaseAuth, database} from '../utils/fire';
 
 import RoutineMaker from '../blocks/RoutineMaker';
@@ -57,10 +58,13 @@ class EditRoutine extends Component {
       <div className="EditRoutine">
         <div className="container">
           <div className="page-header">
+            <Link to="/all-routines" title="Retour aux entraînements"><i className="fa fa-angle-left"></i></Link>
             <h1>Modifier ce programme</h1>
           </div>
         </div>
-        {this.state.routine ? <RoutineMaker postHandler={this.handleFormPost} editRoutine={this.state.routine ? this.state.routine : "empty"} /> : <div className="container"><p>Chargement du programme...</p></div>}
+        <div className="container">
+          {this.state.routine ? <RoutineMaker postHandler={this.handleFormPost} editRoutine={this.state.routine ? this.state.routine : "empty"} /> : <div className="container empty"><div className="inlineLoader"><p>Chargement de l'entraînement...</p></div></div>}
+        </div>
       </div>
     )
   }

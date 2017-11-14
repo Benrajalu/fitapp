@@ -18,5 +18,5 @@ it('distinguishes bewteen weights and minutes', () => {
     <ExerciseListing  exerciseData={cardio} exercisesDatabase={exercisesDatabase} />
   );
   expect(exoWeight.find('p').first().text()).toEqual('10 x 20kg');
-  expect(exoMinutes.find('p').first().text()).toEqual('1 x 40minutes');
+  expect(exoMinutes.find('p').first().text()).toEqual('1 x 40min');
 });

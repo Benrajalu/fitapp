@@ -4,6 +4,8 @@ import {firebaseAuth, database} from '../utils/fire';
 
 import Routines from '../blocks/Routines';
 
+import '../styles/AllRoutines.css';
+
 
 class AllRoutines extends Component {
   constructor(props) {
@@ -91,21 +93,29 @@ class AllRoutines extends Component {
       <div className="AllRoutines">
         <div className="container">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Mes entraînements</h1>
-            <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
           </div>
+        </div>
           {this.state.loading ? 
-            <p>Chargement de vos données...</p>
+            <div className="container empty">
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
+            </div>
             :
-            <div>
+            <div className="container">
               {this.state.routinesList.length > 0 && this.state.routinesList ? 
-                <Routines rebuild={this.refreshRoutines} list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} refresh={this.refreshRoutines}/>
+                <div className="all-routines">
+                  <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
+                  <Routines rebuild={this.refreshRoutines} list={routines} exercisesDatabase={this.state.exercises} editable="true" user={this.state.user} refresh={this.refreshRoutines}/>
+                </div>
                 :
-                <div className="alert alert-warning">Vous n'avez pas encore créé d'entraînement !</div>
+                <div className="empty-workouts">
+                  <p>Nous n'avez enregistré aucun entrainement pour l'instant !</p>
+                  <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>
+                </div>
               }
             </div>
           }
-        </div>
       </div>
     )
   }

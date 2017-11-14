@@ -147,29 +147,31 @@ class History extends Component {
       <div className="History">
         <div className="container">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Historique</h1>
           </div>
         </div>
 
         <div className="container">
-          <div className="col-md-9">
-            <h2>Vos entraînements</h2>
+          <div className="large-9 medium-8 columns left-column">
+            <h2 className="section-title">Vos entraînements</h2>
             { this.state.loading ?
-              <p>Chargement de vos données...</p>
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
               :
               <div> 
                 {this.state.workoutList ?
-                  <div>
-                    <WeekCounter list={workouts} />
-                    <Link to="/history" className="btn btn-default">Historique</Link>
-                    <hr/>
-                    <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} />
+                  <div className="past-workouts-list">
+                    <div className="container no-padding stats">
+                      <WeekCounter list={workouts} />
+                      <button className="btn btn-green" onClick={this.displayModal}>Commencer un entrainement</button>
+                    </div>
+                    <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                   </div>
                   :
-                  <div>
-                    <div className="alert alert-warning">Nous n'avez enregistré aucun entrainement pour l'instant !</div>
+                  <div className="empty-workouts">
+                    <p>Nous n'avez enregistré aucun entrainement pour l'instant !</p>
                     {this.state.routinesList ? 
-                      <button className="btn btn-primary" onClick={this.displayModal}>Lancer un entraînement</button>
+                      <button className="btn btn-green" onClick={this.displayModal}>Lancer un entraînement</button>
                       :
                       <Link to='/new-routine' className="btn btn-default">Créer un entraînement</Link>
                     }
@@ -179,27 +181,35 @@ class History extends Component {
             }
           </div>
 
-          <div className="col-md-3">
-            <h2>Vos records</h2>
-            { this.state.loading ?
-              <p>Chargement de vos données...</p>
-              : 
-              <div>
-                {this.state.records ?
-                  <RecordsLog list={records} exercisesDatabase={this.state.exercises} />
-                  :
-                  <div className="alert alert-warning">Aucun record personnel</div> 
+          <div className="large-3 medium-4 columns">
+            <div className="records-wrap">
+                <h2 className="section-title">Vos records</h2>
+                { this.state.loading ?
+                  <div className="inlineLoader"><p>Chargement de vos données</p></div>
+                  : 
+                  <div>
+                    {this.state.records ?
+                      <RecordsLog list={records} exercisesDatabase={this.state.exercises} />
+                      :
+                      <div className="empty-state">
+                        <p>Aucun record personnel</p>
+                      </div> 
+                    }
+                  </div>
                 }
-              </div>
-            }
+            </div>
           </div>
         </div>
 
-        <RoutineLauncherModal 
+        {this.state.modalDisplay ?
+          <RoutineLauncherModal 
           shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
           routinesList={routines} 
           exercises={this.state.exercises} 
           modalCloser={this.displayModal} />
+          :
+          false
+        }
       </div>
     )
   }

@@ -1,0 +1,49 @@
+@import "styles/_mixins.scss";
+
+.records-wrap{
+  position: relative;
+  padding-bottom:30px;
+  margin-bottom: 40px;
+  &:after{
+    content:"";
+    width: 100%;
+    height: 120%;
+    z-index: 1;
+    background: #32374E;
+    position: absolute;
+    right: -20px;
+    top:-20px;
+  }
+  > *{
+    position: relative;
+    z-index: 2;
+  }
+
+  .empty-state{
+    text-align: right;
+    @include mont(13px, 400, $greyType);
+  }
+
+  .section-title{
+    text-align: right;
+  }
+
+  @media (max-width: $mobile){
+    &:after{
+      right: 10px;
+    }
+    .section-title{
+      text-align: left;
+    }
+    .empty-state{
+      text-align: left;
+    }
+  }
+}
+
+.past-workouts-list{
+  margin-bottom: 60px;
+  .stats{
+    margin-bottom: 30px;
+  }
+}

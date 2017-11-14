@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Timestamper from '../blocks/Timestamper';
+import '../styles/RecordsLogs.css';
 
 class RecordBadge extends Component {
   render() {
@@ -11,15 +12,13 @@ class RecordBadge extends Component {
 
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading">
-          <h3 className="panel-title">{trueExercise.name}</h3>
-        </div>
-        <div className="panel-body">
-          <p><strong>{data.record}</strong></p>
-        </div>
-        <div className="panel-footer">
+      <div className="records-card">
+        <div className="description">
+          <h3 className="title">{trueExercise.name}</h3>
           <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
+        </div>
+        <div className="value">
+          <p>{data.record}</p>
         </div>
       </div>
     )

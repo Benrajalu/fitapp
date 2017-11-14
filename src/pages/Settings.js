@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ReactCrop from 'react-image-crop';
 import {firebaseAuth, database} from '../utils/fire';
+
+import AccountDeleteModal from '../blocks/AccountDeleteModal';
 
 import userData from '../data/users.json';
 import defaultAvatar from '../images/default-avatar.png';
 
 import '../styles/ReactCrop.css';
+import '../styles/Settings.css';
 
 class Settings extends Component {
   constructor(props) {
@@ -22,7 +26,6 @@ class Settings extends Component {
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.togglePopin = this.togglePopin.bind(this);
-    this.activateAccountDelete = this.activateAccountDelete.bind(this);
     this.deleteAccount = this.deleteAccount.bind(this);
 
     this.state = {
@@ -40,7 +43,8 @@ class Settings extends Component {
         availableWeights: []
       }, 
       wrongEmail: false,
-      previewImage: false
+      previewImage: false,
+      animate: " animate"
     }
   }
 
@@ -89,7 +93,7 @@ class Settings extends Component {
 
     this.setState({
       settings: currentWeights,
-      savingWeights: "Enregistrement..."
+      savingWeights: "saving"
     }, () => {
       const updateQuery = database.collection('users').doc(this.state.userId), 
             value = this.state.settings.availableWeights, 
@@ -101,7 +105,7 @@ class Settings extends Component {
       .then(function(response){
         console.log("Congrats, settings saved !");
         _this.setState({
-          savingWeights: 'Enregistré !'
+          savingWeights: 'saved'
         });
         setTimeout(function(){
           _this.setState({
@@ -124,7 +128,7 @@ class Settings extends Component {
 
     this.setState({
       settings: currentSettings, 
-      savingBarbell: "Enregistrement..."
+      savingBarbell: "saving"
     }, () => {
       const updateQuery = database.collection('users').doc(this.state.userId), 
             value = this.state.settings.baseBarbell, 
@@ -136,7 +140,7 @@ class Settings extends Component {
       .then(function(response){
         console.log("Congrats, settings saved !");
         _this.setState({
-          savingBarbell: 'Enregistré !'
+          savingBarbell: 'saved'
         });
         setTimeout(function(){
           _this.setState({
@@ -315,13 +319,7 @@ class Settings extends Component {
   togglePopin(){
     this.setState({
       deletePopin: !this.state.deletePopin
-    })
-  }
-
-  activateAccountDelete(){
-    this.setState({
-      accountDelete: !this.state.accountDelete
-    })
+    });
   }
 
   deleteAccount(){
@@ -356,60 +354,65 @@ class Settings extends Component {
     let previewImage = this.state.previewImage ? this.state.previewImage : false;
 
     return (
-      <div className="Settings">
+      <div className="Settings" id="Settings">
         <div className="container">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Paramètres</h1>
           </div>
         </div>
 
-        <div className="container">
-          <div className="col-md-8">
-            <h3>Gestion des poids (barbell)</h3>
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Poids de la barre à vide {this.state.savingBarbell ? <span className="badge">{this.state.savingBarbell}</span> : false}</h3>
-              </div>
-              <form action="#" className="panel-body">
-              { this.state.loading ? 
-                <p>Chargement...</p> 
-                : 
-                <div>
-                  <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg
-                </div>
-              }
-              </form>
-            </div>
+        <div className="container setting-contents">
+          <div className="large-8 medium-7 small-6 columns">
+            <h3 className="section-title">Gestion des poids (barbell)</h3>
 
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Poids libres disponibles {this.state.savingWeights ? <span className="badge">{this.state.savingWeights}</span> : false}</h3>
-              </div>
-              { this.state.loading ? 
-                <div className="panel-body">
-                  <p>Chargement...</p>
+            <div className="weight-settings">
+              <div className="panel">
+                <div className="panel-heading">
+                  <h3 className="title">Poids de la barre à vide {this.state.savingBarbell ? <i className={this.state.savingBarbell}></i> : false}</h3>
                 </div>
-                :
                 <form action="#" className="panel-body">
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="25" id="input-25" checked={this.state.settings.availableWeights.indexOf(25) > -1 ? true : false} /> <label htmlFor="input-25">25kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="20" id="input-20" checked={this.state.settings.availableWeights.indexOf(20) > -1 ? true : false} /> <label htmlFor="input-20">20kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="15" id="input-15" checked={this.state.settings.availableWeights.indexOf(15) > -1 ? true : false} /><label htmlFor="input-15">15kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="10" id="input-10" checked={this.state.settings.availableWeights.indexOf(10) > -1 ? true : false} /> <label htmlFor="input-10">10kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="5" id="input-5" checked={this.state.settings.availableWeights.indexOf(5) > -1 ? true : false} /> <label htmlFor="input-5">5kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="2.5" id="input-2.5" checked={this.state.settings.availableWeights.indexOf(2.5) > -1 ? true : false} /> <label htmlFor="input-2.5">2.5kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1.25" id="input-1.25" checked={this.state.settings.availableWeights.indexOf(1.25) > -1 ? true : false} /> <label htmlFor="input-1.25">1.25kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1" id="input-1" checked={this.state.settings.availableWeights.indexOf(1) > -1 ? true : false} /> <label htmlFor="input-1">1kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.5" id="input-0.5" checked={this.state.settings.availableWeights.indexOf(0.5) > -1 ? true : false} /> <label htmlFor="input-0.5">0.5kg</label></div>
-                  <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.25" id="input-0.25" checked={this.state.settings.availableWeights.indexOf(0.25) > -1 ? true : false} /> <label htmlFor="input-0.25">0.25kg</label></div>
+                { this.state.loading ? 
+                  <p>Chargement...</p> 
+                  : 
+                  <div className="barbell-load">
+                    <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg
+                  </div>
+                }
                 </form>
-              }
+              </div>
+
+              <div className="panel">
+                <div className="panel-heading">
+                  <h3 className="title">Poids libres disponibles {this.state.savingWeights ? <i className={this.state.savingWeights}></i> : false}</h3>
+                </div>
+                { this.state.loading ? 
+                  <div className="panel-body">
+                    <p>Chargement...</p>
+                  </div>
+                  :
+                  <form action="#" className="panel-body">
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="25" id="input-25" checked={this.state.settings.availableWeights.indexOf(25) > -1 ? true : false} /> <label htmlFor="input-25">25kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="20" id="input-20" checked={this.state.settings.availableWeights.indexOf(20) > -1 ? true : false} /> <label htmlFor="input-20">20kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="15" id="input-15" checked={this.state.settings.availableWeights.indexOf(15) > -1 ? true : false} /><label htmlFor="input-15">15kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="10" id="input-10" checked={this.state.settings.availableWeights.indexOf(10) > -1 ? true : false} /> <label htmlFor="input-10">10kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="5" id="input-5" checked={this.state.settings.availableWeights.indexOf(5) > -1 ? true : false} /> <label htmlFor="input-5">5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="2.5" id="input-2.5" checked={this.state.settings.availableWeights.indexOf(2.5) > -1 ? true : false} /> <label htmlFor="input-2.5">2.5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1.25" id="input-1.25" checked={this.state.settings.availableWeights.indexOf(1.25) > -1 ? true : false} /> <label htmlFor="input-1.25">1.25kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1" id="input-1" checked={this.state.settings.availableWeights.indexOf(1) > -1 ? true : false} /> <label htmlFor="input-1">1kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.5" id="input-0.5" checked={this.state.settings.availableWeights.indexOf(0.5) > -1 ? true : false} /> <label htmlFor="input-0.5">0.5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.25" id="input-0.25" checked={this.state.settings.availableWeights.indexOf(0.25) > -1 ? true : false} /> <label htmlFor="input-0.25">0.25kg</label></div>
+                  </form>
+                }
+              </div>
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div className="panel panel-default">
+          <div className="large-4 medium-5 small-6 columns">
+            <h3 className="section-title">Gestion utilisateur</h3>
+            <div className="panel">
               <div className="panel-heading">
-                <h3 className="panel-title">Paramètres du compte</h3>
+                <h3 className="title">Paramètres du compte</h3>
               </div>
               { this.state.loading ? 
                 <div className="panel-body">
@@ -418,7 +421,7 @@ class Settings extends Component {
                 :
                 <form className="panel-body form" onSubmit={this.handleFormSubmit}>
                   { this.state.newPic ? 
-                     <img src={previewImage} alt="" className="img-circle  img-responsive" />
+                     <img src={previewImage} alt="" className="img-circle" />
                     :
                     <img src={this.state.userPic !== false ? this.state.userPic : defaultAvatar} alt={this.state.userName} className="img-circle  img-responsive"/>
                   }
@@ -441,29 +444,21 @@ class Settings extends Component {
                       </div>
                       : false }
                   </div>
-                  {this.state.saving ? 
-                    <p><button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> </p>
-                    :
-                    <p><button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button></p>
-                  }
-                  <p><button type="button" className="btn btn-danger" onClick={this.togglePopin}>Supprimer ce compte</button></p>
+                  <div className="buttons">
+                    {this.state.saving ? 
+                      <button type="submit" className="btn btn-block btn-big w-radius btn-success" disabled="true">{this.state.saving}</button>
+                      :
+                      <button type="submit" className="btn btn-block btn-big w-radius btn-green" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button>
+                    }
+                    <button type="button" className="btn btn-danger" onClick={this.togglePopin}>Supprimer ce compte</button>
+                  </div>
                 </form>
               }
               {this.state.deletePopin ? 
-                <div className="popin">
-                  <div className="contents panel panel-danger">
-                    <div className="panel-heading">
-                      <h3 className="panel-title">Supprimer votre compte ? </h3>
-                      <button className="closer" onClick={this.togglePopin}>Close modal</button>
-                    </div>
-                    <div className="panel-body">
-                      <p><strong>Attention ! Cette action est irréversible et entraînera la supression de votre compte et de toutes les informations sauvegardées !</strong></p>
-                      <p><input type="checkbox" onChange={this.activateAccountDelete} id="security-checkbox" /> <label htmlFor="security-checkbox">Je souhaite supprimer mon compte</label></p>
-                      <p><button className="btn btn-default" onClick={this.togglePopin}>Annuler</button></p>
-                      <p><button className="btn btn-danger" onClick={this.deleteAccount} disabled={this.state.accountDelete ? false : true}>Supprimer mon compte</button></p>
-                    </div>
-                  </div>
-                </div>
+                <AccountDeleteModal 
+                  shouldAppear={this.state.deletePopin ? 'visible' : 'hidden'} 
+                  deleteAccount={this.deleteAccount}
+                  modalCloser={this.togglePopin} />
                 :
                 false
               }

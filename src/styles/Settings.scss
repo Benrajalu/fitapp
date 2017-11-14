@@ -1,0 +1,51 @@
+@import "styles/_mixins.scss";
+
+.weight-settings{
+  display: flex;
+  flex-direction:row;
+  align-items:flex-start;
+  justify-content:space-between;
+  > .panel{
+    margin:0 20px;
+    flex-grow:1;
+    &:first-child{
+      margin-left: 0px;
+      width: 40%;
+    }
+    &:last-child{
+      margin-right: 0px;
+      width: 60%;
+    }
+  }
+
+  @media (max-width:795px){
+    flex-direction:column;
+    > .panel{
+      width:100%;
+      margin:0px 0px 30px;
+      &:first-child{
+        width: 100%;
+      }
+      &:last-child{
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+#Settings{
+  .setting-contents.container{
+    @media (max-width:500px){
+      .columns{
+        width: 100%;
+        padding:0px;
+      }
+
+      .img-circle{
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  } 
+}

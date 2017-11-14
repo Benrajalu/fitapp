@@ -1,0 +1,15 @@
+@import "styles/_mixins.scss";
+.WeekCounter{
+  display: block;
+  .title{
+    @include mont(12px, 400, $greyType);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .value{
+    @include mont(17px, 700, $white);
+    strong{
+      color: $turquoise
+    }
+  }
+}

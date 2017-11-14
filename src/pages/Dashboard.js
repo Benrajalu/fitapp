@@ -7,6 +7,8 @@ import WorkoutsLog from '../blocks/WorkoutsLog';
 import RecordsLog from '../blocks/RecordsLog';
 import WeekCounter from '../blocks/WeekCounter';
 
+import '../styles/Dashboard.css';
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -148,47 +150,51 @@ class Dashboard extends Component {
     return (
       <div className="Dashboard">
         <div className="container">
-          <div className="col-md-12">
-            <div className="page-header">
-              <h1>Dashboard</h1>
-            </div>
+          <div className="page-header">
+            <h1>Dashboard</h1>
           </div>
         </div>
 
         <div className="container">
-          <div className="col-md-4">
-            <button className="btn btn-primary btn-lg btn-block" onClick={this.displayModal}>Lancer un entraînement</button>
-          </div>
-          <div className="col-md-4">
-            <Link to='/new-routine' className="btn btn-default btn-lg btn-block">Créer un entraînement</Link>
-          </div>
-          <div className="col-md-4">
-            <Link to='/settings' className="btn btn-default btn-lg btn-block">Paramètres</Link>
-          </div>
-          <div className="col-md-12">
-            <hr/>
+          <div className="flex-grid quicklauncher">
+            <button className="btn btn-lg btn-important" onClick={this.displayModal}>
+              <span className="title">Lancer un entraînement</span>
+              <span className="desc">Départ rapide</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
+            </button>
+            <Link to='/new-routine' className="btn btn-lg">
+              <span className="title">Créer un entraînement</span>
+              <span className="desc">Votre routine sur-mesure</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
+            </Link>
+            <Link to='/settings' className="btn btn-lg">
+              <span className="title">Paramètres</span>
+              <span className="desc">Modifiez vos options</span>
+              <div className="arrow"><i className="fa fa-angle-right"></i></div>
+            </Link>
           </div>
         </div>
 
         <div className="container">
-          <div className="col-md-9">
-            <h2>Vos entraînements récents</h2>
+          <div className="large-9 medium-8 columns left-column">
+            <h2 className="section-title">Vos entraînements récents</h2>
             { this.state.loading ?
-              <p>Chargement de vos données...</p>
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>
               :
               <div> 
                 {this.state.workoutList ?
-                  <div>
-                    <WeekCounter list={workouts} />
-                    <Link to="/history" className="btn btn-default">Historique</Link>
-                    <hr/>
+                  <div className="past-workouts-list">
+                    <div className="container no-padding stats">
+                      <WeekCounter list={workouts} />
+                      <Link to="/history" className="btn btn-default">Historique</Link>
+                    </div>
                     <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                   </div>
                   :
-                  <div>
-                    <div className="alert alert-warning">Nous n'avez enregistré aucun entrainement pour l'instant !</div>
+                  <div className="empty-workouts">
+                    <p>Nous n'avez enregistré aucun entrainement pour l'instant !</p>
                     {this.state.routinesList ? 
-                      <button className="btn btn-primary" onClick={this.displayModal}>Lancer un entraînement</button>
+                      <button className="btn btn-green" onClick={this.displayModal}>Lancer un entraînement</button>
                       :
                       <Link to='/new-routine' className="btn btn-default">Créer un entraînement</Link>
                     }
@@ -198,27 +204,35 @@ class Dashboard extends Component {
             }
           </div>
 
-          <div className="col-md-3">
-            <h2>Vos records</h2>
-            { this.state.loading ?
-              <p>Chargement de vos données...</p>
-              : 
-              <div>
-                {this.state.records ?
-                  <RecordsLog list={records} exercisesDatabase={this.state.exercises} limit="5" />
-                  :
-                  <div className="alert alert-warning">Aucun record personnel</div> 
+          <div className="large-3 medium-4 columns">
+            <div className="records-wrap">
+                <h2 className="section-title">Vos records</h2>
+                { this.state.loading ?
+                  <div className="inlineLoader"><p>Chargement de vos données</p></div>
+                  : 
+                  <div>
+                    {this.state.records ?
+                      <RecordsLog list={records} exercisesDatabase={this.state.exercises} limit="5" />
+                      :
+                      <div className="empty-state">
+                        <p>Aucun record personnel</p>
+                      </div> 
+                    }
+                  </div>
                 }
-              </div>
-            }
+            </div>
           </div>
         </div>
-
-        <RoutineLauncherModal 
-          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          routinesList={routines ? routines : []} 
-          exercises={this.state.exercises} 
-          modalCloser={this.displayModal} />
+        
+        { this.state.modalDisplay ? 
+          <RoutineLauncherModal 
+            shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+            routinesList={routines ? routines : []} 
+            exercises={this.state.exercises} 
+            modalCloser={this.displayModal} />
+          : 
+          false
+        }
       </div>
     )
   }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import '../styles/WeekCounter.css';
+
 class WeekCounter extends Component {
   render() {
     const workoutsList = this.props.list;
@@ -33,7 +35,8 @@ class WeekCounter extends Component {
 
     return (
       <div className="WeekCounter">
-        <p><span className="badge">{registeredWorkouts}</span> <strong>Entraînement{registeredWorkouts > 1 ? 's' : ''} cette semaine</strong></p>
+        <p className="title">Cette semaine :</p>
+        <p className="value"><strong>{registeredWorkouts}</strong> séance{registeredWorkouts > 1 ? 's' : ''}</p>
       </div>
     )
   }

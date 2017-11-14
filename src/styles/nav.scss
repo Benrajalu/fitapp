@@ -1,18 +1,178 @@
+@import "styles/_mixins.scss";
+
 #mainNav{
-  .UserLog{
-    position: absolute;
-    right: 15px;
+  .navbar-header{
+    transition:all 200ms ease-out;
+    background: #2C3045;
+    position: fixed;
     top:0px;
-    line-height: 50px;
-    img, p{
-      display: inline-block;
-      vertical-align: middle;
+    right: 0;
+    z-index: 98;
+    .container{
+      transition:all 200ms ease-out;
+      display: flex;
+      flex-direction:row;
+      justify-content:space-between;
+      align-items:center;
+      padding:15px 10px;
+      &:focus{
+        outline: 0;
+      }
+      .navbar-brand{
+        font-family:"Montserrat";
+        font-size:22px;
+        font-weight: 400;
+        color:#F9F9F9;
+        margin-bottom: 0px;
+        text-decoration: none;
+        strong{
+          color:#1FC3AF;
+          font-weight: 400;
+        }
+      }
+
+      .menuToggle{
+        background: transparent;
+        border:0px;
+        position:relative;
+        width:30px;
+        height:30px;
+        padding:0px;
+        margin:0px;
+        cursor:pointer;
+        transition: all 600ms ease;
+        &:active, &:focus{
+          outline:0px;
+          border:0px;
+        }
+        > i{
+          cursor:pointer;
+          width:30px;
+          padding:0px;
+          height:3px;
+          background:$green;
+          box-shadow:0px 0px 0px transparent;
+          border:0px transparent;
+          text-indent:-999px;
+          position:absolute;
+          top:50%;
+          left:0px;
+          margin-top:-1px;
+          -webkit-appearance:none;
+          line-height:0px;
+          transition: all 300ms ease;
+          border-radius:99px;
+          &:active, &:focus{
+            outline:0px;
+            border:0px;
+          }
+          &::after, &::before{
+            display:block;
+            content: "";
+            position:absolute;
+            left:0px;
+            height:3px;
+            background:$green;
+            width:100%;
+            transition: all 300ms ease;
+            border-radius:99px;
+          }
+          &::after{
+            top:-10px;
+          }
+          &::before{
+            bottom:-10px;
+            left:auto;
+            right:0px;
+          }
+        }
+      }
     }
-    img{
-      width: 30px;
-      height: 30px;
-      border-radius:100%;
-      margin-right: 5px;
+  }
+  &.active{
+    .navbar-header{
+      right: 250px;
+      .container{
+        max-width: 100%;
+        justify-content:flex-end;
+        .navbar-brand{
+          margin-right: 30px;
+        }
+        .menuToggle{
+          transform: rotate(360deg);
+          >i{
+            background:transparent;
+            &:after{
+              transform: rotate(-135deg) translate(-6px, -8px) scale(1.2, 1.2);
+            }
+            &:before{
+              transform: rotate(135deg) translate(-6px, 8px) scale(1.2, 1.2);
+            }
+          }
+        }
+      }
+    }
+  }
+  .navbar-collapse{
+    z-index: 1;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+    text-align: right;
+    background: #32374E;
+    width: 250px;
+    padding:60px 0px;
+    box-shadow: inset 2px 0px 5px rgba(0,0,0,0.3);
+    overflow: auto;
+    .nav{
+      width: 100%;
+      margin-bottom: 30px;
+      li{
+        border-bottom: 1px solid #2C3045;
+        padding:5px 0px;
+        a{
+          padding:10px 30px;
+          @include mont(17px, regular, $white);
+          text-decoration: none;
+          display: inline-block;
+          transition:all 200ms ease-out;
+          border-right: 0px solid transparent;
+          &.active{
+            border-right: 10px solid $green;
+          }
+          &:hover{
+            border-right: 10px solid transparent;
+          }
+        }
+      }
+    }
+
+    .userZone{
+      width: 100%;
+      display: block;
+      border-top: 2px solid #2C3045;
+      text-align: center;
+    }
+
+    .UserLog{
+      text-align: center;
+      padding-top: 30px;
+      img{
+        max-width: 70px;
+        display: block;
+        margin:0 auto 10px;
+        border-radius: 100%;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      }
+      p{
+        @include mont(13px, regular, #9397A1);
+        margin-bottom: 25px;
+      }
     }
   }
 }

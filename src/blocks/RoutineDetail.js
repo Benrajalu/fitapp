@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { database} from '../utils/fire';
 
 import ExerciseListing from '../blocks/ExerciseListing';
+import RoutineDelete from '../blocks/RoutineDelete';
 
 
 class RoutineDetail extends Component {
@@ -26,8 +27,12 @@ class RoutineDetail extends Component {
   }
   deleteRoutine(){
     const _this = this;
+    this.setState({
+      deleting: true
+    });
     this.userRef.collection('routines').doc(this.props.contents.id).delete().then(() => {
       _this.setState({
+        deleting: false,
         killConfirmed:true
       }, () => {
         setTimeout(() => {
@@ -45,46 +50,34 @@ class RoutineDetail extends Component {
     });
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading container-fluid">
-          <div className="col-md-8">
-            <h3 className="panel-title">{this.props.contents.name}</h3>
+      <div className="routine-detail">
+        <div className="routine-heading with-actions">
+          <div className="description">
+            <h3 className="title">{this.props.contents.name}</h3>
+            <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
           </div>
-          <div className="col-md-4 text-right">
-            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>
-          </div>
+          <Link to={'/workout/' + this.props.contents.id} className="action">Débuter l'entraînement</Link>
         </div>
-        <div className="panel-body">
+        <div className="routine-body details">
           {listExercises}
         </div>
         {this.props.editable ? 
-          <div className="panel-footer">
-            <Link to={'/edit/' + this.props.contents.id} className="btn btn-default">Edit</Link>
-            &nbsp;
-            <button className="btn btn-danger" onClick={this.togglePopin}>Supprimer</button>
+          <div className="routine-footer">
+            <Link to={'/edit/' + this.props.contents.id} className="btn btn-size-s">Modifier</Link>
+            <button className="btn btn-size-s btn-danger" onClick={this.togglePopin}>Supprimer</button>
           </div>
           : false}
-        {this.state.showPopin ? 
-          <div className="popin visible">
-            <div className="panel panel-danger contents">
-              <div className="panel-heading">
-                <h3 className="panel-title">Suppression d'un entrainement</h3>
-              </div>
-              {!this.state.killConfirmed ? 
-                <div className="panel-body text-center">
-                  <p><strong>Souhaitez vous effacer la routine {this.props.contents.name} ?</strong></p>
-                  <p>Cette action est irrémédiable !</p>
-                  <button className="btn btn-danger" onClick={this.deleteRoutine}>Supprimer cette routine</button>&nbsp;
-                  <button className="btn btn-default" onClick={this.togglePopin}>Annuler</button>
-                </div>
-                : 
-                <div className="panel-body text-center">
-                  <p><strong>La routine {this.props.contents.name} a été effacée avec succès</strong></p>
-                </div>
-              }
-            </div>
-          </div>
-          : false}
+        {this.state.showPopin ?
+          <RoutineDelete  shouldAppear={this.state.showPopin ? 'visible' : 'hidden'} 
+            name={this.props.contents.name} 
+            modalCloser={this.togglePopin} 
+            deleteRoutine={this.deleteRoutine}
+            killConfirmed={this.state.killConfirmed}
+            deleting={this.state.deleting}
+          />
+          : 
+          false
+        }
       </div>
     )
   }

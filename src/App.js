@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import {firebaseAuth, database} from './utils/fire';
 
+import Loader from "./blocks/Loader.js"; 
 import Dashboard from './pages/Dashboard.js';
 import Settings from './pages/Settings.js';
 import History from './pages/History.js';
@@ -19,12 +20,28 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      menuOpen: false,
       loading:true,
       loggedIn: false, 
       user: false
     };
     this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
     this.resetUser = this.resetUser.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+  }
+
+  toggleMenu(event){
+    event.preventDefault();
+    this.setState({
+      menuOpen: !this.state.menuOpen
+    });
+  }
+
+  closeMenu(event){
+    this.setState({
+      menuOpen: false
+    });
   }
 
   authListener(){
@@ -104,9 +121,10 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          {this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} /> : false}
-          {this.state.loading ? <p>Loading</p> :
-            <main id="mainContents">
+          {this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} toggleMenu={this.toggleMenu} closeMenu={this.closeMenu} menuOpen={this.state.menuOpen} /> : false}
+          {this.state.loading ? <Loader /> :
+            <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : false}>
+              <div className="container-fluid">
               {this.state.loggedIn ? 
                 <Switch>
                   <Route exact path="/" component={Dashboard}/>
@@ -127,6 +145,7 @@ class App extends Component {
                   <Route component={NoMatch}/>
                 </Switch>
               }
+              </div>
             </main>
           }
         </div>

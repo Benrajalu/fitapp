@@ -22,7 +22,7 @@ test('has 5 menu entries', () => {
   );
   
   // Expecting to find 5 menu entries
-  expect(dash.find('li')).toHaveLength(5);
+  expect(dash.find('li')).toHaveLength(4);
 });
 
 test('shows the user name', () => {

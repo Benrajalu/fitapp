@@ -5,6 +5,8 @@ import {firebaseAuth, database} from '../utils/fire';
 import ExercisePicker from '../blocks/ExercisePicker';
 import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
 
+import '../styles/RoutineMaker.css';
+
 class RoutineMaker extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class RoutineMaker extends Component {
       exercisesDatabase: [],
       newRoutine: {
         routineId: timestamp.getTime(),
-        color : "#67E658", 
+        color : "#1FC3AF", 
         exercises : [], 
         dateCreated: fullDate,
         lastPerformed: fullDate
@@ -115,8 +117,6 @@ class RoutineMaker extends Component {
         newRoutine: nextRoutineShot, 
         isEdit: true
       });
-
-      console.log(this.state.newRoutine);
     }
   }
 
@@ -140,16 +140,19 @@ class RoutineMaker extends Component {
     }, () => {
       // If it's still false, then we proceed
       if (!this.state.errors){
-        console.log("Congrats, built this new routine :");
-
         const userId = this.state.user.uid, 
               addedRoutine = this.state.newRoutine, 
               _this = this, 
               verb = this.state.isEdit ? 'put' : 'post';
 
+        this.setState({
+          saving: true
+        });
+
         if(verb === "post"){
           database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).set(addedRoutine).then(() => {
             _this.setState({
+              saving: false,
               successRedirect:true
             });
           })
@@ -157,6 +160,7 @@ class RoutineMaker extends Component {
         else if(verb === "put"){
           database.collection('users').doc(userId).collection('routines').doc(addedRoutine.routineId.toString()).update(addedRoutine).then(() => {
             _this.setState({
+              saving: false,
               successRedirect:true
             });
           })  
@@ -262,56 +266,79 @@ class RoutineMaker extends Component {
     return (
       <div id="RoutineMaker">
         {this.state.loading ? 
-          <div className="container">
-            <p>Chargement de l'entrainement...</p>
+          <div className="container empty">
+            <div className="inlineLoader"><p>Sauvegarde en cours...</p></div>
           </div>
           :
-          <form onSubmit={this.validate} className="container">
-            <div className={this.state.errors.name ? "form-group has-error" : "form-group"}>
-              <label>Routine name</label>
-              <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} />
-              {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
-            </div>
-            <div className="form-group">
-              <label>Routine color</label>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#67E658" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#67E658" ? true : false} /> <span style={{ "color": "#67E658" }}>Neon green</span>
-                  </label>
+          <form onSubmit={this.validate}>
+            <div className="routine-labels">
+              <div className={this.state.errors.name ? "form-group main has-error" : "form-group main"}>
+                <label>Nom de l'entraînement</label>
+                <input type="text" name="name" className="form-control" onChange={this.handleInputChange} value={this.state.newRoutine.name ? this.state.newRoutine.name : ""} placeholder="Ex: Routine du Lundi"/>
+                {this.state.errors.name ? <span className="help-block">{this.state.errors.name}</span> : false }
               </div>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#DF8833" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#DF8833" ? true : false} /> <span style={{ color: "#DF8833" }}>Mad orange</span>
-                  </label>
+              <div className="form-group">
+                <label>Niveau</label>
+                <div className="colors">
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#1FC3AF" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#1FC3AF" ? true : false} /> 
+                      <span><i className="color-point" style={{ "backgroundColor": "#1FC3AF" }}></i>Normal</span>
+                    </label>
+                  </div>
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#FCC05A" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FCC05A" ? true : false} /> 
+                      <span><i className="color-point" style={{ backgroundColor: "#FCC05A" }}></i>Moyen</span>
+                    </label>
+                  </div>
+                  <div className="radio">
+                    <label>
+                      <input type="radio" name="color" value="#FC5A5C" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#FC5A5C" ? true : false} /> 
+                      <span><i className="color-point" style={{ backgroundColor: "#FC5A5C" }}></i>Elevé</span>
+                    </label>
+                  </div>
+                </div>
               </div>
-              <div className="radio">
-                  <label>
-                    <input type="radio" name="color" value="#F30012" onChange={this.handleInputChange} checked={this.state.newRoutine.color === "#F30012" ? true : false} /> <span style={{ color: "#F30012" }}>Damn red</span>
-                  </label>
+            </div>
+
+            <div className={this.state.newRoutine.exercises.length === 0 ? " routine-exercises empty" : 'routine-exercises'}>
+              <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
+                {listExercises}
+                {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
+                <button className="btn btn-caps" type="button" onClick={this.displayModal}>{this.state.newRoutine.exercises.length > 0 ? "Modifier les exercices" : "Ajouter un exercice"}</button>
               </div>
             </div>
-            <div className={this.state.errors.exercises ? "form-group has-error" : "form-group"}>
-              <label>Exercices</label>
-              {listExercises}
-              {this.state.errors.exercises ? <span className="help-block">{this.state.errors.exercises}</span> : false }
-              <button className="btn btn-primary" type="button" onClick={this.displayModal}>Ajouter un exercice</button>
-            </div>
-            <hr/>
-            <div className="form-group">
-              <button type="submit" className="btn btn-default">Submit</button>
-              {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
-            </div>
+            
+            { this.state.saving ?
+              <div className="routine-footer align-center">
+                <div className="inlineLoader"><p>Sauvegarde en cours...</p></div>
+              </div>
+              :
+              <div className="routine-footer">
+                {this.state.isEdit  ? 
+                  <button type="submit" className="btn btn-green btn-big btn-block">Modifier cet entraînement</button>
+                  :
+                  <button type="submit" className="btn btn-green btn-big btn-block">Créer cet entraînement</button>
+                }
+                {this.state.success ? <div className="panel-warning"><p>Bravo ! Votre entraînement a été créé ! Vous allez être redirigé vers le dashboard...</p></div> : false}
+              </div>
+            }
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/all-routines', state:{newRoutine:true} }} /> : false}
           </form>
         }
-
-        <ExercisePicker 
-          exercisesDatabase={this.state.exercisesDatabase} 
-          shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
-          modalCloser={this.displayModal}
-          updateExercises={this.updateExercises}
-          settings={this.state.user}
-          pickedExercises={this.state.newRoutine.exercises} />
+        
+        {this.state.modalDisplay ? 
+          <ExercisePicker 
+            exercisesDatabase={this.state.exercisesDatabase} 
+            shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'} 
+            modalCloser={this.displayModal}
+            updateExercises={this.updateExercises}
+            settings={this.state.user}
+            pickedExercises={this.state.newRoutine.exercises} />
+          : 
+          false
+        }
       </div>
     )
   }

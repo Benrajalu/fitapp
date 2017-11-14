@@ -23,15 +23,22 @@ class ExercisePickerDetails extends Component {
     }
 
     return (
-      <div className="exercise panel panel-default" onClick={this.props.handleClick.bind(this, ExerciseObject)} >
-        <div className="panel-heading">
-          <p>{this.props.data.type} { this.props.data.muscleGroup ? <small>({this.props.data.muscleGroup})</small> : false }</p>
+      <div className="exercise-panel">
+        <div className="description">
+          <div className="exercise-heading">
+            <p>{this.props.data.type} { this.props.data.muscleGroup ? <small>({this.props.data.muscleGroup})</small> : false }</p>
+          </div>
+          <div className="exercise-body">
+            <h3>{this.props.data.name}</h3>
+          </div>
+          <div className="exercise-footer">
+            <a href={"https://www.youtube.com/results?search_query=form+" + this.props.data.name.replace(' ', '+')} target="_blank">Démos youtube</a>
+          </div>
         </div>
-        <div className="panel-body">
-          <h3>{this.props.data.name}</h3>
-        </div>
-        <div className="panel-footer">
-          <a href={"https://www.youtube.com/results?search_query=form+" + this.props.data.name.replace(' ', '+')} target="_blank">Démos youtube</a>
+        <div className="action">
+          <button className="exercise-action" onClick={this.props.handleClick.bind(this, ExerciseObject)}>
+            <i className="fa fa-plus"></i>
+          </button>
         </div>
       </div>
     )
