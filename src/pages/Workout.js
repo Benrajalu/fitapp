@@ -456,7 +456,7 @@ class Workout extends Component {
                       <h3 className="title">{this.state.routine.name}</h3>
                       <i className="color-spot" style={{"backgroundColor" : this.state.routine.color}}></i>
                     </div>
-                    <button className="action" onClick={this.endRoutine}>Terminer l'entraînement</button>
+                    <button className="action end-workout" onClick={this.endRoutine}>Terminer l'entraînement</button>
                   </div>
                   <div className="routine-body workout">
                     {workoutItems}

@@ -56,7 +56,7 @@ it('add exercises when users click on one', () => {
         pickedExercises={[]} />
   );
 
-  picker.find('.exercise').first().simulate('click');
+  picker.find('.exercise-action').first().simulate('click');
 
   expect(picker.find('.exercise-pick')).not.toHaveLength(0);
 });
@@ -81,6 +81,6 @@ it('add displays current exercises when users edit a routine', () => {
         settings={users[0]}
         pickedExercises={testExercises} />
   );
-  expect(picker.find('.exercise-pick').first().text()).toEqual("Bent-over Rows");
+  expect(picker.find('.exercise-pick').first().text()).toEqual("Bent-over Rows ");
 });
 

@@ -36,7 +36,7 @@ class ExercisePickerDetails extends Component {
           </div>
         </div>
         <div className="action">
-          <button onClick={this.props.handleClick.bind(this, ExerciseObject)}>
+          <button className="exercise-action" onClick={this.props.handleClick.bind(this, ExerciseObject)}>
             <i className="fa fa-plus"></i>
           </button>
         </div>

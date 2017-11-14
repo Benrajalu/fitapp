@@ -170,15 +170,11 @@ describe('when exiting a workout', () => {
     },
     exercisesDatabase: exercisesDatabase, 
     routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0],
+    loading:false,
     workoutLog:{
       exercises:[
-        {
-          exerciseId:"ex-11",
-          handicap:10,
-          repTarget:1,
-          sets:[0],
-          setsTarget:1
-        }
+        {exerciseId: "ex-04", repTarget: "10", setsTarget: "5", handicap: "20", sets: [10,10,10,10,10]},
+        {exerciseId: "ex-06", repTarget: "5", setsTarget: "8", handicap: "15", sets: [0,0,0,0,0,0,0,0]}
       ]
     }
   }) 
@@ -209,6 +205,6 @@ describe('when exiting a workout', () => {
       }
     });
     workout.find('.end-workout').first().simulate('click');
-    expect(workout.find('.popin.visible .alert').first().text()).toEqual("Bent-over Rows peut passer de 20kg à 25kgNope!");
+    expect(workout.find('.popin').find('.workout-update').text()).toEqual("L'exercice \"Bent-over Rows\" peut passer de 20kg à 25kgAnnuler");
   });
 });

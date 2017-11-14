@@ -56,9 +56,9 @@ test('runs the required user tasks smoothy until submit', () => {
   })
 
   // Testing that buttons to up / down the exercises work 
-  expect(maker.find('.panel-heading h3').first().text()).toEqual('Bent-over Rows');
-  maker.find('.panel-heading .btn-down').first().simulate('click');
-  expect(maker.find('.panel-heading h3').first().text()).toEqual('Triceps press-down');
+  expect(maker.find('.exercise-tuner .title').first().text()).toEqual('Bent-over Rows');
+  maker.find('.exercise-tuner .btn-down').first().simulate('click');
+  expect(maker.find('.exercise-tuner .title').first().text()).toEqual('Triceps press-down');
   
   // Expecting message not to be empty
   expect(maker.find('.help-block')).toHaveLength(0);
