@@ -51,13 +51,17 @@ class Login extends Component {
     event.preventDefault();
     const provider = new fire.auth.GoogleAuthProvider(), 
           _this = this;
+    this.setState({
+      googleLogin:true
+    });
     firebaseAuth.signInWithPopup(provider).then(() => {
       _this.setState({
         loading:true
       });
     }).catch((error) => {
       _this.setState({
-        loading:false
+        loading:false,
+        googleLogin:false
       });
     });
   }
@@ -66,13 +70,17 @@ class Login extends Component {
     event.preventDefault();
     const provider = new fire.auth.FacebookAuthProvider(), 
           _this = this;
+    this.setState({
+      facebookLogin:true
+    });
     firebaseAuth.signInWithPopup(provider).then(() => {
       _this.setState({
         loading:true
       });
     }).catch((error) => {
       _this.setState({
-        loading:false
+        loading:false,
+        facebookLogin:false
       });
     });
   }
@@ -150,9 +158,9 @@ class Login extends Component {
           <div className="login-box">
             <div className="socialAccount">
               <h3>Se connecter avec...</h3>
-              <button className="btn google" onClick={this.handleGoogleLogin}>Connexion avec Google</button>
+              <button className="btn google" onClick={this.handleGoogleLogin}>{this.state.googleLogin ? "Tentative de connexion..." : "Connexion avec Google" }</button>
               <hr/>
-              <button className="btn facebook" onClick={this.handleFacebookLogin}>Connexion avec Facebook</button>
+              <button className="btn facebook" onClick={this.handleFacebookLogin}>{this.state.facebookLogin ? "Tentative de connexion..." : "Connexion avec Facebook" }</button>
             </div>
             <div className="mailAccount">
               <h4>Utiliser un compte mail</h4>
