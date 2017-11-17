@@ -72,6 +72,10 @@ class AllRoutines extends Component {
     this.exercisesListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Vos programmes d'entraînement";
+  }
+
   refreshRoutines(){
     this.routinesListener();
   }

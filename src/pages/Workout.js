@@ -156,6 +156,10 @@ class Workout extends Component {
     this.exercisesListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Entraînement en cours !";
+  }
+
   updateRoutine(index, event){
     // When the workout detail component wants to update handicaps, we do it here
     let changedName = event.target["name"],

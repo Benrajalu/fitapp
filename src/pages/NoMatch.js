@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 class NoMatch extends Component {
+  componentDidMount(){
+    document.title = "FitApp. - Cette page n'existe pas !";
+  }
+
   render() {
     return (
       <div className="NoMatch">

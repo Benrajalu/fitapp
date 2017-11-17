@@ -106,6 +106,10 @@ class History extends Component {
     this.exercisesListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Historique de vos entraînements";
+  }
+
   displayModal(event) {
     this.setState({
       modalDisplay: !this.state.modalDisplay

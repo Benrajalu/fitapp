@@ -79,6 +79,10 @@ class Settings extends Component {
     this.userListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Vos paramètres";
+  }
+
   updateWeights(event){
     let target = parseFloat(event.target.value);
 

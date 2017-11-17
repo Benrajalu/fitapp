@@ -13,6 +13,10 @@ class NewRoutine extends Component {
     event.preventDefault();
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Création d'un programme d'entraînement";
+  }
+
   render() {
     return (
       <div className="NewRoutine">

@@ -49,6 +49,10 @@ class EditRoutine extends Component {
     this.routinesListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Modification d'un programme";
+  }
+
   handleFormPost(event, data) {
     event.preventDefault();
   }

@@ -7,6 +7,7 @@ import WorkoutsLog from '../blocks/WorkoutsLog';
 import RecordsLog from '../blocks/RecordsLog';
 import WeekCounter from '../blocks/WeekCounter';
 
+
 import '../styles/Dashboard.css';
 
 class Dashboard extends Component {
@@ -109,6 +110,10 @@ class Dashboard extends Component {
     this.exercisesListener = undefined;
   }
 
+  componentDidMount(){
+    document.title = "FitApp. - Dashboard";
+  }
+
   displayModal(event) {
     this.setState({
       modalDisplay: !this.state.modalDisplay
@@ -179,25 +184,29 @@ class Dashboard extends Component {
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements récents</h2>
             { this.state.loading ?
-              <div className="inlineLoader"><p>Chargement de vos données</p></div>
+              <div className="inlineLoader"><p>Chargement de vos données</p></div>  
               :
-              <div> 
+              <div>
                 {this.state.workoutList ?
-                  <div className="past-workouts-list">
-                    <div className="container no-padding stats">
-                      <WeekCounter list={workouts} />
-                      <Link to="/history" className="btn btn-default">Historique</Link>
+                  <div>
+                    <div className="past-workouts-list">
+                      <div className="container no-padding stats">
+                        <WeekCounter list={workouts} />
+                        <Link to="/history" className="btn btn-default">Historique</Link>
+                      </div>
+                      <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                     </div>
-                    <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                   </div>
                   :
-                  <div className="empty-workouts">
-                    <p>Nous n'avez enregistré aucun entrainement pour l'instant !</p>
-                    {this.state.routinesList ? 
-                      <button className="btn btn-green" onClick={this.displayModal}>Lancer un entraînement</button>
-                      :
-                      <Link to='/new-routine' className="btn btn-default">Créer un entraînement</Link>
-                    }
+                  <div>
+                    <div className="empty-workouts">
+                      <p>Nous n'avez enregistré aucun entrainement pour l'instant !</p>
+                      {this.state.routinesList ? 
+                        <button className="btn btn-green" onClick={this.displayModal}>Lancer un entraînement</button>
+                        :
+                        <Link to='/new-routine' className="btn btn-default">Créer un entraînement</Link>
+                      }
+                    </div>
                   </div>
                 }
               </div>
