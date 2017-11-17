@@ -170,35 +170,35 @@ class WorkoutDetails extends Component {
             <i className="fa fa-angle-down"></i></button>
           }
         </div>
-          <TransitionGroup>
-            { this.state.visible ? // If the user so chosses, that part of the routine is hidden
-              <AnimatedPanel>
-                <div className="body">
-                    { trueExercise.type !== "cardio" || warmupButton || weightHelper ?
-                      <ul className="helper-buttons">
-                        { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
-                        {warmupButton ? warmupButton : false}
-                        {weightHelper ? weightHelper : false}
-                      </ul>
-                      :
-                      false
-                    }
-                    <div className="input-zone">
-                      <button className="value-button" onClick={this.removeHandicap.bind(this, this.props.index)}><i className="fa fa-minus"></i></button>
-                      <div className="input">
-                        <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
-                        <p>{handicapType}</p>
-                      </div>
-                      <button className="value-button" onClick={this.addHandicap.bind(this, this.props.index)}><i className="fa fa-plus"></i></button>
+        <TransitionGroup>
+          { this.state.visible ? // If the user so chosses, that part of the routine is hidden
+            <AnimatedPanel>
+              <div className="body">
+                  { trueExercise.type !== "cardio" || warmupButton || weightHelper ?
+                    <ul className="helper-buttons">
+                      { trueExercise.type !== "cardio" ? <li role="presentation"><a href={"https://www.youtube.com/results?search_query=form+" + trueExercise.name.replace(' ', '+')} target="_blank">Démos youtube</a></li> : false }
+                      {warmupButton ? warmupButton : false}
+                      {weightHelper ? weightHelper : false}
+                    </ul>
+                    :
+                    false
+                  }
+                  <div className="input-zone">
+                    <button className="value-button" onClick={this.removeHandicap.bind(this, this.props.index)}><i className="fa fa-minus"></i></button>
+                    <div className="input">
+                      <input type="number" name="handicap" value={this.props.contents.handicap} onChange={this.props.onUpdate.bind(this, this.props.index)} />
+                      <p>{handicapType}</p>
                     </div>
-                    {sets}
-                    {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
-                    {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
-                </div> 
-              </AnimatedPanel> 
-              : null
-            }
-          </TransitionGroup>
+                    <button className="value-button" onClick={this.addHandicap.bind(this, this.props.index)}><i className="fa fa-plus"></i></button>
+                  </div>
+                  {sets}
+                  {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
+                  {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
+              </div> 
+            </AnimatedPanel> 
+            : null
+          }
+        </TransitionGroup>
       </div>
     )
   }

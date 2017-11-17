@@ -4,17 +4,18 @@ import Velocity from 'velocity-animate';
 
 class AnimatedPanel extends Component {
   componentWillEnter (callback) {
-      const element = ReactDOM.findDOMNode(this);
-      Velocity(element, 'slideDown', { duration: 300 }).then(callback);
+    const element = ReactDOM.findDOMNode(this);
+    Velocity(element, 'slideDown', { duration: 300 }).then(callback);
   }
 
   componentWillLeave (callback) {
-      const element = ReactDOM.findDOMNode(this);
-      Velocity(element, 'slideUp', { duration: 300 }).then(callback);
+    const element = ReactDOM.findDOMNode(this);
+    Velocity(element, 'slideUp', { duration: 300 }).then(callback);
   }
 
 
   render() {
+    console.log("coucou");
     return (
       <div className="animatedPanel">
         {this.props.children}
