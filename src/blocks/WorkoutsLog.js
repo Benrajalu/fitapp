@@ -9,8 +9,8 @@ class WorkoutsLog extends Component {
     const exercisesDatabase = this.props.exercisesDatabase;
     const displayLimit= this.props.limit ? this.props.limit : workoutsList.length;
 
-    const workoutItems = workoutsList.slice(0, displayLimit).map((value) => 
-      <WorkoutHistoryDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} />
+    const workoutItems = workoutsList.slice(0, displayLimit).map((value, index) => 
+      <WorkoutHistoryDetail key={value.id} contents={value} exercisesDatabase={exercisesDatabase} delay={index * 100}/>
     );
 
     return (

@@ -7,6 +7,26 @@ import Timestamper from '../blocks/Timestamper';
 import "../styles/routine.css"
 
 class WorkoutHistoryDetail extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      getIn:{
+        transform:"translateX(-30%)",
+        opacity:0
+      }
+    }
+  }
+  componentDidMount(){
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        getIn:{
+          transform:"translateX(0)",
+          opacity:"1"
+        }
+      })
+    }, this.props.delay);
+  }
   render() {
     const workoutExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -16,7 +36,7 @@ class WorkoutHistoryDetail extends Component {
     });
 
     return (
-      <div className="routine-detail">
+      <div className="routine-detail" style={this.state.getIn}>
         <div className="routine-heading">
           <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
           <h3 className="title">{this.props.contents.routineName}</h3>
