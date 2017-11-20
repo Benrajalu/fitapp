@@ -278,10 +278,14 @@ class Workout extends Component {
 
   saveRoutine(){
     const _this = this, 
-          today = new Date();
+          today = new Date(), 
+          workout = this.state.workoutLog;
+
+    workout.timestamp = today.getTime();
 
     this.setState({
-      runningWorkout: "saving"
+      runningWorkout: "saving",
+      workoutLog: workout
     });
     
     const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
@@ -383,7 +387,7 @@ class Workout extends Component {
     // we use the fullDate to update the targeted routine so users know it's the most recently used
     // and we use the state.workout to save into the workout logs so this workout is part of the user's history
     database.collection('users').doc(this.state.user.uid).collection('routines').doc(this.state.routine.routineId.toString()).update({
-      "lastPerformed" : fullDate
+      "lastPerformed" : today.getTime()
     }).then(() => {
       database.collection('users').doc(_this.state.user.uid).collection('workoutLog').add(_this.state.workoutLog).then(() => {
         _this.setState({

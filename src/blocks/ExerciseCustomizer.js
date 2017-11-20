@@ -13,7 +13,7 @@ class ExerciseCustomizer extends Component {
         eventObject;
 
     if(direction==="more"){
-      newValue = value + 1; 
+      newValue = parseFloat(value) + 1; 
       eventObject = {
         target:{
           name: name, 
@@ -22,7 +22,7 @@ class ExerciseCustomizer extends Component {
       };
     }
     else{
-      newValue = value > 0 ? value - 1 : 0; 
+      newValue = parseFloat(value) > 0 ? parseFloat(value) - 1 : 0; 
       eventObject = {
         target:{
           name:name, 

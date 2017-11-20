@@ -144,10 +144,8 @@ class Dashboard extends Component {
     let routines = [];
     if(this.state.routinesList.length > 0){
       routines = this.state.routinesList.sort((a, b) => {
-        var aDate = a.lastPerformed.split('/');
-        var bDate = b.lastPerformed.split('/');
-        var c = new Date('20' + aDate[2], aDate[1] - 1, aDate[0]);
-        var d = new Date('20' + bDate[2], bDate[1] - 1, bDate[0]);
+        var c = new Date(a.lastPerformed);
+        var d = new Date(b.lastPerformed);
         return c>d ? -1 : c<d ? 1 : 0;
       });
     }
