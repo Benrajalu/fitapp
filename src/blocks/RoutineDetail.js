@@ -12,7 +12,14 @@ class RoutineDetail extends Component {
     super(props);
     this.state = {
       showPopin: false, 
-      user: this.props.user
+      user: this.props.user,
+      animation:{
+        perspective: "800px",
+        transformOrigin: '50% 0%',
+        marginBottom: -30,
+        opacity: 0,
+        transform: "rotateX(-70deg)"
+      }
     };
     this.togglePopin = this.togglePopin.bind(this);
     this.deleteRoutine = this.deleteRoutine.bind(this);
@@ -42,6 +49,21 @@ class RoutineDetail extends Component {
     });
   }
 
+  componentDidMount(){
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        animation:{
+          perspective: "800px",
+          transformOrigin: '50% 100%',
+          marginBottom: "15px",
+          opacity: 1,
+          transform: "rotateX(-0deg)"
+        }
+      })
+    }, this.props.delay);
+  }
+
   render() {
     const routineExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -50,7 +72,7 @@ class RoutineDetail extends Component {
     });
 
     return (
-      <div className="routine-detail">
+      <div className="routine-detail" style={this.state.animation}>
         <div className="routine-heading with-actions">
           <div className="description">
             <h3 className="title">{this.props.contents.name}</h3>

@@ -158,6 +158,12 @@ class Workout extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Entraînement en cours !";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   updateRoutine(index, event){
@@ -288,10 +294,10 @@ class Workout extends Component {
       workoutLog: workout
     });
     
-    const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
+   /* const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
           mm = today.getMonth()+1 < 10 ? '0' + (today.getMonth()+1) : today.getMonth()+1,
           yyyy = today.getFullYear(),
-          fullDate = dd+'/'+mm+'/'+yyyy;
+          fullDate = dd+'/'+mm+'/'+yyyy;*/
 
     // If some sets have been completed, then we update the user's personal records because they did good
     if(this.state.completedExercises && this.state.completedExercises.length > 0){
@@ -384,7 +390,7 @@ class Workout extends Component {
     }
     
     // This is the basic payload, saved whatever happens
-    // we use the fullDate to update the targeted routine so users know it's the most recently used
+    // we use the "today" to update the targeted routine so users know it's the most recently used
     // and we use the state.workout to save into the workout logs so this workout is part of the user's history
     database.collection('users').doc(this.state.user.uid).collection('routines').doc(this.state.routine.routineId.toString()).update({
       "lastPerformed" : today.getTime()
@@ -424,16 +430,16 @@ class Workout extends Component {
                                    writeRoutine={this.saveRoutine} />;
     
     return (
-      <div id="Workout">
+      <div id="Workout" className={this.state.mounted ? "loaded" : null}>
         { this.state.routine === false ? 
           <div>
-            <div className="container">
+            <div className="container introduction">
               <div className="page-header">
                 <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
                 <h1>Entraînement <small>{this.state.routine.name}</small></h1>
               </div>
             </div>
-            <div className="container empty">
+            <div className="container empty contents">
               <div className="panel alert">
                 <div className="panel-body">
                   <p>Cet entraînement n'existe pas !</p>
@@ -446,13 +452,13 @@ class Workout extends Component {
           <div className="hard-lock">
             <Prompt when={this.state.runningWorkout ? true : false} message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? " /> 
             {this.state.successRedirect ? <Redirect push to={{ pathname:'/'}} /> : false }
-            <div className="container">
+            <div className="container introduction">
               <div className="page-header">
                 <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
                 <h1>Entraînement <small>{this.state.routine.name}</small></h1>
               </div>
             </div>
-            <div className="container workout-wrapper">
+            <div className="container workout-wrapper contents">
               {this.state.loading || this.state.routine.exercises.length < 1 || this.state.exercisesDatabase.length < 1 ? 
                 <div className="container empty workout-list">
                   <div className="inlineLoader"><p>Chargement du programme...</p></div>

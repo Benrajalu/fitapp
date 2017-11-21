@@ -39,10 +39,10 @@ class ExerciseListing extends Component {
         let numberOfSets = 1, 
             numberOfReps = 1, 
             setValues = [], 
-            repsTarget = 0;
+            repsTarget = 0,
+            sets = []; 
 
-        const handicap = data.handicap, 
-              sets = [];  
+        const handicap = data.handicap; 
 
         // If there is no "status" or it is false, then the listing is "inactive" : it doesn't show performance, but goals
         if (!status){
@@ -88,11 +88,11 @@ class ExerciseListing extends Component {
           }
           // Or display the user's goals (passive routine check)
           else{
-            sets.push(
-              <div className={"status " + status} key={i + trueExercise.name}>
-                <p>{numberOfReps} { handicap ? 'x ' + (handicap + unit) : 'reps'}</p>
-              </div>
-            )
+            sets = <div className={!status ? "status listing" : "status"} key={i + trueExercise.name}>
+                    {numberOfSets > 1 ? <p className="set-number">{numberOfSets} <strong>sets</strong></p> : null}
+                    <p className="rep-number">{numberOfReps} <strong>reps</strong></p>
+                    { handicap ? <p className="handicap-number">{handicap} <strong>{unit}</strong></p> : null }
+                   </div>;
           }
         }
 

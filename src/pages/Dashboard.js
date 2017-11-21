@@ -112,6 +112,12 @@ class Dashboard extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Dashboard";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   displayModal(event) {
@@ -151,14 +157,14 @@ class Dashboard extends Component {
     }
 
     return (
-      <div className="Dashboard">
-        <div className="container">
+      <div className={this.state.mounted ? "Dashboard loaded" : "Dashboard"}>
+        <div className="container introduction">
           <div className="page-header">
             <h1>Dashboard</h1>
           </div>
         </div>
 
-        <div className="container">
+        <div className="container introduction">
           <div className="flex-grid quicklauncher">
             <button className="btn btn-lg btn-important" onClick={this.displayModal}>
               <span className="title">Lancer un entraînement</span>
@@ -178,7 +184,7 @@ class Dashboard extends Component {
           </div>
         </div>
 
-        <div className="container">
+        <div className="container contents">
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements récents</h2>
             { this.state.loading ?
@@ -186,14 +192,12 @@ class Dashboard extends Component {
               :
               <div>
                 {this.state.workoutList ?
-                  <div>
-                    <div className="past-workouts-list">
-                      <div className="container no-padding stats">
-                        <WeekCounter list={workouts} />
-                        <Link to="/history" className="btn btn-default">Historique</Link>
-                      </div>
-                      <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
+                  <div className="past-workouts-list">
+                    <div className="container no-padding stats">
+                      <WeekCounter list={workouts} />
+                      <Link to="/history" className="btn btn-default">Historique</Link>
                     </div>
+                    <WorkoutsLog list={workouts} exercisesDatabase={this.state.exercises} limit="5" />
                   </div>
                   :
                   <div>

@@ -1,6 +1,7 @@
 @import "styles/_mixins.scss";
 .WeekCounter{
   display: block;
+  margin-bottom: 15px;
   .title{
     @include mont(12px, 400, $greyType);
     text-transform: uppercase;

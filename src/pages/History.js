@@ -108,6 +108,12 @@ class History extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Historique de vos entraînements";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   displayModal(event) {
@@ -139,24 +145,22 @@ class History extends Component {
     let routines = [];
     if(this.state.routinesList.length > 0){
       routines = this.state.routinesList.sort((a, b) => {
-        var aDate = a.lastPerformed.split('/');
-        var bDate = b.lastPerformed.split('/');
-        var c = new Date('20' + aDate[2], aDate[1] - 1, aDate[0]);
-        var d = new Date('20' + bDate[2], bDate[1] - 1, bDate[0]);
+        var c = new Date(a.lastPerformed);
+        var d = new Date(b.lastPerformed);
         return c>d ? -1 : c<d ? 1 : 0;
       });
     }
 
     return (
-      <div className="History">
-        <div className="container">
+      <div className={this.state.mounted ? "History loaded" : "History"}>
+        <div className="container introduction">
           <div className="page-header">
             <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Historique</h1>
           </div>
         </div>
 
-        <div className="container">
+        <div className="container contents">
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements</h2>
             { this.state.loading ?
