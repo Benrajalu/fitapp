@@ -29,14 +29,18 @@
   }
 
   @media (max-width: $mobile){
+    padding:0 10px 30px;
     &:after{
-      right: 10px;
+      right: 0px;
     }
     .section-title{
-      text-align: left;
+      text-align: center;
     }
     .empty-state{
-      text-align: left;
+      text-align: center;
+    }
+    .records-card{
+      margin:0 auto 15px;
     }
   }
 }
