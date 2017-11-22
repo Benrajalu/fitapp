@@ -74,6 +74,8 @@
       }
       .empty-state{
         @include mont(14px, 400, $greyType);
+        white-space: normal;
+        padding:0 10px;
       }
 
       @media (max-width: 520px){
