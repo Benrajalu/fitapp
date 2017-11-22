@@ -89,9 +89,11 @@ class ExerciseListing extends Component {
           // Or display the user's goals (passive routine check)
           else{
             sets = <div className={!status ? "status listing" : "status"} key={i + trueExercise.name}>
-                    {numberOfSets > 1 ? <p className="set-number">{numberOfSets} <strong>sets</strong></p> : <p className="set-number">1 <strong>set</strong></p>}
-                    <p className="rep-number">{numberOfReps} <strong>{numberOfReps > 1 ? "reps" : "rep"}</strong></p>
-                    { handicap ? <p className="handicap-number">{handicap} <strong>{unit}</strong></p> : null }
+                    <p className="type">{trueExercise.type}</p>
+                    <p className="reps">
+                      <strong>{numberOfSets > 1 ? numberOfSets : 1}</strong> {numberOfSets > 1 ? "sets" : "set"} de <strong>{numberOfReps}</strong> {numberOfReps > 1 ? "reps" : "rep"}
+                    </p>
+                    { handicap ? <p className="handicap">{handicap} {unit}</p> : null }
                    </div>;
           }
         }

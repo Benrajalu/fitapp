@@ -27,14 +27,14 @@
   .value{
     width: 75px;
     background: #62ABD6;
-    border-radius: 2px;
+    border-radius: 0 2px 2px 0;
     text-align: center;
     display: flex;
     align-items:center;
     justify-content:center;
     padding:20px 5px;
     p{
-      @include mont(22px, 300, $white);
+      @include mont(20px, 300, $white);
     }
   }
   @media (max-width: $mobile){

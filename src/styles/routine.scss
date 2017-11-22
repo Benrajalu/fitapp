@@ -132,91 +132,52 @@
       justify-content:space-between;
       align-items:center;
       justify-content:flex-start;
-      padding:10px 10px 10px 0;
+      padding:10px;
       .routine-log{
-        display: flex;
-        flex-flow:row nowrap;
         flex:0 0 auto;
+        display: block;
         width:100%;
         padding:0px;
         margin:0px auto 15px;
+        border-radius: 3px;
         background:#383E59;
         border-right: 0px;
         overflow: hidden;
-        justify-content:space-between;
-        align-items:stretch;
+        padding:15px;
+        position: relative;
+        padding-right: 80px;
         &:last-child{
           margin-bottom: 0px;
         }
         .exercise-name{
-          padding: 0px 10px;
-          //background: #32374E;
-          background: #494B65;
-          text-align: right;
-          margin-bottom: 0px;
-          display: flex;
-          align-items:center;
-          justify-content:flex-end;
-          width: 120px;
-          min-width: 112px;
-          flex-wrap:normal;
+          @include mont(14px, 300, $white);
+          margin-bottom: 3px;
           white-space: normal;
-          font-size: 12px;
         }
-        .status{
-          flex-grow:2;
-          &.listing{
-          text-align: center;
-          display: flex;
-          flex-flow:row nowrap;
-          justify-content:space-between;
-          align-items:center;
-          p{
-            @include mont(16px, 300, $blue);
-            line-height: 1.2;
-            text-align: center;
-            flex-grow:1;
-            border-right: 1px solid #32374E;
-            position: relative;
-            padding:12px 15px;
-            strong{
-              @include mont(12px, 400, $white);
-            }
-            &:last-child{
-              border-right: 0px;
-            }
-            &:after{
-              width: 20px;
-              height: 20px;
-              text-align: center;
-              line-height: 20px;
-              font-family: "FontAwesome";
-              position: absolute;
-              right: 0px;
-              top: 50%;
-              transform:translateX(50%) translateY(-50%);
-              background: #32374E;
-              font-size: 9px;
-              color: $greyType;
-              border-radius: 100%;
-            }
-            &.set-number{
-              &:after{
-                content:"\f061";
-              }
-            }
-            &.rep-number{
-              &:after{
-                content:"\f00d";
-              }
-            }
-            &:last-child{
-              &:after{
-                display: none;
-              }
-            }
+        .type{
+          @include mont(10px, 300, $greyType);
+          margin-bottom: 10px;
+        }
+        .reps{
+          @include mont(12px, 300, $white);
+          strong{
+            font-weight: 700;
           }
         }
+        .handicap{
+          @include mont(14px, 400, $blue);
+          position: absolute;
+          display: flex;
+          right: 0px;
+          height: 100%;
+          padding:10px;
+          top: 0px;
+          background: #32374E;
+          width: 70px;
+          align-items:center;
+          justify-content:center;
+          box-shadow: -2px 0px 2px rgba(0,0,0,0.2);
+          text-align: center;
         }
       }
     }
@@ -268,31 +229,6 @@
         width:45%;
         flex:0 0 45%;
       }
-
-
-      &.details{
-        .routine-log{
-          .exercise-name{
-            font-size: 11px;
-            width: 90px;
-            min-width: 90px;
-            max-width: 90px;
-            flex-grow:1;
-            text-align: center;
-            justify-content:center;
-          }
-          .status{
-            &.listing{
-              p{
-                font-size: 13px;
-                strong{
-                  font-size: 11px;
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 
@@ -301,20 +237,6 @@
       .routine-log{
         width:55%;
         flex:0 0 55%;
-      }
-
-      &.details{
-        .routine-log{
-          .status{
-            &.listing{
-              p{
-                strong{
-                  display: block;
-                }
-              }
-            }
-          }
-        }
       }
     }
   }
