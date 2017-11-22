@@ -14,7 +14,8 @@ class AllRoutines extends Component {
       loading:true,
       routinesList:[], 
       exercises: [], 
-      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"} 
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
+      mounted: false
     };
     this.refreshRoutines = this.refreshRoutines.bind(this);
   }
@@ -74,6 +75,12 @@ class AllRoutines extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Vos programmes d'entraînement";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   refreshRoutines(){
@@ -92,19 +99,19 @@ class AllRoutines extends Component {
     }
 
     return (
-      <div className="AllRoutines">
-        <div className="container">
+      <div className={this.state.mounted ? "AllRoutines loaded" : "AllRoutines"}>
+        <div className="container animation-introduction">
           <div className="page-header">
             <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Mes entraînements</h1>
           </div>
         </div>
           {this.state.loading ? 
-            <div className="container empty">
+            <div className="container empty animation-contents">
               <div className="inlineLoader"><p>Chargement de vos données</p></div>
             </div>
             :
-            <div className="container">
+            <div className="container animation-contents">
               {this.state.routinesList.length > 0 && this.state.routinesList ? 
                 <div className="all-routines">
                   <Link className="btn btn-default" to='/new-routine'>Créer un nouvel entraînement</Link>

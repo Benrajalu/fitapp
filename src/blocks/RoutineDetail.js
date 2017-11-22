@@ -72,23 +72,25 @@ class RoutineDetail extends Component {
     });
 
     return (
-      <div className="routine-detail" style={this.state.animation}>
-        <div className="routine-heading with-actions">
-          <div className="description">
-            <h3 className="title">{this.props.contents.name}</h3>
-            <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
+      <div>
+        <div className="routine-detail" style={this.state.animation}>
+          <div className="routine-heading with-actions">
+            <div className="description">
+              <h3 className="title">{this.props.contents.name}</h3>
+              <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
+            </div>
+            <Link to={'/workout/' + this.props.contents.id} className="action">Débuter l'entraînement</Link>
           </div>
-          <Link to={'/workout/' + this.props.contents.id} className="action">Débuter l'entraînement</Link>
-        </div>
-        <div className="routine-body details">
-          {listExercises}
-        </div>
-        {this.props.editable ? 
-          <div className="routine-footer">
-            <Link to={'/edit/' + this.props.contents.id} className="btn btn-size-s">Modifier</Link>
-            <button className="btn btn-size-s btn-danger" onClick={this.togglePopin}>Supprimer</button>
+          <div className="routine-body details">
+            {listExercises}
           </div>
-          : false}
+          {this.props.editable ? 
+            <div className="routine-footer">
+              <Link to={'/edit/' + this.props.contents.id} className="btn btn-size-s">Modifier</Link>
+              <button className="btn btn-size-s btn-danger" onClick={this.togglePopin}>Supprimer</button>
+            </div>
+            : false}
+        </div>
         {this.state.showPopin ?
           <RoutineDelete  shouldAppear={this.state.showPopin ? 'visible' : 'hidden'} 
             name={this.props.contents.name} 

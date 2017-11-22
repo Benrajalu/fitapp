@@ -158,13 +158,13 @@ class Dashboard extends Component {
 
     return (
       <div className={this.state.mounted ? "Dashboard loaded" : "Dashboard"}>
-        <div className="container introduction">
+        <div className="container animation-introduction">
           <div className="page-header">
             <h1>Dashboard</h1>
           </div>
         </div>
 
-        <div className="container introduction">
+        <div className="container animation-introduction">
           <div className="flex-grid quicklauncher">
             <button className="btn btn-lg btn-important" onClick={this.displayModal}>
               <span className="title">Lancer un entraînement</span>
@@ -184,7 +184,7 @@ class Dashboard extends Component {
           </div>
         </div>
 
-        <div className="container contents">
+        <div className="container animation-contents">
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements récents</h2>
             { this.state.loading ?

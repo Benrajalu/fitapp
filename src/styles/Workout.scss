@@ -244,7 +244,6 @@
   &.loaded{
     .introduction, .contents{
       opacity:1;
-      transform:translateY(0%);
       .quicklauncher .btn{
         transform:translateY(0%);
         opacity:1;

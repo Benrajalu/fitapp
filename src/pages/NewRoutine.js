@@ -7,6 +7,9 @@ class NewRoutine extends Component {
   constructor(props) {
     super(props);
     this.handleFormPost = this.handleFormPost.bind(this);
+    this.state={
+      mounted: false
+    }
   }
 
   handleFormPost(event, data) {
@@ -15,19 +18,25 @@ class NewRoutine extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Création d'un programme d'entraînement";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   render() {
     return (
-      <div className="NewRoutine">
-        <div className="container">
+      <div className={this.state.mounted ? "NewRoutine loaded" : "NewRoutine"}>
+        <div className="container animation-introduction">
           <div className="page-header">
             <Link to="/all-routines" title="Retour aux entraînements"><i className="fa fa-angle-left"></i></Link>
             <h1>Créer un programme</h1>
           </div>
         </div>
         
-        <div className="container">
+        <div className="container animation-contents">
           <RoutineMaker postHandler={this.handleFormPost} />
         </div>
 

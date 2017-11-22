@@ -192,9 +192,10 @@ class WorkoutDetails extends Component {
                     <button className="value-button" onClick={this.addHandicap.bind(this, this.props.index)}><i className="fa fa-plus"></i></button>
                   </div>
                   {sets}
-                  {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
-                  {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
               </div> 
+              
+              {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
+              {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
             </AnimatedPanel> 
             : null
           }

@@ -47,5 +47,37 @@
         max-width: 300px;
       }
     }
+  }
+
+  >.animation-introduction{
+    transition:all 200ms ease-out;
+    opacity:0;
+  }
+
+  >.animation-contents{
+    transition:all 300ms ease-out;
+    transition-delay:100ms;
+    opacity:0; 
+    position: relative;
+  }
+
+  .setting-panel{
+    transition:all 300ms ease-out;
+    margin-top:150px;
+    &:nth-child(2){
+      transition-delay:100ms;
+    }
+    &:nth-child(3){
+      transition-delay:200ms;
+    }
+  }
+
+  &.loaded{
+    >.animation-introduction, >.animation-contents{
+      opacity:1;
+    }
+    .setting-panel{
+      margin-top: 0px;
+    }
   } 
 }

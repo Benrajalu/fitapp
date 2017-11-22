@@ -153,14 +153,14 @@ class History extends Component {
 
     return (
       <div className={this.state.mounted ? "History loaded" : "History"}>
-        <div className="container introduction">
+        <div className="container animation-introduction">
           <div className="page-header">
             <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Historique</h1>
           </div>
         </div>
 
-        <div className="container contents">
+        <div className="container animation-contents">
           <div className="large-9 medium-8 columns left-column">
             <h2 className="section-title">Vos entraînements</h2>
             { this.state.loading ?

@@ -30,6 +30,7 @@ class Settings extends Component {
 
     this.state = {
       user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
+      mounted:false,
       userId:false,
       loading: true,
       userName : '',
@@ -81,6 +82,12 @@ class Settings extends Component {
 
   componentDidMount(){
     document.title = "FitApp. - Vos paramètres";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   updateWeights(event){
@@ -358,20 +365,20 @@ class Settings extends Component {
     let previewImage = this.state.previewImage ? this.state.previewImage : false;
 
     return (
-      <div className="Settings" id="Settings">
-        <div className="container">
+      <div className={this.state.mounted ? 'Settings loaded' : 'Settings'} id="Settings">
+        <div className="container animation-intro">
           <div className="page-header">
             <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Paramètres</h1>
           </div>
         </div>
 
-        <div className="container setting-contents">
+        <div className="container setting-contents animation-contents">
           <div className="large-8 medium-7 small-6 columns">
             <h3 className="section-title">Gestion des poids (barbell)</h3>
 
             <div className="weight-settings">
-              <div className="panel">
+              <div className="panel setting-panel">
                 <div className="panel-heading">
                   <h3 className="title">Poids de la barre à vide {this.state.savingBarbell ? <i className={this.state.savingBarbell}></i> : false}</h3>
                 </div>
@@ -386,7 +393,7 @@ class Settings extends Component {
                 </form>
               </div>
 
-              <div className="panel">
+              <div className="panel setting-panel">
                 <div className="panel-heading">
                   <h3 className="title">Poids libres disponibles {this.state.savingWeights ? <i className={this.state.savingWeights}></i> : false}</h3>
                 </div>
@@ -414,7 +421,7 @@ class Settings extends Component {
 
           <div className="large-4 medium-5 small-6 columns">
             <h3 className="section-title">Gestion utilisateur</h3>
-            <div className="panel">
+            <div className="panel setting-panel">
               <div className="panel-heading">
                 <h3 className="title">Paramètres du compte</h3>
               </div>

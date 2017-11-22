@@ -125,7 +125,7 @@ class WorkoutExit extends Component {
     }
 
     return (
-      <div className={"popin visible" + this.state.animate}>
+      <div className={"popin visible " + this.state.animate}>
         {contents}
       </div>
     )
