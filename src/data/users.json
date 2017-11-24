@@ -10,7 +10,7 @@
         "name": "Routine A", 
         "id": "01routineA",
         "color": "#67E658", 
-        "dateCreated": "02/08/2017",
+        "dateCreated": 1510151461000,
         "lastPerformed": 1511170367000,
         "exercises": [
           {
@@ -47,7 +47,7 @@
         "name": "Routine B",
         "id": "02routineB", 
         "color": "#DF8833", 
-        "dateCreated": "03/08/2017",
+        "dateCreated": 1510583461000,
         "lastPerformed": 1510911167000,
         "exercises": [
           {
@@ -68,7 +68,7 @@
         "name": "Routine C",
         "id": "03routineC", 
         "color": "#F30012", 
-        "dateCreated": "03/08/2017",
+        "dateCreated": 1510669861000,
         "lastPerformed": 1510651967000,
         "exercises": [
           {

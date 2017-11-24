@@ -12,12 +12,6 @@ class RoutineMaker extends Component {
     super(props);
     const timestamp = new Date();
 
-    const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
-          mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
-          yyyy = timestamp.getFullYear(),
-          fullDate = dd+'/'+mm+'/'+yyyy;
-    
-
     // Defaults
     this.state = {
       user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
@@ -26,8 +20,8 @@ class RoutineMaker extends Component {
         routineId: timestamp.getTime(),
         color : "#1FC3AF", 
         exercises : [], 
-        dateCreated: fullDate,
-        lastPerformed: fullDate
+        dateCreated: timestamp.getTime(),
+        lastPerformed: timestamp.getTime()
       },
       errors:{}
     }
@@ -82,13 +76,8 @@ class RoutineMaker extends Component {
     if(this.props.editRoutine){  
       const timestamp = new Date();
 
-      const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
-            mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
-            yyyy = timestamp.getFullYear(),
-            fullDate = dd+'/'+mm+'/'+yyyy;
-
       const nextRoutineShot = this.props.editRoutine;
-      nextRoutineShot.lastPerformed = fullDate;
+      nextRoutineShot.lastPerformed = timestamp.getTime();
       this.setState({
         newRoutine: nextRoutineShot, 
         isEdit: true
@@ -105,14 +94,9 @@ class RoutineMaker extends Component {
   componentWillReceiveProps(nextProps) {
     const timestamp = new Date();
 
-    const dd = timestamp.getDate() < 10 ? '0' + timestamp.getDate() : timestamp.getDate(), 
-          mm = timestamp.getMonth()+1 < 10 ? '0' + (timestamp.getMonth()+1) : timestamp.getMonth()+1,
-          yyyy = timestamp.getFullYear(),
-          fullDate = dd+'/'+mm+'/'+yyyy;
-
     if(nextProps.editRoutine && nextProps.editRoutine !== "empty"){
       const nextRoutineShot = nextProps.editRoutine;
-      nextRoutineShot.lastPerformed = fullDate;
+      nextRoutineShot.lastPerformed = timestamp.getTime();
       this.setState({
         newRoutine: nextRoutineShot, 
         isEdit: true
