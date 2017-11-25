@@ -21,6 +21,7 @@ class AllRoutines extends Component {
     this.applyFilter = this.applyFilter.bind(this);
     this.applyOrder = this.applyOrder.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
   routinesListener(){
@@ -58,6 +59,7 @@ class AllRoutines extends Component {
 
   applyOrder(value, event){
     event.preventDefault();
+    this.toggleDropdown();
     if (value !== "none"){
       this.setState({
         order:value
@@ -78,7 +80,7 @@ class AllRoutines extends Component {
       case "none" :
         _this.setState({
           routinesList: _this.state.pureList ? _this.state.pureList : _this.state.routinesList,
-          filter:'none'
+          filter:false
         });
       break; 
 
@@ -119,6 +121,12 @@ class AllRoutines extends Component {
     event.preventDefault();
     this.setState({
       toggleFilters: !this.state.toggleFilters
+    });
+  }
+
+  toggleDropdown(){
+    this.setState({
+      toggleDropdown: !this.state.toggleDropdown
     })
   }
 
@@ -228,22 +236,31 @@ class AllRoutines extends Component {
                 <Link className="btn btn-block" to='/new-routine'><i className="fa fa-plus"></i> Créer un nouvel entraînement</Link>
                 {this.state.pureList.length > 0 && this.state.pureList ? 
                   <div>
-                    <button className={this.state.toggleFilters ? "toggleFilters active" : "toggleFilters"} onClick={this.toggleFilters}><i className="fa fa-sliders"></i> Filters <i className={this.state.toggleFilters ? "fa fa-angle-up" : "fa fa-angle-down"}></i></button>
+                    <button className={this.state.toggleFilters ? "toggleFilters active" : "toggleFilters"} onClick={this.toggleFilters}>{this.state.order || this.state.filter ? <i className="fa fa-wrench"></i> : false }<i className="fa fa-sliders"></i> Filters <i className={this.state.toggleFilters ? "fa fa-angle-up" : "fa fa-angle-down"}></i></button>
                     <div className={this.state.toggleFilters ? "filters active" : "filters"}>
                       <h3 className="filter-title">Niveau</h3>
                       <div className="filter-zone">
-                        <button className={!this.state.filter || this.state.filter === "none" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'none')}>Tous</button>
-                        <button className={this.state.filter && this.state.filter === "normal" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'normal')}><i className="color-spot green"></i> Normal</button>
-                        <button className={this.state.filter && this.state.filter === "medium" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'medium')}><i className="color-spot orange"></i> Moyen</button>
-                        <button className={this.state.filter && this.state.filter === "hard" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'hard')}><i className="color-spot red"></i> Elevé</button>
+                        <button className={!this.state.filter || this.state.filter === "none" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'none')}><span>Tous</span></button>
+                        <button className={this.state.filter && this.state.filter === "normal" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'normal')}><span><i className="color-spot green"></i> Normal</span></button>
+                        <button className={this.state.filter && this.state.filter === "medium" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'medium')}><span><i className="color-spot orange"></i> Moyen</span></button>
+                        <button className={this.state.filter && this.state.filter === "hard" ? "filter active" : "filter"} onClick={this.applyFilter.bind(this, 'hard')}><span><i className="color-spot red"></i> Elevé</span></button>
                       </div>
 
                       <div className="filter-title">Classement</div>
-                      <div className="filter-zone">
-                        <button className={!this.state.order ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'none')}>Utilisation la plus récente</button>
-                        <button className={this.state.order && this.state.order === "low-use" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'low-use')}>Utilisation la moins récente</button>
-                        <button className={this.state.order && this.state.order === "new" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'new')}>Création la plus récente</button>
-                        <button className={this.state.order && this.state.order === "old" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'old')}>Création la moins récente</button>
+                      <div className={this.state.toggleDropdown ? "filter-drop active" : "filter-drop"}>
+                        <div className="current" onClick={this.toggleDropdown}>
+                          {!this.state.order ? "Utilisation la plus récente" : null }
+                          {this.state.order && this.state.order === "low-use" ? "Utilisation la moins récente" : null}
+                          {this.state.order && this.state.order === "new" ? "Création la plus récente" : null}
+                          {this.state.order && this.state.order === "old" ? "Création la moins récente" : null}
+                          <i className={this.state.toggleDropdown ? "fa fa-angle-up" : "fa fa-angle-down"}></i>
+                        </div>
+                        <ul className="options">
+                          <li><button className={!this.state.order ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'none')}><span>Utilisation la plus récente</span></button></li>
+                          <li><button className={this.state.order && this.state.order === "low-use" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'low-use')}><span>Utilisation la moins récente</span></button></li>
+                          <li><button className={this.state.order && this.state.order === "new" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'new')}><span>Création la plus récente</span></button></li>
+                          <li><button className={this.state.order && this.state.order === "old" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'old')}><span>Création la moins récente</span></button></li>
+                        </ul>
                       </div>
                     </div>
                   </div>
