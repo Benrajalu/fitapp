@@ -17,6 +17,8 @@ it('distinguishes bewteen weights and minutes', () => {
   const exoMinutes = mount(
     <ExerciseListing  exerciseData={cardio} exercisesDatabase={exercisesDatabase} />
   );
-  expect(exoWeight.find('p').first().text()).toEqual('10 x 20kg');
-  expect(exoMinutes.find('p').first().text()).toEqual('1 x 40min');
+  expect(exoWeight.find('p.reps').first().text()).toEqual('5 sets de 10 reps');
+  expect(exoWeight.find('p.handicap').first().text()).toEqual('20 kg');
+  expect(exoMinutes.find('p.reps').first().text()).toEqual('1 set de 1 rep');
+  expect(exoMinutes.find('p.handicap').first().text()).toEqual('40 min');
 });

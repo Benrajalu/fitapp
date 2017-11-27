@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import SetCounter from '../blocks/SetCounter';
-import WarmUp from '../blocks/WarmUp';
-import WeightHelper from '../blocks/WeightHelper';
+import WeightHelperModal from '../blocks/WeightHelperModal';
 import AnimatedPanel from '../blocks/AnimatedPanel';
 
 import {TransitionGroup} from 'react-transition-group';
@@ -86,12 +85,13 @@ class WorkoutDetails extends Component {
     this.props.onReps(setsSnapshot, this.props.index);
   }
 
-  displayModal(data, event) {
+  displayModal(data, target, event) {
     // There are two different modals so we have to initialize both and use an argument to find who's who 
     const modals = this.state.modalDisplay;
     modals[data] = !modals[data];
     this.setState({
-      modalDisplay: modals
+      modalDisplay: modals, 
+      targetWindow: target
     })
   }
 
@@ -103,7 +103,6 @@ class WorkoutDetails extends Component {
               value: currentValue + 1 
             }
           };
-    console.log(valueObject.target.name);
     this.props.onUpdate(index, valueObject);
   }
 
@@ -115,7 +114,6 @@ class WorkoutDetails extends Component {
               value: currentValue > 0 ? currentValue - 1 : 0
             }
           };
-    console.log(valueObject.target.name);
     this.props.onUpdate(index, valueObject);
   }
 
@@ -138,20 +136,19 @@ class WorkoutDetails extends Component {
     let warmupButton = false, 
         warmupWindow = false;
     if(trueExercise.type === "barbell" || trueExercise.type === "dumbbell" || trueExercise.type === "cable"){
-      warmupButton = <li role="presentation"><button onClick={this.displayModal.bind(this, 'warmup')}>Échauffement</button></li>;
-      warmupWindow = <WarmUp closeModal={this.displayModal.bind(this, 'warmup')} 
+      warmupButton = <li role="presentation"><button onClick={this.displayModal.bind(this, 'warmup', 'warmup')}>Échauffement</button></li>;
+      warmupWindow = <WeightHelperModal closeModal={this.displayModal.bind(this, 'warmup')} 
                               shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'} 
+                              targetWindow={this.state.targetWindow ? this.state.targetWindow : 'warmup'}
                               name={trueExercise.name} 
                               weight={workoutExercise.handicap} 
                               maxReps={workoutExercise.repTarget ? workoutExercise.repTarget : false} type={trueExercise.type} settings={this.props.settings}/>;
     }
     
     // Let's plan a helper window to load your barbell with requisite weights if needed
-    let weightHelper = false, 
-        weightWindow = false;
+    let weightHelper;
     if(trueExercise.type === "barbell"){
-      weightHelper = <li role="presentation"><button onClick={this.displayModal.bind(this, 'weightHelper')}>Répartition des poids</button></li>;
-      weightWindow = <WeightHelper closeModal={this.displayModal.bind(this, 'weightHelper')} shouldAppear={this.state.modalDisplay.weightHelper ? 'visible' : 'hidden'} weight={workoutExercise.handicap} settings={this.props.settings} />;
+      weightHelper = <li role="presentation"><button onClick={this.displayModal.bind(this, 'warmup', 'loadout')}>Répartition des poids</button></li>;
     }
 
     // If there is no set target, then it's cardio so the set is...1
@@ -195,7 +192,6 @@ class WorkoutDetails extends Component {
               </div> 
               
               {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
-              {weightWindow && this.state.modalDisplay.weightHelper ? weightWindow : false}
             </AnimatedPanel> 
             : null
           }

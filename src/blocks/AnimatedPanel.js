@@ -15,7 +15,6 @@ class AnimatedPanel extends Component {
 
 
   render() {
-    console.log("coucou");
     return (
       <div className="animatedPanel">
         {this.props.children}

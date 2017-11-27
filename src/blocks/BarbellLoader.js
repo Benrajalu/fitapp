@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import '../styles/weightLoader.css';
+
 class BarbellLoader extends Component {
   constructor(props) {
     super(props);

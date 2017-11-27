@@ -104,6 +104,58 @@
     }
   }
 
+  &.slider{
+    justify-content:flex-end;
+    .modal-contents{
+      padding:0px;
+      display: flex;
+      justify-content:flex-end;
+      align-items:flex-end;
+      .container{
+        display: block;
+        padding-bottom: 30px;
+        .panel{
+          position: relative;
+          overflow: visible;
+          &:after{
+            content:"";
+            width: 120px;
+            height: 120px;
+            border-radius:100%;
+            background: #32374E;
+            transform:translateY(-40%) translateX(-50%);
+            position: absolute;
+            top:0px;
+            left: 50%;
+            z-index: -1;
+            opacity: 0.4;
+          }
+          .closer{
+            position: absolute;
+            top:0px;
+            left: 50%;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            border-radius:100%;
+            background: $green;
+            text-align: center;
+            line-height: 36px;
+            border:0px;
+            padding:0px;
+            transform:translateY(-50%) translateX(-50%);
+            font-size: 15px;
+            color:$white;
+            i{
+              position: relative;
+              top:-1px;
+            }
+          }
+        }
+      }
+    }
+  }
+
   &.animate{
     &:before{
       opacity:0;

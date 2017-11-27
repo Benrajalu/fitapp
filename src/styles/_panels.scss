@@ -325,12 +325,142 @@
     margin:0 auto;
     max-width: 400px;
     overflow: hidden;
+    transition:height 200ms ease-out;
+    .tabs-zone{
+      overflow: hidden;
+      position: relative;
+    }
+    .panel-tab{
+      transition:all 300ms cubic-bezier(.6,-0.5,.48,1.57);
+      transform:translateX(-100%);
+      &:nth-child(2){
+        transform:translateX(100%);
+        position: absolute;
+        top:0px;
+        width: 100%;
+      }
+      &.active{
+        transform:translateX(0);
+      }
+    }
+    .panel-status{
+      padding:10px 10px 0px;
+      display: flex;
+      border-bottom: 1px solid #32374E;
+      margin-bottom: 5px;
+      button{
+        flex-grow:1;
+        text-align: center;
+        background: transparent;
+        border:0px;
+        padding:10px 5px;
+        position: relative;
+        @include mont(11px, 400, $greyType);
+        text-transform: uppercase;
+        transition:all 300ms ease-out;
+        &:after{
+          content:"";
+          width:0%;
+          height: 3px;
+          background: $blue;
+          border-radius: 10px;
+          position: absolute;
+          right: 0;
+          bottom: -2px;
+          transition:all 300ms ease-out;
+        }
+        &:last-child{
+          &:after{
+            right: auto;
+            left: 0px;
+          }
+        }
+        &.active{
+          color:$white;
+          &:after{
+            width: 100%;
+          }
+        }
+      }
+    }
+    .panel-heading{
+      display: block;
+      text-align: center;
+      background: transparent;
+      margin-bottom: 10px;
+      p{
+        display: block;
+        font-size: 14px;
+        color:$white;
+      }
+    }
+    .panel-sub{
+      display: flex;
+      width: 100%;
+      flex-flow:row nowrap;
+      align-items:flex-start;
+      box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+      .index{
+        flex-grow:1;
+        text-align: center;
+        position: relative;
+        padding-bottom: 20px;
+        margin-bottom: 10px;
+        h3{
+          @include mont(11px, 400, $greyType);
+          margin-bottom: 3px;
+        }
+        p{
+          @include mont(11px, 700, $greyType);
+        }
+        &:after{
+          content:"";
+          display: block;
+          width:100%;
+          height: 10px;
+          position: absolute;
+          bottom:0px;
+          left: 0;
+          border-right: 1px solid $underlines;
+          background: $greyType;
+          box-sizing:border-box;
+        }
+        &:first-child{
+          &:after{
+            left:10%;
+            width:90%;
+            border-radius: 10px 0 0 10px;
+          }
+        }
+        &:last-child{
+          &:after{
+            border-right: 0px;
+            left:0px;
+            width:90%;
+            border-radius: 0px 10px 10px 0px;
+          }
+        }
+        &.active{
+          p, h3{
+            color:$white;
+          }
+          &:after{
+            background:$blue;
+          }
+        }
+        &.done{
+          &:after{
+            background:$green;
+          }
+        }
+      }
+    }
     .panel-body{
       padding:0px;
       overflow: hidden;
       position: relative;
       .warmup-content{
-        padding:15px 0px;
+        padding:5px 0px;
         transition:all 300ms ease-out;
         transform:translateY(0px);
         position: relative;
@@ -364,6 +494,9 @@
         }
 
         .slide{
+          &.no-barbell{
+            padding:30px 10px;
+          }
           >p{
             @include mont(16px, 300, $white);
             text-align: center;
@@ -376,18 +509,21 @@
       display: flex;
       align-items:stretch;
       justify-content:space-between;
+      border-radius: 0 0 3px 3px;
+      overflow: hidden;
       button{
         flex-grow:1;
-        line-height: 35px;
+        line-height: 40px;
         background:$green;
-        color:$white;
         text-align: center;
-        font-size: 15px;
         border:0px;
         border-radius: 0px;
         padding:0px;
+        @include mont(11px, 400, $white);
+        text-transform: uppercase;
         i{
           position: relative;
+          font-size: 15px;
           transition:all 200ms ease-out;
         }
         &:focus{
@@ -399,12 +535,16 @@
           }
         }
         &:last-child{
-          border-left: 1px solid $underlines;
+          border-left: 1px solid #1AA898;
           i{
             right:0px;
           }
         }
-        &:hover{
+        &:disabled{
+          opacity:0.7;
+          cursor: default;
+        }
+        &:hover:not([disabled]){
           &:first-child{
             i{
               left: -10px;
@@ -416,6 +556,12 @@
             }
           }
         }
+      }
+    }
+
+    &.no-barbell{
+      .panel-heading{
+        padding-top: 30px;
       }
     }
   }

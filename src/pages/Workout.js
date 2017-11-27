@@ -99,7 +99,6 @@ class Workout extends Component {
           user = this.state.user;
 
     this.fireRecordsListener = database.collection('users').doc(user.uid).collection('personalRecords').get().then((snapshot) => {
-      console.log(snapshot);
       if(snapshot){
         const output = [];
         snapshot.forEach((doc) => {
@@ -108,7 +107,6 @@ class Workout extends Component {
         _this.setState({
           records: output
         });
-        console.log(_this.state.records);
       }
       else{
         _this.setState({
@@ -323,7 +321,6 @@ class Workout extends Component {
             }
           }
           else{
-            console.log(this.state.records);
             const newRecord = {
               exerciseId: current.exerciseId, 
               record: newRecordValue + 'kg',
