@@ -29,5 +29,5 @@ test('logs "1" if there has been one workout done in the past 7 days', () => {
   );
   
   // Expecting message not to be empty
-  expect(count.find('.badge').text()).toEqual("1");
+  expect(count.find('strong').text()).toEqual("1");
 });

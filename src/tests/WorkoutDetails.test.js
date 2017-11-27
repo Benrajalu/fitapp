@@ -54,8 +54,8 @@ it('accurately translate completed sets and reps arrays into values', () => {
     sets: [10, 0, 0, 0, 0]
   });
 
-  expect(dash.find('.panel-title').first().text()).toEqual('Bent-over Rows 1/5');
-  expect(dash.find('.set-counter .panel-title').first().text()).toEqual('Set 1 | 10/10 reps');
+  expect(dash.find('.title').first().text()).toEqual('Bent-over Rows 1/5');
+  expect(dash.find('.set-counter .title').first().text()).toEqual('Set 1 | 10/10 reps');
 });
 
 it('manages to deal with cardio exercises by remplacing reps with minutes', () => {
@@ -76,5 +76,5 @@ it('manages to deal with cardio exercises by remplacing reps with minutes', () =
     <WorkoutDetails contents={value} exercisesDatabase={exercisesDatabase} index={0} onUpdate={updateRoutine} onReps={feedReps} settings={userData[0].settings}/>
   );
 
-  expect(dash.find('.set-counter .panel-title').first().text()).toEqual('Set 1 | 0/40 minutes');
+  expect(dash.find('.set-counter .title').first().text()).toEqual('Set 1 | 0/40 minutes');
 });

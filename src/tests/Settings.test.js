@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
+import PropTypes from 'prop-types';
 import Settings from '../pages/Settings';
 
 import userData from '../data/users.json';
@@ -16,8 +17,27 @@ it('renders without crashing', () => {
 });
 
 test('displays the test message', () => {
-  const dash = shallow(
-    <Settings />
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
+  const dash = mount(
+    <Settings />,
+    MountOptions
   );
   
   // Expecting message not to be empty
@@ -25,15 +45,36 @@ test('displays the test message', () => {
 });
 
 describe('when managing settings', () => {
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
   const settings = mount(
-    <Settings />
+    <Settings />,
+    MountOptions
   );  
 
   settings.setState({
+    loading: false,
+    userId:"01",
     settings: userData[0].settings,
-    userName : userData[0]["display-name"],
-    userPic: userData[0]["profile-picture"],
-    userEmail: userData[0]["contact-email"]
+    userName : userData[0]["displayName"],
+    userPic: userData[0]["profilePicture"],
+    userEmail: userData[0]["contactEmail"]
   });
 
   test("it displays the user's current settings", () => {
@@ -43,10 +84,16 @@ describe('when managing settings', () => {
 
   test("it updates settings flawlessly", () => {
     // Checking the first disc weight, making it available
-    settings.find('input[type="checkbox"]').first().simulate('change');
+    let settingsTest={baseBarbell: 10, availableWeights:[25]};
+    settings.setState({
+      settings: settingsTest,
+    });
     expect(settings.find('input[type="checkbox"]').first().props().checked).toBeTruthy();
     // Unchecking it
-    settings.find('input[type="checkbox"]').first().simulate('change');
+    settingsTest={baseBarbell: 10, availableWeights:[20]};
+    settings.setState({
+      settings: settingsTest,
+    });
     expect(settings.find('input[type="checkbox"]').first().props().checked).not.toBeTruthy();
   });
 
@@ -63,4 +110,5 @@ describe('when managing settings', () => {
     settings.find('input[name="userEmail"]').simulate('change');
     expect(settings.find('button[type="submit"]').props().disabled).not.toBeTruthy();
   });
+  
 });

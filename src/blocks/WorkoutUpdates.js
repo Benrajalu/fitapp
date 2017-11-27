@@ -21,9 +21,9 @@ class WorkoutUpdates extends Component {
     }
 
     return (
-      <div className="alert alert-success">
-        <strong>{fullData.name}</strong> peut passer de <strong>{currentExercise.handicap}{unit}</strong> à <strong>{parseFloat(currentExercise.handicap) + update}{unit}</strong>
-        <button onClick={this.props.notUpdating.bind(this, this.props.completedSet)} className="btn btn-default">Nope!</button>
+      <div className="workout-update">
+        <div><p>L'exercice <strong>"{fullData.name}"</strong> peut passer de <strong>{currentExercise.handicap}{unit}</strong> à <strong>{parseFloat(currentExercise.handicap) + update}{unit}</strong></p></div>
+        <button onClick={this.props.notUpdating.bind(this, this.props.completedSet)} className="btn btn-green">Annuler</button>
       </div>
     )
   }

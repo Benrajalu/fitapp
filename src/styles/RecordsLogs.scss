@@ -1,0 +1,43 @@
+@import "styles/_mixins.scss";
+
+.records-card{
+  display: flex;
+  margin-bottom: 15px;
+  background: #494B65;
+  border-radius: 2px;
+  width: 100%;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  justify-content:space-between;
+  align-items:center;
+  transition:all 300ms ease-out;
+  &:last-child{
+    margin-bottom: 0px;
+  }
+  .description{
+    padding:0 15px;
+    p{
+      @include mont(10px, 400, $greyType);
+    }
+    .title{
+      @include mont(15px, 400, $blue);
+      margin-bottom: 3px;
+    }
+  }
+  .value{
+    width: 75px;
+    background: #62ABD6;
+    border-radius: 0 2px 2px 0;
+    text-align: center;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px 5px;
+    p{
+      @include mont(20px, 300, $white);
+    }
+  }
+  @media (max-width: $mobile){
+    max-width: 400px;
+  }
+}

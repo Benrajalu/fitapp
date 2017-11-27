@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
 import AllRoutines from '../pages/AllRoutines';
 import Routines from '../blocks/Routines';
+import PropTypes from 'prop-types';
 
 import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
@@ -28,12 +29,28 @@ test('displays the test message', () => {
 
 test('displays user routines', () => {
   const routinesList = userData[0].routines;
-
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
   const listing = mount(
-    <MemoryRouter>
-      <Routines list={routinesList} exercisesDatabase={exercisesDatabase} />
-    </MemoryRouter>
+    <Routines list={routinesList} exercisesDatabase={exercisesDatabase} user={userData[0]}/>, 
+    MountOptions
   );
 
-  expect(listing.find('.routine-card').length).not.toEqual(0)
+  expect(listing.find('.routine-detail').length).not.toEqual(0)
 });

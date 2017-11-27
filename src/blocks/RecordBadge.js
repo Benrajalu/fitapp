@@ -2,8 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Timestamper from '../blocks/Timestamper';
+import '../styles/RecordsLogs.css';
 
 class RecordBadge extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      animation:{
+        perspective: "800px",
+        transformOrigin: '50% 0%',
+        marginBottom: -30,
+        opacity: 0,
+        transform: "rotateX(-70deg)"
+      }
+    }
+  }
+  componentDidMount(){
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        animation:{
+          perspective: "800px",
+          transformOrigin: '50% 100%',
+          marginBottom: "15px",
+          opacity: 1,
+          transform: "rotateX(-0deg)"
+        }
+      })
+    }, this.props.delay);
+  }
   render() {
     const data = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -11,15 +38,13 @@ class RecordBadge extends Component {
 
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading">
-          <h3 className="panel-title">{trueExercise.name}</h3>
-        </div>
-        <div className="panel-body">
-          <p><strong>{data.record}</strong></p>
-        </div>
-        <div className="panel-footer">
+      <div className="records-card" style={this.state.animation}>
+        <div className="description">
+          <h3 className="title">{trueExercise.name}</h3>
           <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
+        </div>
+        <div className="value">
+          <p>{data.record}</p>
         </div>
       </div>
     )

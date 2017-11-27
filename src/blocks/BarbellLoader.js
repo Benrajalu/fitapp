@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import '../styles/weightLoader.css';
+
 class BarbellLoader extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +110,7 @@ class BarbellLoader extends Component {
         for(let z = 0; z < loadsToUse[y][orderedKeys[y]]; z++){
           // Then push a dsic in the loadsWrapper array
           let discSize = "disc size-" + orderedKeys[y].replace('.', '-');
-          loadsWrapper.push(<div className={discSize} key={'disc-' + z + ' - ' + y}>{orderedKeys[y]} kg</div> )
+          loadsWrapper.push(<div className={discSize} key={'disc-' + z + ' - ' + y}><p>{orderedKeys[y]} kg</p></div> )
         }
       }
       // And then display the results

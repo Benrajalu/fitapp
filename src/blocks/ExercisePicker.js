@@ -5,13 +5,15 @@ import ExercisePickerDetails from '../blocks/ExercisePickerDetails';
 import ExercisePickerPick from '../blocks/ExercisePickerPick';
 
 import '../styles/modals.css';
+import '../styles/ExercisePicker.css';
 
 class ExercisePicker extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      exercises: this.props.pickedExercises ? this.props.pickedExercises : [] 
+      exercises: this.props.pickedExercises ? this.props.pickedExercises : [],
+      animate: " animate" 
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -27,9 +29,24 @@ class ExercisePicker extends Component {
     }
   }
 
+  componentDidMount() {
+    const _this = this;
+    setTimeout(function(){
+      _this.setState({
+        animate: false
+      })
+    }, 100);
+  }
+
   closeModal() {
-    // References the parent method for displaying a modal that's in Dashboard.js
-    this.props.modalCloser();
+    const _this = this;
+    this.setState({
+      animate: " animate"
+    });
+    setTimeout(function(){
+      // References the parent method for displaying a modal that's in Dashboard.js
+      _this.props.modalCloser();
+    }, 300);
   }
   addExercise(data) {
     let currentExercises = this.state.exercises;
@@ -87,7 +104,7 @@ class ExercisePicker extends Component {
 
 
     // Listing any current exercice added to the routine and setting a default message for none. 
-      let currentExercisesList = <p>Aucun exercice selectionné</p>;
+      let currentExercisesList = <p className="empty-state">Choisissez vos exercises ci-dessous pour construire votre entraînement</p>;
       if(this.state.exercises.length > 0){
         currentExercisesList = this.state.exercises.map((value, index) => 
           <ExercisePickerPick database={this.props.exercisesDatabase} currentExercise={value} handleClick={this.removeExercise} key={value.exerciseId + '-' + new Date().getTime() + index}/>
@@ -95,20 +112,30 @@ class ExercisePicker extends Component {
       }
 
     return (
-      <div className={"routineLauncher popin large " + displayStatus}>
-        <div className="contents">
-          <button className="closer" onClick={this.closeModal}>Close modal</button>
+      <div className={"popin large " + displayStatus + this.state.animate}>
+        <div className="modal-header">
+          <div className="container">
+            <p className="title">Choisissez vos exercices</p>
+            <button className="closer" onClick={this.closeModal}>Fermer</button>
+          </div>
+        </div>
+        <div className="modal-contents" id="ExercisePicker">
           <div className="currentPick">
-            <h4>Exercices sélectionnés</h4>
-            {currentExercisesList}
+            <div className="container">
+              <h4>Exercices sélectionnés</h4>
+              <div className="current-exercises">
+                {currentExercisesList}
+              </div>
+            </div>
           </div>
           <div className="main-list">
-            <h4>Cliquez sur un exercice pour l'ajouter</h4>
-            {showBarbells}
-            {showDumbbells}
-            {showCables}
-            {showCalithenics}
-            {showCardio}
+            <div className="container">
+              {showBarbells}
+              {showDumbbells}
+              {showCables}
+              {showCalithenics}
+              {showCardio}
+            </div>
           </div>
         </div>
       </div>

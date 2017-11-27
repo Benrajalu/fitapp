@@ -1,17 +1,17 @@
 [
   {
     "id": "01",
-    "signin-email": "rajalubenoit@gmail.com",
-    "contact-email": "rajalubenoit@gmail.com",
-    "profile-picture": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/17634828_10210382518897204_8194606884438197467_n.jpg?oh=3f5600eed7f4737dfd1bd0960a702736&oe=5A1FEFA6", 
-    "display-name": "Benoit", 
+    "signinEmail": "rajalubenoit@gmail.com",
+    "contactEmail": "rajalubenoit@gmail.com",
+    "profilePicture": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/17634828_10210382518897204_8194606884438197467_n.jpg?oh=3f5600eed7f4737dfd1bd0960a702736&oe=5A1FEFA6", 
+    "displayName": "Benoit", 
     "routines": [
       {
         "name": "Routine A", 
         "id": "01routineA",
         "color": "#67E658", 
-        "dateCreated": "02/08/2017",
-        "lastPerformed": "03/08/2017",
+        "dateCreated": 1510151461000,
+        "lastPerformed": 1511170367000,
         "exercises": [
           {
             "exerciseId": "ex-04", 
@@ -47,8 +47,8 @@
         "name": "Routine B",
         "id": "02routineB", 
         "color": "#DF8833", 
-        "dateCreated": "03/08/2017",
-        "lastPerformed": "01/09/2017",
+        "dateCreated": 1510583461000,
+        "lastPerformed": 1510911167000,
         "exercises": [
           {
             "exerciseId": "ex-04", 
@@ -68,8 +68,8 @@
         "name": "Routine C",
         "id": "03routineC", 
         "color": "#F30012", 
-        "dateCreated": "03/08/2017",
-        "lastPerformed": "03/08/2017",
+        "dateCreated": 1510669861000,
+        "lastPerformed": 1510651967000,
         "exercises": [
           {
             "exerciseId": "ex-04", 
@@ -182,10 +182,10 @@
   },
   {
     "id": "02",
-    "signin-email": "test@gmail.com",
-    "contact-email": "test@gmail.com",
-    "profile-picture": false, 
-    "display-name": "John Doe", 
+    "signinEmail": "test@gmail.com",
+    "contactEmail": "test@gmail.com",
+    "profilePicture": false, 
+    "displayName": "John Doe", 
     "routines": [],
     "workoutLog": [],
     "personalRecords":[],

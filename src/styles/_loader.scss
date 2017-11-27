@@ -1,0 +1,62 @@
+@keyframes movingdot {
+  0%{
+    top:0%;
+    transform:translateY(0) translateX(0);
+  }
+  50%{
+    top:50%;
+    transform:translateY(0) translateX(-200%);
+  }
+  100%{
+    top:100%;
+    transform:translateY(0) translateX(0);
+  }
+}
+@keyframes movingdotRev {
+  0%{
+    bottom:0%;
+    transform:translateY(0) translateX(0);
+  }
+  50%{
+    bottom:50%;
+    transform:translateY(0) translateX(200%);
+  }
+  100%{
+    bottom:100%;
+    transform:translateY(0) translateX(0);
+  }
+}
+
+.loader{
+  position: fixed;
+  z-index: 99;
+  transition:all 20ms ease-out;
+  top:50%;
+  left:50%;
+  width: 130px;
+  height: 130px;
+  margin:-65px 0 0 -65px;
+  .bit{
+    width: 30px;
+    height: 30px;
+    background: $green;
+    border-radius:100%;
+    position: absolute;
+    top:0;
+    left:50%;
+    margin-left:-15px;
+    margin-top:-15px;
+    animation-name:movingdot;
+    animation-duration:670ms;
+    animation-iteration-count:infinite;
+    animation-direction: alternate-reverse;
+    + .bit{
+      animation-name:movingdotRev;
+      top:auto;
+      bottom:0;
+      margin-top:0;
+      margin-bottom:-15px;
+      background: $white;
+    }
+  }
+}

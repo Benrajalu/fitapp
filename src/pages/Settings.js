@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ReactCrop from 'react-image-crop';
+import {firebaseAuth, database} from '../utils/fire';
+
+import AccountDeleteModal from '../blocks/AccountDeleteModal';
 
 import userData from '../data/users.json';
 import defaultAvatar from '../images/default-avatar.png';
 
 import '../styles/ReactCrop.css';
+import '../styles/Settings.css';
 
 class Settings extends Component {
   constructor(props) {
@@ -21,10 +26,13 @@ class Settings extends Component {
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.togglePopin = this.togglePopin.bind(this);
-    this.activateAccountDelete = this.activateAccountDelete.bind(this);
     this.deleteAccount = this.deleteAccount.bind(this);
 
     this.state = {
+      user: firebaseAuth.currentUser ? firebaseAuth.currentUser : {uid: "0"}, 
+      mounted:false,
+      userId:false,
+      loading: true,
       userName : '',
       userPic: false,
       userEmail: '',
@@ -36,28 +44,54 @@ class Settings extends Component {
         availableWeights: []
       }, 
       wrongEmail: false,
-      previewImage: false
+      previewImage: false,
+      animate: " animate"
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      settings: userData[0].settings,
-      userName : userData[0]["display-name"],
-      userPic: userData[0]["profile-picture"],
-      userEmail: userData[0]["contact-email"]
-    })
+  userListener(){
+    const _this = this, 
+          user = this.state.user;
+
+    this.fireUserListener = database.collection('users').doc(user.uid).get().then((doc) => {
+      if(doc.exists){
+        const userObj = doc.data();
+        userObj.uid = user.uid;
+        _this.setState({
+          loading:false,
+          userId: userObj.uid,
+          settings: userObj.settings,
+          userName : userObj.displayName,
+          userPic: userObj.profilePicture,
+          userEmail: userObj.contactEmail
+        });
+      }
+    });
+  }
+
+  componentWillMount() {
+    // Binding the listeners created above to this component
+    this.userListener = this.userListener.bind(this);
+    this.userListener();
+  }
+
+  compontentWillUnmout(){
+    // Removing the bindings and stopping the events from poluting the state
+    this.userListener = undefined;
+  }
+
+  componentDidMount(){
+    document.title = "FitApp. - Vos paramètres";
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        mounted:true
+      });
+    }, 200)
   }
 
   updateWeights(event){
-    let target = parseFloat(event.target.value), 
-        serverPayload = {
-          method: 'post', 
-          url: '',
-          data: {
-            settings: {}
-          }  
-        };
+    let target = parseFloat(event.target.value);
 
     const currentWeights = this.state.settings;
     if(this.state.settings.availableWeights.indexOf(target) !== -1){
@@ -69,49 +103,65 @@ class Settings extends Component {
     }
 
     this.setState({
-      settings: currentWeights
+      settings: currentWeights,
+      savingWeights: "saving"
     }, () => {
-      serverPayload.data.settings.availableWeights = this.state.settings.availableWeights;
-      axios(serverPayload)
+      const updateQuery = database.collection('users').doc(this.state.userId), 
+            value = this.state.settings.availableWeights, 
+            _this = this;
+
+      updateQuery.update({
+        "settings.availableWeights" : value
+      })
       .then(function(response){
         console.log("Congrats, settings saved !");
-        console.log(response);
+        _this.setState({
+          savingWeights: 'saved'
+        });
+        setTimeout(function(){
+          _this.setState({
+            savingWeights: false
+          });
+        }, 2000);
       })
       .catch(function(error){
         console.log("That's a FALSE setting saved : " + error.message);
-        console.log(serverPayload);
-      })
+      });
     })
   }
 
   updateBarbell(event){
-    let target = parseFloat(event.target.value), 
-        serverPayload = {
-          method: 'post', 
-          url: '',
-          data: {
-            settings: {}
-          }  
-        };
+    let target = parseFloat(event.target.value);
 
     const currentSettings = this.state.settings;
     currentSettings.baseBarbell = target === 0 ? 1 : target;
 
 
     this.setState({
-      settings: currentSettings
+      settings: currentSettings, 
+      savingBarbell: "saving"
     }, () => {
-      serverPayload.data.settings.baseBarbell = this.state.settings.baseBarbell;
+      const updateQuery = database.collection('users').doc(this.state.userId), 
+            value = this.state.settings.baseBarbell, 
+            _this = this;
 
-      axios(serverPayload)
+      updateQuery.update({
+        "settings.baseBarbell" : value
+      })
       .then(function(response){
         console.log("Congrats, settings saved !");
-        console.log(response);
+        _this.setState({
+          savingBarbell: 'saved'
+        });
+        setTimeout(function(){
+          _this.setState({
+            savingBarbell: false
+          });
+        }, 2000);
       })
       .catch(function(error){
         console.log("That's a FALSE setting saved : " + error.message);
-        console.log(serverPayload);
-      })
+      });
     })
   }
 
@@ -247,63 +297,40 @@ class Settings extends Component {
       this.setState({
         saving: "Patientez..."
       });
-      const serverPayload = {
-        method: 'post', 
-        url: '',
-        data: {
-          'display-name': this.state.userName,
-          'contact-email': this.state.userEmail, 
-          'profile-picture': this.state.previewImage ? this.state.previewImage : this.state.userPic
-        }  
-      }, 
-      _this = this;
+      const updateQuery = database.collection('users').doc(this.state.userId),
+            displayName = this.state.userName,
+            contactEmail = this.state.userEmail, 
+            profilePicture = this.state.previewImage ? this.state.previewImage : this.state.userPic, 
+            _this = this;
 
-      axios(serverPayload)
-        .then(function(response){
-          console.log("Congrats, settings saved !");
-          console.log(response);
-          setTimeout(() => {
-            _this.setState({
-              saving: "Modifications enregistrées !"
-            })
-          }, 500);
-          setTimeout(() => {
-            _this.setState({
-              saving: false,
-              newPic: false, 
-              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
-            })
-          }, 1500);
-        })
-        .catch(function(error){
-          console.log("That's a FALSE setting saved : " + error.message);
-          console.log(serverPayload);
-          setTimeout(() => {
-            _this.setState({
-              saving: "Modifications enregistrées !"
-            })
-          }, 500);
-          setTimeout(() => {
-            _this.setState({
-              saving: false,
-              newPic: false, 
-              userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
-            })
-          }, 1500);
+      updateQuery.update({
+        displayName : displayName,
+        contactEmail : contactEmail,
+        profilePicture : profilePicture,
+      })
+      .then(function(response){
+        console.log("Congrats, settings saved !");
+        _this.setState({
+          saving: "Modifications enregistrées !"
         });
+        setTimeout(function(){
+          _this.setState({
+            saving: false,
+            newPic: false, 
+            userPic: _this.state.previewImage ? _this.state.previewImage : _this.state.userPic
+          });
+        }, 2000);
+      })
+      .catch(function(error){
+        console.log("That's a FALSE setting saved : " + error.message);
+      });
     }
   }
 
   togglePopin(){
     this.setState({
       deletePopin: !this.state.deletePopin
-    })
-  }
-
-  activateAccountDelete(){
-    this.setState({
-      accountDelete: !this.state.accountDelete
-    })
+    });
   }
 
   deleteAccount(){
@@ -338,96 +365,111 @@ class Settings extends Component {
     let previewImage = this.state.previewImage ? this.state.previewImage : false;
 
     return (
-      <div className="Settings">
-        <div className="container">
+      <div className={this.state.mounted ? 'Settings loaded' : 'Settings'} id="Settings">
+        <div className="container animation-intro">
           <div className="page-header">
+            <Link to="/" title="Retour au dashboard"><i className="fa fa-angle-left"></i></Link>
             <h1>Paramètres</h1>
           </div>
         </div>
 
-        <div className="container">
-          <div className="col-md-8">
-            <h3>Gestion des poids (barbell)</h3>
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Poids de la barre à vide</h3>
-              </div>
-              <form action="#" className="panel-body">
-                <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg
-              </form>
-            </div>
+        <div className="container setting-contents animation-contents">
+          <div className="large-8 medium-7 small-6 columns">
+            <h3 className="section-title">Gestion des poids (barbell)</h3>
 
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Poids libres disponibles</h3>
+            <div className="weight-settings">
+              <div className="panel setting-panel">
+                <div className="panel-heading">
+                  <h3 className="title">Poids de la barre à vide {this.state.savingBarbell ? <i className={this.state.savingBarbell}></i> : false}</h3>
+                </div>
+                <form action="#" className="panel-body">
+                { this.state.loading ? 
+                  <p>Chargement...</p> 
+                  : 
+                  <div className="barbell-load">
+                    <input type="number" value={this.state.settings.baseBarbell} onChange={this.updateBarbell}/> kg
+                  </div>
+                }
+                </form>
               </div>
-              <form action="#" className="panel-body">
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="25" id="input-25" checked={this.state.settings.availableWeights.indexOf(25) > -1 ? true : false} /> <label htmlFor="input-25">25kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="20" id="input-20" checked={this.state.settings.availableWeights.indexOf(20) > -1 ? true : false} /> <label htmlFor="input-20">20kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="15" id="input-15" checked={this.state.settings.availableWeights.indexOf(15) > -1 ? true : false} /><label htmlFor="input-15">15kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="10" id="input-10" checked={this.state.settings.availableWeights.indexOf(10) > -1 ? true : false} /> <label htmlFor="input-10">10kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="5" id="input-5" checked={this.state.settings.availableWeights.indexOf(5) > -1 ? true : false} /> <label htmlFor="input-5">5kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="2.5" id="input-2.5" checked={this.state.settings.availableWeights.indexOf(2.5) > -1 ? true : false} /> <label htmlFor="input-2.5">2.5kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1.25" id="input-1.25" checked={this.state.settings.availableWeights.indexOf(1.25) > -1 ? true : false} /> <label htmlFor="input-1.25">1.25kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1" id="input-1" checked={this.state.settings.availableWeights.indexOf(1) > -1 ? true : false} /> <label htmlFor="input-1">1kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.5" id="input-0.5" checked={this.state.settings.availableWeights.indexOf(0.5) > -1 ? true : false} /> <label htmlFor="input-0.5">0.5kg</label></div>
-                <div><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.25" id="input-0.25" checked={this.state.settings.availableWeights.indexOf(0.25) > -1 ? true : false} /> <label htmlFor="input-0.25">0.25kg</label></div>
-              </form>
+
+              <div className="panel setting-panel">
+                <div className="panel-heading">
+                  <h3 className="title">Poids libres disponibles {this.state.savingWeights ? <i className={this.state.savingWeights}></i> : false}</h3>
+                </div>
+                { this.state.loading ? 
+                  <div className="panel-body">
+                    <p>Chargement...</p>
+                  </div>
+                  :
+                  <form action="#" className="panel-body">
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="25" id="input-25" checked={this.state.settings.availableWeights.indexOf(25) > -1 ? true : false} /> <label htmlFor="input-25">25kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="20" id="input-20" checked={this.state.settings.availableWeights.indexOf(20) > -1 ? true : false} /> <label htmlFor="input-20">20kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="15" id="input-15" checked={this.state.settings.availableWeights.indexOf(15) > -1 ? true : false} /><label htmlFor="input-15">15kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="10" id="input-10" checked={this.state.settings.availableWeights.indexOf(10) > -1 ? true : false} /> <label htmlFor="input-10">10kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="5" id="input-5" checked={this.state.settings.availableWeights.indexOf(5) > -1 ? true : false} /> <label htmlFor="input-5">5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="2.5" id="input-2.5" checked={this.state.settings.availableWeights.indexOf(2.5) > -1 ? true : false} /> <label htmlFor="input-2.5">2.5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1.25" id="input-1.25" checked={this.state.settings.availableWeights.indexOf(1.25) > -1 ? true : false} /> <label htmlFor="input-1.25">1.25kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="1" id="input-1" checked={this.state.settings.availableWeights.indexOf(1) > -1 ? true : false} /> <label htmlFor="input-1">1kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.5" id="input-0.5" checked={this.state.settings.availableWeights.indexOf(0.5) > -1 ? true : false} /> <label htmlFor="input-0.5">0.5kg</label></div>
+                    <div className="free-weights"><input type="checkbox" name="availableWeights" onChange={this.updateWeights} value="0.25" id="input-0.25" checked={this.state.settings.availableWeights.indexOf(0.25) > -1 ? true : false} /> <label htmlFor="input-0.25">0.25kg</label></div>
+                  </form>
+                }
+              </div>
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div className="panel panel-default">
+          <div className="large-4 medium-5 small-6 columns">
+            <h3 className="section-title">Gestion utilisateur</h3>
+            <div className="panel setting-panel">
               <div className="panel-heading">
-                <h3 className="panel-title">Paramètres du compte</h3>
+                <h3 className="title">Paramètres du compte</h3>
               </div>
-              <form className="panel-body form" onSubmit={this.handleFormSubmit}>
-                { this.state.newPic ? 
-                   <img src={previewImage} alt="" className="img-circle  img-responsive" />
-                  :
-                  <img src={this.state.userPic !== false ? this.state.userPic : defaultAvatar} alt={this.state.userName} className="img-circle  img-responsive"/>
-                }
-                <div className="form-group">
-                  <label>Nom</label>
-                  <input type="text" className="form-control" name="userName" value={this.state.userName} onChange={this.updateAccount}/>
+              { this.state.loading ? 
+                <div className="panel-body">
+                  <p>Chargement...</p>
                 </div>
-                <div className="form-group">
-                  <label>Email de contact</label>
-                  <input type="email" className="form-control" name="userEmail" value={this.state.userEmail} onChange={this.updateAccount}/>
-                  {this.state.wrongEmail ? <p>Cet email n'est pas valide</p> : false}
-                </div>
-                <div className="form-group">
-                  <label>Image de profil</label>
-                  <input type="file" accept="image/x-png,image/gif,image/jpeg" name="userImage" onChange={this.updateImage} />
+                :
+                <form className="panel-body form" onSubmit={this.handleFormSubmit}>
                   { this.state.newPic ? 
-                    <div>
-                      <hr/>
-                      <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
-                    </div>
-                    : false }
-                </div>
-                {this.state.saving ? 
-                  <p><button type="submit" className="btn btn-success" disabled="true">{this.state.saving}</button> </p>
-                  :
-                  <p><button type="submit" className="btn btn-primary" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button></p>
-                }
-                <p><button type="button" className="btn btn-danger" onClick={this.togglePopin}>Supprimer ce compte</button></p>
-              </form>
-              {this.state.deletePopin ? 
-                <div className="popin">
-                  <div className="contents panel panel-danger">
-                    <div className="panel-heading">
-                      <h3 className="panel-title">Supprimer votre compte ? </h3>
-                      <button className="closer" onClick={this.togglePopin}>Close modal</button>
-                    </div>
-                    <div className="panel-body">
-                      <p><strong>Attention ! Cette action est irréversible et entraînera la supression de votre compte et de toutes les informations sauvegardées !</strong></p>
-                      <p><input type="checkbox" onChange={this.activateAccountDelete} id="security-checkbox" /> <label htmlFor="security-checkbox">Je souhaite supprimer mon compte</label></p>
-                      <p><button className="btn btn-default" onClick={this.togglePopin}>Annuler</button></p>
-                      <p><button className="btn btn-danger" onClick={this.deleteAccount} disabled={this.state.accountDelete ? false : true}>Supprimer mon compte</button></p>
-                    </div>
+                     <img src={previewImage} alt="" className="img-circle" />
+                    :
+                    <img src={this.state.userPic !== false ? this.state.userPic : defaultAvatar} alt={this.state.userName} className="img-circle  img-responsive"/>
+                  }
+                  <div className="form-group">
+                    <label>Nom</label>
+                    <input type="text" className="form-control" name="userName" value={this.state.userName} onChange={this.updateAccount}/>
                   </div>
-                </div>
+                  <div className="form-group">
+                    <label>Email de contact</label>
+                    <input type="email" className="form-control" name="userEmail" value={this.state.userEmail} onChange={this.updateAccount}/>
+                    {this.state.wrongEmail ? <p>Cet email n'est pas valide</p> : false}
+                  </div>
+                  <div className="form-group">
+                    <label>Image de profil</label>
+                    <input type="file" accept="image/x-png,image/gif,image/jpeg" name="userImage" onChange={this.updateImage} />
+                    { this.state.newPic ? 
+                      <div>
+                        <hr/>
+                        <ReactCrop src={this.state.newPic} crop={this.state.crop} onChange={this.handleCrop} onImageLoaded={this.handleDefaultCrop} className="img-responsive" />
+                      </div>
+                      : false }
+                  </div>
+                  <div className="buttons">
+                    {this.state.saving ? 
+                      <button type="submit" className="btn btn-block btn-big w-radius btn-success" disabled="true">{this.state.saving}</button>
+                      :
+                      <button type="submit" className="btn btn-block btn-big w-radius btn-green" disabled={this.state.wrongEmail ||  this.state.userName.length === 0 ? true : false}>Valider</button>
+                    }
+                    <button type="button" className="btn btn-danger" onClick={this.togglePopin}>Supprimer ce compte</button>
+                  </div>
+                </form>
+              }
+              {this.state.deletePopin ? 
+                <AccountDeleteModal 
+                  shouldAppear={this.state.deletePopin ? 'visible' : 'hidden'} 
+                  deleteAccount={this.deleteAccount}
+                  modalCloser={this.togglePopin} />
                 :
                 false
               }

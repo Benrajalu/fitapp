@@ -9,21 +9,90 @@ import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
 it('renders without crashing', () => {
-  const dash = shallow(
-    <Workout />
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
+  const match = {
+    params:{
+      id: "01routineA"
+    }
+  };
+  const dash = mount(
+    <Workout match={match} />, 
+    MountOptions
   );
 
   dash.setState({
     routineId: '01routineA', 
-    user: userData[0],
+    user: {
+      contactEmail:userData[0].contactEmail,
+      displayName:userData[0].displayName,
+      profilePicture:userData[0].profilePicture,
+      signinEmail:userData[0].signinEmail,
+      uid: "0",
+      settings:{
+        availableWeights:[20, 10, 5, 2.5, 1.25, 0.5, 0.25],
+        baseBarbell:10
+      }
+    },
     exercisesDatabase: exercisesDatabase, 
-    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0]
+    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0],
+    workoutLog:{
+      exercises:[
+        {
+          exerciseId:"ex-11",
+          handicap:10,
+          repTarget:1,
+          sets:[0],
+          setsTarget:1
+        }
+      ]
+    }
   })
 });
 
 test('displays the correct routine', () => {
-  const dash = shallow(
-    <Workout />
+  const MountOptions = {
+      context: {
+        router: {
+          history: {
+            createHref: (a, b) => {
+            },
+            push: () => {
+            },
+            replace: () => {
+            }, 
+            block: ()=> {
+            }
+          }
+        }
+      }, childContextTypes: {
+        router: PropTypes.object
+      }
+  };
+  const match = {
+    params:{
+      id: "01routineA"
+    }
+  };
+  const dash = mount(
+    <Workout match={match} />, 
+    MountOptions
   );
 
   const today = new Date(), 
@@ -80,15 +149,39 @@ describe('when exiting a workout', () => {
     params:{
       id: "01routineA"
     }
-  }
+  };
   const workout = mount(
     <Workout match={match} />, 
     MountOptions
-  );  
+  ); 
+
+  workout.setState({
+    routineId: '01routineA', 
+    user: {
+      contactEmail:userData[0].contactEmail,
+      displayName:userData[0].displayName,
+      profilePicture:userData[0].profilePicture,
+      signinEmail:userData[0].signinEmail,
+      uid: "0",
+      settings:{
+        availableWeights:[20, 10, 5, 2.5, 1.25, 0.5, 0.25],
+        baseBarbell:10
+      }
+    },
+    exercisesDatabase: exercisesDatabase, 
+    routine: userData[0].routines.filter(obj => obj.id === '01routineA' )[0],
+    loading:false,
+    workoutLog:{
+      exercises:[
+        {exerciseId: "ex-04", repTarget: "10", setsTarget: "5", handicap: "20", sets: [10,10,10,10,10]},
+        {exerciseId: "ex-06", repTarget: "5", setsTarget: "8", handicap: "15", sets: [0,0,0,0,0,0,0,0]}
+      ]
+    }
+  }) 
 
   test('the exit window apears when the exit button is clicked', () => {
     workout.find('.end-workout').first().simulate('click');
-    expect(workout.find('.popin.visible .panel-title').first().text()).toEqual("Terminer l'entraînement ?");
+    expect(workout.find('.popin .title').first().text()).toEqual("Terminer l'entraînement ?");
   });
 
   test('if some exercise has changed, a prompt to save changes is shown', () => {
@@ -112,6 +205,6 @@ describe('when exiting a workout', () => {
       }
     });
     workout.find('.end-workout').first().simulate('click');
-    expect(workout.find('.popin.visible .alert').first().text()).toEqual("Bent-over Rows peut passer de 20kg à 25kgNope!");
+    expect(workout.find('.popin').find('.workout-update').text()).toEqual("L'exercice \"Bent-over Rows\" peut passer de 20kg à 25kgAnnuler");
   });
 });

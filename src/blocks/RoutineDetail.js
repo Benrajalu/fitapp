@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { database} from '../utils/fire';
 
 import ExerciseListing from '../blocks/ExerciseListing';
+import RoutineDelete from '../blocks/RoutineDelete';
 
 
 class RoutineDetail extends Component {
@@ -11,10 +12,20 @@ class RoutineDetail extends Component {
     super(props);
     this.state = {
       showPopin: false, 
-      user: this.props.user
+      user: this.props.user,
+      animation:{
+        perspective: "800px",
+        transformOrigin: '50% 0%',
+        marginBottom: -30,
+        opacity: 0,
+        transform: "rotateX(-70deg)"
+      }
     };
     this.togglePopin = this.togglePopin.bind(this);
     this.deleteRoutine = this.deleteRoutine.bind(this);
+    if(this.props.user){
+      this.userRef = database.collection('users').doc(this.props.user.id);
+    }
   }
   togglePopin(){
     this.setState({
@@ -22,33 +33,35 @@ class RoutineDetail extends Component {
     })
   }
   deleteRoutine(){
-    const serverPayload = {
-      method: 'post', 
-      url: '',
-      data: {
-        userId: this.props.user.id, 
-        routineId: this.props.contents.id, 
-        operation: 'remove'
-      }  
-    }, 
-    _this = this;
-
-    axios(serverPayload)
-    .then(function(response){
-      console.log("Kill order confirmed on routine " + this.props.contents.id);
-      console.log(response);
-    })
-    .catch(function(error){
-      console.log("That's a FALSE delete : " + error.message);
-      console.log(serverPayload);
-      // Mock success still 
+    const _this = this;
+    this.setState({
+      deleting: true
+    });
+    this.userRef.collection('routines').doc(this.props.contents.id).delete().then(() => {
       _this.setState({
+        deleting: false,
         killConfirmed:true
+      }, () => {
+        setTimeout(() => {
+         _this.props.refresh();
+        }, 1500);
       });
-      setTimeout(() => {
-       _this.togglePopin();
-      }, 1500);
-    })
+    });
+  }
+
+  componentDidMount(){
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        animation:{
+          perspective: "800px",
+          transformOrigin: '50% 100%',
+          marginBottom: "15px",
+          opacity: 1,
+          transform: "rotateX(-0deg)"
+        }
+      })
+    }, this.props.delay);
   }
 
   render() {
@@ -59,46 +72,36 @@ class RoutineDetail extends Component {
     });
 
     return (
-      <div className="panel panel-default routine-card">
-        <div className="panel-heading container-fluid">
-          <div className="col-md-8">
-            <h3 className="panel-title">{this.props.contents.name}</h3>
-          </div>
-          <div className="col-md-4 text-right">
-            <Link to={'/workout/' + this.props.contents.id} className="btn btn-primary">Débuter l'entraînement</Link>
-          </div>
-        </div>
-        <div className="panel-body">
-          {listExercises}
-        </div>
-        {this.props.editable ? 
-          <div className="panel-footer">
-            <Link to={'/edit/' + this.props.contents.id} className="btn btn-default">Edit</Link>
-            &nbsp;
-            <button className="btn btn-danger" onClick={this.togglePopin}>Supprimer</button>
-          </div>
-          : false}
-        {this.state.showPopin ? 
-          <div className="popin visible">
-            <div className="panel panel-danger contents">
-              <div className="panel-heading">
-                <h3 className="panel-title">Suppression d'un entrainement</h3>
-              </div>
-              {!this.state.killConfirmed ? 
-                <div className="panel-body text-center">
-                  <p><strong>Souhaitez vous effacer la routine {this.props.contents.name} ?</strong></p>
-                  <p>Cette action est irrémédiable !</p>
-                  <button className="btn btn-danger" onClick={this.deleteRoutine}>Supprimer cette routine</button>&nbsp;
-                  <button className="btn btn-default" onClick={this.togglePopin}>Annuler</button>
-                </div>
-                : 
-                <div className="panel-body text-center">
-                  <p><strong>La routine {this.props.contents.name} a été effacée avec succès</strong></p>
-                </div>
-              }
+      <div>
+        <div className="routine-detail" style={this.state.animation}>
+          <div className="routine-heading with-actions">
+            <div className="description">
+              <h3 className="title">{this.props.contents.name}</h3>
+              <i className="color-spot" style={{"backgroundColor" : this.props.contents.color}}></i>
             </div>
+            <Link to={'/workout/' + this.props.contents.id} className="action">Débuter l'entraînement</Link>
           </div>
-          : false}
+          <div className="routine-body details">
+            {listExercises}
+          </div>
+          {this.props.editable ? 
+            <div className="routine-footer">
+              <Link to={'/edit/' + this.props.contents.id} className="btn btn-size-s">Modifier</Link>
+              <button className="btn btn-size-s btn-danger" onClick={this.togglePopin}>Supprimer</button>
+            </div>
+            : false}
+        </div>
+        {this.state.showPopin ?
+          <RoutineDelete  shouldAppear={this.state.showPopin ? 'visible' : 'hidden'} 
+            name={this.props.contents.name} 
+            modalCloser={this.togglePopin} 
+            deleteRoutine={this.deleteRoutine}
+            killConfirmed={this.state.killConfirmed}
+            deleting={this.state.deleting}
+          />
+          : 
+          false
+        }
       </div>
     )
   }
