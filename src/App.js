@@ -123,7 +123,7 @@ class App extends Component {
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
           {this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} toggleMenu={this.toggleMenu} closeMenu={this.closeMenu} menuOpen={this.state.menuOpen} /> : false}
           {this.state.loading ? <Loader /> :
-            <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : false}>
+            <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : undefined}>
               <div className="container-fluid">
               {this.state.loggedIn ? 
                 <Switch>

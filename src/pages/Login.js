@@ -165,8 +165,8 @@ class Login extends Component {
             <div className="mailAccount">
               <h4>Utiliser un compte mail</h4>
               <ul className="nav nav-tabs">
-                <li role="presentation" className={this.state.connect ? "active" : false}><a onClick={() => {this.toggleTab('connect')}}>Connexion</a></li>
-                <li role="presentation" className={this.state.register ? "active" : false}><a onClick={() => {this.toggleTab('register')}}>Nouveau compte</a></li>
+                <li role="presentation" className={this.state.connect ? "active" : undefined}><a onClick={() => {this.toggleTab('connect')}}>Connexion</a></li>
+                <li role="presentation" className={this.state.register ? "active" : undefined}><a onClick={() => {this.toggleTab('register')}}>Nouveau compte</a></li>
               </ul>
               {this.state.connect ?
                 <div className="loginSection">
