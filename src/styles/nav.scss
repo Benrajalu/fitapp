@@ -3,87 +3,133 @@
 #mainNav{
   .navbar-header{
     transition:all 200ms ease-out;
-    background: #2C3045;
-    position: fixed;
+    background: #0D0D0D;
+    position: relative;
     top:0px;
     right: 0;
     z-index: 98;
+    box-shadow: 0 -3px 4px rgba(60,60,60,0.3);
+    @media (min-width: 721px){
+      box-shadow: 0 3px 4px rgba(100,100,100,0.3);
+    }
     .container{
       transition:all 200ms ease-out;
       display: flex;
       flex-direction:row;
       justify-content:space-between;
       align-items:center;
-      padding:15px 10px;
       &:focus{
         outline: 0;
       }
-      .navbar-brand{
-        font-family:"Montserrat";
-        font-size:22px;
-        font-weight: 400;
-        color:#F9F9F9;
-        margin-bottom: 0px;
-        text-decoration: none;
-        strong{
-          color:#1FC3AF;
-          font-weight: 400;
+      h1{
+        display: none;
+      }
+      .list{
+        display: flex;
+        flex-flow:row nowrap;
+        width: 100%;
+        height: 60px;
+        align-items:center;
+        justify-content:center;
+        li{
+          flex-grow:1;
+          text-align: center;
+          position: relative;
+          height: 60px;
+          line-height: 60px;
+          a, button{
+            background: transparent;
+            padding:0px;
+            display: inline-block;
+            width: 100%;
+            border:0px;
+            line-height: 1;
+            color:#F2F2F2;
+            text-decoration: none;
+            vertical-align: middle;
+            width: 100%;
+            svg{
+              width: 16px;
+              height: 16px;
+              display: block;
+              margin:0 auto 5px;
+              transition:all 200ms ease-out;
+              transform: rotate(-0deg);
+            }
+            span{
+              display: block;
+              @include mont(10px, 400, #F2F2F2);
+              text-transform: uppercase;
+              margin-bottom: 4px;
+            }
+          }
+          a{
+            &:after{
+              transition:all 200ms ease-out;
+              content:'';
+              width: 15px;
+              height: 4px;
+              border-radius:6px;
+              position: absolute;
+              bottom:0px;
+              opacity: 0;
+              left: 50%;
+              transform:translateX(-50%);
+              background: #D42F2F;
+            }
+            &.active{
+              &:after{
+                bottom:5px;
+                opacity: 1;
+              }
+            }
+          }
+          button.trigger{
+            display: block;
+            margin:0 auto;
+            border-radius: 100%;
+            line-height: 62px;
+            text-align: center;
+            position: relative;
+            top:-15px;
+            width: 62px;
+            height: 62px;
+            background: #D42F2F;
+            box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.77);
+            svg{
+              position: relative;
+              left: 1px;
+              top:1px;
+            }
+          }
         }
       }
 
-      .menuToggle{
-        background: transparent;
-        border:0px;
-        position:relative;
-        width:30px;
-        height:30px;
-        padding:0px;
-        margin:0px;
-        cursor:pointer;
-        transition: all 600ms ease;
-        &:active, &:focus{
-          outline:0px;
-          border:0px;
+      @media (min-width: 721px){
+        h1{
+          font-family: "Questrial";
+          font-size: 25px;
+          color: #fff;
+          display: block;
+          strong{
+            color: #D42F2F;
+          }
         }
-        > i{
-          cursor:pointer;
-          width:30px;
-          padding:0px;
-          height:3px;
-          background:$green;
-          box-shadow:0px 0px 0px transparent;
-          border:0px transparent;
-          text-indent:-999px;
-          position:absolute;
-          top:50%;
-          left:0px;
-          margin-top:-1px;
-          -webkit-appearance:none;
-          line-height:0px;
-          transition: all 300ms ease;
-          border-radius:99px;
-          &:active, &:focus{
-            outline:0px;
-            border:0px;
-          }
-          &::after, &::before{
-            display:block;
-            content: "";
-            position:absolute;
-            left:0px;
-            height:3px;
-            background:$green;
-            width:100%;
-            transition: all 300ms ease;
-            border-radius:99px;
-          }
-          &::after{
-            top:-10px;
-          }
-          &::before{
-            bottom:-10px;
-            left:auto;
-            right:0px;
+        .list{
+          max-width:400px;
+          li{
+            order:2;
+            width: 20%;
+            &.middle{
+              order:0;
+            }
+            button.trigger{
+              top:0%;
+              display: inline-block;
+              width: 40px;
+              height: 40px;
+              line-height: 40px;
+            }
           }
         }
       }
@@ -91,24 +137,15 @@
   }
   &.active{
     .navbar-header{
-      right: 250px;
+      right: 320px;
       .container{
         max-width: 100%;
         justify-content:flex-end;
         .navbar-brand{
           margin-right: 30px;
         }
-        .menuToggle{
-          transform: rotate(360deg);
-          >i{
-            background:transparent;
-            &:after{
-              transform: rotate(-135deg) translate(-6px, -8px) scale(1.2, 1.2);
-            }
-            &:before{
-              transform: rotate(135deg) translate(-6px, 8px) scale(1.2, 1.2);
-            }
-          }
+        .menuToggle svg{
+          transform: rotate(-90deg);
         }
       }
     }
@@ -120,30 +157,102 @@
     top: 0;
     height: 100%;
     display: flex;
-    flex-direction:column;
+    flex-direction:row;
     justify-content:space-between;
-    align-items:center;
+    align-items:stretch;
     text-align: right;
-    background: #32374E;
-    width: 250px;
-    padding:60px 0px;
+    background: #464748;
+    width: 320px;
+    max-width: 100%;
+    padding:0px 0px;
     box-shadow: inset 2px 0px 5px rgba(0,0,0,0.3);
     overflow: auto;
+    .left, .right{
+      display: flex;
+      flex-flow:column;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .left{
+      background: #2C2D2D;
+      flex-grow:1;
+      box-shadow: inset 2px 0px 5px rgba(0,0,0,0.3);
+    }
+    .right{
+      width: 80px;
+      justify-content:flex-end;
+      position: relative;
+      box-shadow: inset 2px 0px 5px rgba(0,0,0,0.2);
+      p{
+        font-family: "Questrial";
+        font-size: 20px;
+        color: #fff;
+        display: block;
+        position: absolute;
+        top:35px;
+        left: 50%;
+        transform:translateX(-50%) rotate(90deg);
+        letter-spacing: 0.5px;
+        strong{
+          color: #D42F2F;
+        }
+      }
+      button{
+        text-align: center;
+        padding:13px 4px;
+        background:transparent;
+        border:0px;
+        width: 100%;
+        @include mont(10px, 300, #929398);
+        transition:all 200ms ease-out;
+        &:hover{
+          color:$white;
+        }
+        &.disconnect{
+          border-bottom: 1px solid #2C2D2D;
+          border-top: 1px solid #2C2D2D;
+          &:hover{
+            svg{
+              fill:$red;
+            }
+          }
+        }
+        svg{
+          display: block;
+          width: 22px;
+          height: 22px;
+          margin:0 auto 5px;
+        }
+      }
+    }
+
     .nav{
       width: 100%;
       margin-bottom: 30px;
+      order:2;
+      flex-grow:2;
       li{
-        border-bottom: 1px solid #2C3045;
         padding:5px 0px;
+        width: 100%;
         a{
           padding:10px 30px;
-          @include mont(17px, regular, $white);
+          @include mont(13px, 300, #9C9D9F);
           text-decoration: none;
           display: inline-block;
           transition:all 200ms ease-out;
           border-right: 0px solid transparent;
+          width: 100%;
+          svg{
+            width: 14px;
+            height: 14px;
+            display: inline-block;
+            margin-left: 10px;
+          }
           &.active{
-            border-right: 10px solid $green;
+            color:#fff;
+            svg{
+              color:#D42F2F;
+            }
           }
           &:hover{
             border-right: 10px solid transparent;
@@ -155,23 +264,40 @@
     .userZone{
       width: 100%;
       display: block;
-      border-top: 2px solid #2C3045;
+      margin-bottom: 20px;
       text-align: center;
+      padding:0 0px;
+      order:0;
     }
 
     .UserLog{
-      text-align: center;
-      padding-top: 30px;
+      text-align: right;
+      width: 100%;
+      position: relative;
+      .profile{
+        filter:grayscale(100);
+      }
+      .copy{
+        position: absolute;
+        bottom: 0px;
+        z-index: 2;
+        background:rgba(250,250,250,0.8);
+        padding:15px 30px;
+        width: 100%;
+        left: 0px;
+        text-align: left;
+      }
       img{
         max-width: 70px;
         display: block;
-        margin:0 auto 10px;
+        margin:0 0 10px;
         border-radius: 100%;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
       }
       p{
-        @include mont(13px, regular, #9397A1);
-        margin-bottom: 25px;
+        font-family: "Questrial";
+        font-size: 16px;
+        color:#000;
       }
     }
   }

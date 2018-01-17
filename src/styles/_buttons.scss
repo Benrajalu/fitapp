@@ -13,16 +13,28 @@ button{
   margin:0px;
   text-decoration: none;
   display: inline-block;
-  border: 1px solid #1FC3AF;
+  border: 1px solid $white;
   border-radius: 3px;
   text-align: center;
-  padding:10px;
+  padding:5px 10px;
   background: transparent;
   transition:all 200ms ease-out;
-  @include mont(12px, 400, $white);
+  @include mont(12px, 300, $white);
   cursor: pointer;
   &:hover:not(:disabled){
-    background: $green;
+    background: $red;
+    border-color:$red;
+  }
+
+  &.btn-grey{
+    background: #2E2E2E;
+    border-color: #2E2E2E;
+    color: $white;
+    &:hover{
+      border-color: $white;
+      background:transparent;
+      color:#2E2E2E;
+    }
   }
 
   &.facebook{

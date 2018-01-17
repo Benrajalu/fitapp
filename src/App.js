@@ -121,33 +121,35 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-          {this.state.loggedIn ? <MainNav user={this.state.user}  resetUser={this.resetUser} toggleMenu={this.toggleMenu} closeMenu={this.closeMenu} menuOpen={this.state.menuOpen} /> : false}
-          {this.state.loading ? <Loader /> :
-            <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : undefined}>
-              <div className="container-fluid">
-              {this.state.loggedIn ? 
-                <Switch>
-                  <Route exact path="/" component={Dashboard}/>
-                  <Route exact path="/settings" component={Settings}/>
-                  <Route exact path="/history" component={History}/>
-                  <Route exact path="/all-routines" component={AllRoutines}/>
-                  <Route path="/edit/:id" component={EditRoutine}/>
-                  <Route exact path="/new-routine" component={NewRoutine}/>
-                  <Route path="/workout/:id" component={Workout}/>
-                  <Redirect from="/workout" to="/all-routines"/>
-                  <Redirect from="/login" to="/"/>
-                  <Route component={NoMatch}/>
-                </Switch>
-              :
-                <Switch>
-                  <Route exact path="/login" component={Login}/>
-                  <Redirect from="/" to="/login"/>
-                  <Route component={NoMatch}/>
-                </Switch>
-              }
-              </div>
-            </main>
-          }
+            {this.state.loggedIn ? <div id="nav-zone" className="zone"><MainNav user={this.state.user}  resetUser={this.resetUser} toggleMenu={this.toggleMenu} closeMenu={this.closeMenu} menuOpen={this.state.menuOpen} /></div> : false}
+          <div id="contents-zone" className="zone">
+            {this.state.loading ? <Loader /> :
+              <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : undefined}>
+                <div className="container-fluid no-padding">
+                {this.state.loggedIn ? 
+                  <Switch>
+                    <Route exact path="/" component={Dashboard}/>
+                    <Route exact path="/settings" component={Settings}/>
+                    <Route exact path="/history" component={History}/>
+                    <Route exact path="/all-routines" component={AllRoutines}/>
+                    <Route path="/edit/:id" component={EditRoutine}/>
+                    <Route exact path="/new-routine" component={NewRoutine}/>
+                    <Route path="/workout/:id" component={Workout}/>
+                    <Redirect from="/workout" to="/all-routines"/>
+                    <Redirect from="/login" to="/"/>
+                    <Route component={NoMatch}/>
+                  </Switch>
+                :
+                  <Switch>
+                    <Route exact path="/login" component={Login}/>
+                    <Redirect from="/" to="/login"/>
+                    <Route component={NoMatch}/>
+                  </Switch>
+                }
+                </div>
+              </main>
+            }
+          </div>
         </div>
       </BrowserRouter>
     );

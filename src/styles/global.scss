@@ -2,22 +2,11 @@
 @import "styles/_mixins.scss";
 
 body, html{
-  background: #2C3045;
+  background: #000000;
 }
 
 .logged-in #mainContents{
-  padding-top: 80px;
-}
-#mainContents{
-  background: #2C3045;
-  position: relative;
-  z-index: 95;
-  min-height: 100vh;
-  transition:all 200ms ease-out;
-  right: 0px;
-  &.menuActive{
-    right: 250px;
-  }
+  padding-top: 30px;
 }
 
 .align-right{
@@ -113,5 +102,35 @@ body, html{
     @include mont(10px, 400, $white);
     text-transform: uppercase;
     margin-bottom: 0px !important;
+  }
+}
+
+
+.App{
+  display:flex;
+  flex-direction:column;
+  height: 100vh;
+  .zone{
+    flex-grow:1;
+    width: 100%;
+    overflow: auto;
+    &#nav-zone{
+      height: 60px;
+      overflow: visible;
+      @media (max-width: 720px){
+        order:2;
+      }
+    }
+  }
+  #mainContents{
+    background: #000000;
+    position: relative;
+    z-index: 95;
+    min-height: 100vh;
+    transition:all 200ms ease-out;
+    right: 0px;
+    &.menuActive{
+      right: 320px;
+    }
   }
 }

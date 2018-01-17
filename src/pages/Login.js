@@ -151,26 +151,22 @@ class Login extends Component {
   render() {
     return (
       <div className={this.state.loading ? "login loading" : "login"} id="login">
+        <header>
+          <p className="logo">fit<strong>app</strong></p> 
+        </header>
         <div className="contents">
-          <p className="logo">Fit<strong>App.</strong></p> 
-          <h1>Connexion</h1>
+          <h1>Let's get <br/>started!</h1>
 
           <div className="login-box">
             <div className="socialAccount">
-              <h3>Se connecter avec...</h3>
               <button className="btn google" onClick={this.handleGoogleLogin}>{this.state.googleLogin ? "Tentative de connexion..." : "Connexion avec Google" }</button>
-              <hr/>
               <button className="btn facebook" onClick={this.handleFacebookLogin}>{this.state.facebookLogin ? "Tentative de connexion..." : "Connexion avec Facebook" }</button>
             </div>
+
             <div className="mailAccount">
-              <h4>Utiliser un compte mail</h4>
-              <ul className="nav nav-tabs">
-                <li role="presentation" className={this.state.connect ? "active" : undefined}><a onClick={() => {this.toggleTab('connect')}}>Connexion</a></li>
-                <li role="presentation" className={this.state.register ? "active" : undefined}><a onClick={() => {this.toggleTab('register')}}>Nouveau compte</a></li>
-              </ul>
               {this.state.connect ?
                 <div className="loginSection">
-                  <h3>Se connecter</h3>
+                  <h4>Utiliser une adresse email</h4>
                   <form action="" onSubmit={this.handleAccountLogin}>
                     <div className="form-group">
                      <label htmlFor="email">Email</label>
@@ -181,12 +177,13 @@ class Login extends Component {
                      <input className="form-control" type="password" name="password" id="password" value={this.state.password ? this.state.password : ''} onChange={this.updateFields}/>
                     </div>
                     {this.state.loginError ? <p>{this.state.loginError}</p> : false}
-                    <button type="submit" className="btn btn-size-s">Se connecter</button>
+                    <button type="submit" className="btn btn-grey">Connexion</button>
                   </form>
+                  <p><a onClick={() => {this.toggleTab('register')}}>Nouveau compte</a></p>
                 </div>
               :
                 <div className="loginSection">
-                  <h3>Créer un compte</h3>
+                  <h4>Créer un compte avec une adresse email</h4>
                   <form action="" onSubmit={this.handleAccountCreation}>
                     <div className="form-group">
                      <label htmlFor="creationEmail">Email</label>
@@ -197,8 +194,9 @@ class Login extends Component {
                      <input className="form-control" type="password" id="creationPassword" name="creationPassword" value={this.state.creationPassword ? this.state.creationPassword : ''} onChange={this.updateFields}/>
                     </div>
                     {this.state.creationError ? <p>{this.state.creationError}</p> : false}
-                    <button type="submit" className="btn btn-size-s">Créer un compte</button>
+                    <button type="submit" className="btn btn-grey">Créer un compte</button>
                   </form>
+                  <p><a onClick={() => {this.toggleTab('connect')}}>Connexion via email</a></p>
                 </div>
               }
             </div>
