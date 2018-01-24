@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import '../styles/NoMatch.css';
+import '../../styles/NoMatch.css';
 
 class NoMatch extends Component {
   constructor(props){

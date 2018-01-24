@@ -3,11 +3,11 @@ import { NavLink } from 'react-router-dom';
 import UserLog from './UserLog';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
-import {firebaseAuth} from '../utils/fire';
+import {firebaseAuth} from '../../store/';
 
-import '../styles/nav.css';
+import '../../styles/nav.css';
 
-import users from '../data/users.json';
+import users from '../../data/users.json';
 
 class Nav extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Nav extends Component {
 
   render() {
     return (
-      <nav id="mainNav" className={this.props.menuOpen ? "active" : "inactive"}>
+      <nav id="mainNav" className={this.props.menu.status === "opened" ? "active" : "inactive"}>
         <div className="container-fluid navbar-header ">
           <div className="container">
             <h1>fit<strong>app</strong></h1>
@@ -89,8 +89,8 @@ class Nav extends Component {
           </div>
           <div className="right">
               <p>fit<strong>app</strong></p>
-              <button onClick={this.logOff} className="disconnect"><FontAwesomeIcon icon={['fas', 'power-off']} size="1x" /> Déconnexion</button>
-              <button onClick={this.props.closeMenu} className="close"><FontAwesomeIcon icon={['fas', 'times']} size="1x" /> Fermer</button>
+              <button onClick={this.logOff} className="disconnect"><FontAwesomeIcon icon={['far', 'power-off']} size="1x" /> Déconnexion</button>
+              <button onClick={this.props.closeMenu} className="close"><FontAwesomeIcon icon={['far', 'times']} size="1x" /> Fermer</button>
           </div>
         </div>
       </nav>

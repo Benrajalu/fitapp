@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 
-import {fire, firebaseAuth} from '../utils/fire';
+import {fire, firebaseAuth} from '../../store/';
 
-import Loader from "../blocks/Loader.js"; 
-
-import '../styles/login.css';
+import '../../styles/login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -60,7 +58,6 @@ class Login extends Component {
       });
     }).catch((error) => {
       _this.setState({
-        loading:false,
         googleLogin:false
       });
     });
@@ -91,19 +88,19 @@ class Login extends Component {
           _this = this;
 
     if(emailRegex.test(this.state.creationEmail) && this.state.creationPassword){
-      _this.setState({
-        loading:true
-      });
       firebaseAuth.createUserWithEmailAndPassword(this.state.creationEmail, this.state.creationPassword)
       .then((user) => {
         user.sendEmailVerification();
-        console.log("coucou toi");
+        console.log("New user log-in");
+        _this.setState({
+          newMailLogin: "Création de compte..."
+        });
       })
       .catch(function(error) {
         var errorMessage = error.message;
         _this.setState({
           creationError: errorMessage, 
-          loading:false
+          newMailLogin: false
         })
         // ...
       });
@@ -111,7 +108,7 @@ class Login extends Component {
     else{
       this.setState({
         creationError: "Merci de renseigner une adresse email valide et un mot de passe.",
-        loading:false
+        newMailLogin:false
       })
     }
   }
@@ -128,7 +125,7 @@ class Login extends Component {
 
       firebaseAuth.signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => {
-          console.log("re-coucou toi");
+          console.log("User logged in");
         })
         .catch(function(error) {
           // Handle Errors here.
@@ -150,7 +147,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className={this.state.loading ? "login loading" : "login"} id="login">
+      <div className="login" id="login">
         <header>
           <p className="logo">fit<strong>app</strong></p> 
         </header>
@@ -194,7 +191,7 @@ class Login extends Component {
                      <input className="form-control" type="password" id="creationPassword" name="creationPassword" value={this.state.creationPassword ? this.state.creationPassword : ''} onChange={this.updateFields}/>
                     </div>
                     {this.state.creationError ? <p>{this.state.creationError}</p> : false}
-                    <button type="submit" className="btn btn-grey">Créer un compte</button>
+                    <button type="submit" className="btn btn-grey" disabled={this.state.newMailLogin ? true : false}>{this.state.newMailLogin ? this.state.newMailLogin : "Créer un compte"}</button>
                   </form>
                   <p><a onClick={() => {this.toggleTab('connect')}}>Connexion via email</a></p>
                 </div>
@@ -202,7 +199,6 @@ class Login extends Component {
             </div>
           </div>
         </div>
-        <Loader />
       </div>
     )
   }

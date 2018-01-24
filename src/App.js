@@ -1,71 +1,86 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import {firebaseAuth, database} from './utils/fire';
 
-import Loader from "./blocks/Loader.js"; 
-import Dashboard from './pages/Dashboard.js';
-import Settings from './pages/Settings.js';
-import History from './pages/History.js';
-import AllRoutines from './pages/AllRoutines.js';
-import EditRoutine from './pages/EditRoutine.js';
-import NewRoutine from './pages/NewRoutine.js';
-import Workout from './pages/Workout.js';
-import Login from './pages/Login.js';
-import NoMatch from './pages/NoMatch.js';
-import MainNav from './blocks/Nav.js';
+import {firebaseAuth, database} from './store/';
+
+import { connect } from 'react-redux';
+import {getLoading, removeLoading} from './actions/';
+import {authenticateUser, resetUser} from './actions/UserActions';
+
+// Navigation and loader
+import AwareLoader from "./templates/containers/AwareLoader.js"; 
+import MenuContainer from "./templates/containers/MenuContainer.js"; 
+
+// Pages
+import LoginContainer from './templates/containers/LoginContainer.js';
+import Dashboard from './templates/pages/Dashboard.js';
+import NoMatch from './templates/pages/NoMatch.js';
 
 import './styles/placeholder.css';
+
+// Passing the state down through the connect down below
+const mapStateToProps = state => {
+  return{
+    user: state.user, 
+    loading: state.loading, 
+    menu:state.menu
+  }
+};
+// Passing the various actions needed at this stage from the store through the props
+const mapDispatchToProps = dispatch => {
+  return {
+    getLoading: () => {
+      dispatch(getLoading())
+    },
+    removeLoading: () => {
+      dispatch(removeLoading())
+    },
+    authenticateUser: (data) => {
+      dispatch(authenticateUser(data))
+    }, 
+    resetUser: () => {
+      dispatch(resetUser())
+    }
+  }
+}
+
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      menuOpen: false,
-      loading:true,
-      loggedIn: false, 
-      user: false
+      userChecked: false
     };
     this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
-    this.resetUser = this.resetUser.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.closeMenu = this.closeMenu.bind(this);
-  }
-
-  toggleMenu(event){
-    event.preventDefault();
-    this.setState({
-      menuOpen: !this.state.menuOpen
-    });
-  }
-
-  closeMenu(event){
-    this.setState({
-      menuOpen: false
-    });
   }
 
   authListener(){
     const _this = this;
     this.fireBaseListener = firebaseAuth.onAuthStateChanged(function(user) {
-      if(user){
+      if(user !== null){
+        _this.props.removeLoading();
         const query = database.collection('users').doc(user.uid);
         query.onSnapshot((doc) => {
           if(!doc.exists){
+            console.log("User doesn't exist");
             _this.initiateDefaultUser(user);
           }
           else{
+            var rawdata = doc.data();
+            rawdata.uid = user.uid;
+            _this.props.authenticateUser(rawdata);
             _this.setState({
-              user: doc.data(), 
-              loggedIn: true, 
-              loading: false
-            })
+              userChecked: true
+            });
           }
+        }, (error) => {
+          console.log("User logged out");
         });
       }
       else{
+        console.log("not loggedin");
         _this.setState({
-          loggedIn: false, 
-          loading: false
+          userChecked: true
         });
       }
     });
@@ -91,23 +106,18 @@ class App extends Component {
     }).then(() => {
       let newQuery = database.collection('users').doc(user.uid);
       newQuery.get().then((doc) => {
+        var rawdata = doc.data();
+        rawdata.uid = user.uid;
+        _this.props.authenticateUser(rawdata);
         _this.setState({
-          user: doc.data(), 
-          loggedIn: true, 
-          loading: false
-        })
+          userChecked: true
+        });
       })
     });
   }
 
-  resetUser(){
-    this.setState({
-      user: false, 
-      loggedIn: false
-    })
-  }
-
   componentWillMount() {
+    this.props.getLoading();
     this.authListener = this.authListener.bind(this);
     this.authListener();
   }
@@ -117,43 +127,46 @@ class App extends Component {
     this.authListener = undefined;
   }
 
+  componentDidMount(){
+    setTimeout(()=>{
+      this.props.removeLoading();
+    },300);
+  }
+
   render() {
     return (
       <BrowserRouter>
-        <div className={this.state.loggedIn ? 'App logged-in' : 'App logged-off' }>
-            {this.state.loggedIn ? <div id="nav-zone" className="zone"><MainNav user={this.state.user}  resetUser={this.resetUser} toggleMenu={this.toggleMenu} closeMenu={this.closeMenu} menuOpen={this.state.menuOpen} /></div> : false}
-          <div id="contents-zone" className="zone">
-            {this.state.loading ? <Loader /> :
-              <main id="mainContents" className={this.state.menuOpen && this.state.loggedIn ? "menuActive" : undefined}>
+        <div className={this.props.user.uid ? 'App logged-in' : 'App logged-off' }>
+          {this.props.user.uid ? <div id="nav-zone" className="zone"><MenuContainer /></div> : false}
+          {this.state.userChecked ?
+            <div id="contents-zone" className="zone">
+              <main id="mainContents" className={this.props.menu.status === "opened" ? "menuActive" : undefined}>
                 <div className="container-fluid no-padding">
-                {this.state.loggedIn ? 
+                {this.props.user.uid ? 
                   <Switch>
                     <Route exact path="/" component={Dashboard}/>
-                    <Route exact path="/settings" component={Settings}/>
-                    <Route exact path="/history" component={History}/>
-                    <Route exact path="/all-routines" component={AllRoutines}/>
-                    <Route path="/edit/:id" component={EditRoutine}/>
-                    <Route exact path="/new-routine" component={NewRoutine}/>
-                    <Route path="/workout/:id" component={Workout}/>
-                    <Redirect from="/workout" to="/all-routines"/>
                     <Redirect from="/login" to="/"/>
                     <Route component={NoMatch}/>
                   </Switch>
                 :
                   <Switch>
-                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/login" component={LoginContainer}/>
                     <Redirect from="/" to="/login"/>
                     <Route component={NoMatch}/>
                   </Switch>
                 }
                 </div>
               </main>
-            }
-          </div>
+            </div>
+            :
+            null
+          }
+
+          <AwareLoader loading="LOADING" />
         </div>
       </BrowserRouter>
     );
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
