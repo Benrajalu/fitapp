@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Timestamper from '../blocks/Timestamper';
-import '../styles/RecordsLogs.css';
+import '../../styles/RecordsLogs.css';
 
 class RecordBadge extends Component {
   constructor(props){
@@ -24,7 +24,7 @@ class RecordBadge extends Component {
         animation:{
           perspective: "800px",
           transformOrigin: '50% 100%',
-          marginBottom: "15px",
+          marginBottom: "0",
           opacity: 1,
           transform: "rotateX(-0deg)"
         }
@@ -39,12 +39,12 @@ class RecordBadge extends Component {
 
     return (
       <div className="records-card" style={this.state.animation}>
+        <div className="value">
+          <p>{data.record.split('kg')[0]}<span>kg</span></p>
+        </div>
         <div className="description">
           <h3 className="title">{trueExercise.name}</h3>
           <Timestamper timestamp={this.props.contents.timestamp.toString().length !== 13 ? this.props.contents.timestamp * 1000 : this.props.contents.timestamp} />
-        </div>
-        <div className="value">
-          <p>{data.record}</p>
         </div>
       </div>
     )

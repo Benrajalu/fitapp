@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
-import WorkoutDetails from '../blocks/WorkoutDetails';
+import WorkoutDetails from '../templates/blocks/WorkoutDetails';
 
 import userData from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';

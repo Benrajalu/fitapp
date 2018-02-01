@@ -39,6 +39,9 @@
           position: relative;
           height: 60px;
           line-height: 60px;
+          &:not(.middle){
+            overflow: hidden;
+          }
           a, button{
             background: transparent;
             padding:0px;
@@ -50,6 +53,9 @@
             text-decoration: none;
             vertical-align: middle;
             width: 100%;
+            transform:translateY(0);
+            transition:all 200ms ease-out;
+            position: relative;
             svg{
               width: 16px;
               height: 16px;
@@ -81,7 +87,7 @@
             }
             &.active{
               &:after{
-                bottom:5px;
+                bottom:-5px;
                 opacity: 1;
               }
             }
@@ -99,9 +105,34 @@
             background: #D42F2F;
             box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.5);
             svg{
-              position: relative;
-              left: 1px;
-              top:1px;
+              position: absolute;
+              left: 50%;
+              top:50%;
+              transform:translateX(-50%) translateY(-50%);
+              margin:-1px 0 0 1px;
+              transition:all 200ms ease-out;
+              opacity: 1;
+              &.alternate{
+                margin:5px 0 0 0px;
+                opacity: 0;
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+        }
+        &.w-workouts{
+          @media (max-width: 720px){
+            li a, li button:not(.trigger){
+              transform:translateY(150%);
+            }
+          }
+          li button.trigger svg{
+            opacity: 0;
+            margin:-5px 0 0 1px;
+            &.alternate{
+              opacity: 1;
+              margin:0px 0 0 0px;
             }
           }
         }
@@ -306,5 +337,12 @@
         color:#000;
       }
     }
+  }
+  .routines-collapse.popin{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 97;
   }
 }

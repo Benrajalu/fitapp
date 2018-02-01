@@ -8,7 +8,9 @@ const mapStateToProps = (state, ownProps) => {
     firebase: state.firebase,
     user: state.user, 
     loading:state.loading, 
-    menu:state.menu
+    menu:state.menu, 
+    routines: state.routines, 
+    exercises: state.exercises
   }
 }
 
@@ -43,7 +45,9 @@ const mapDispatchToProps = dispatch => {
 
 const MenuContainer = connect(
   mapStateToProps, 
-  mapDispatchToProps
+  mapDispatchToProps, 
+  null, 
+  {pure : false}
 )(Nav)
 
 export default MenuContainer

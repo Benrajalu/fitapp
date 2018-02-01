@@ -26,6 +26,23 @@ button{
     border-color:$red;
   }
 
+  svg{
+    width: 10px;
+    height: 10px;
+    margin-right: 4px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &.btn-ghost{
+    border-color: $greyType;
+    color:$greyType;
+    border-radius: 0px;
+    &:hover{
+      color:$white;
+    }
+  }
+
   &.btn-grey{
     background: #2E2E2E;
     border-color: #2E2E2E;

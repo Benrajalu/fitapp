@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow, mount} from 'enzyme';
-import Timestamper from '../blocks/Timestamper';
+import Timestamper from '../templates/blocks/Timestamper';
 
 const testTimestamp = 1504290660, 
       todayStamp = + new Date();
@@ -22,5 +22,5 @@ test('figures out if the date is today', () => {
   );
   
   // Expecting message not to be empty
-  expect(stamp.find('p').text().split(' ')[0]).toEqual("Aujourd'hui");
+  expect(stamp.find('p').text().split(' ')[0]).toEqual("Aujourd’hui");
 });

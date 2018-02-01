@@ -1,60 +1,88 @@
 @import "styles/_mixins.scss";
 
-.records-wrap{
-  position: relative;
-  padding-bottom:30px;
+.mainLogo{
+  text-align: center;
+  line-height: 45px;
+  font-family: 'Questrial';
+  font-size: 25px;
+  color: #fff;
+  margin-bottom: 18px;
+  strong{
+    color:$red;
+  }
+  @media (min-width: 721px){
+    display: none;
+  }
+}
+.dashboard-intro{
+  padding:0 30px;
   margin-bottom: 40px;
-  &:after{
-    content:"";
-    width: 100%;
-    height: 105%;
-    z-index: 1;
-    background: #32374E;
-    position: absolute;
-    right: -20px;
-    top:-20px;
+  h1{
+    font-family: 'Questrial';
+    font-size: 47px;
+    color: #fff;
+    margin-bottom: 17px;
   }
-  > *{
+  p{
+    font-family: 'Questrial';
+    font-size: 14px;
+    color: #fff;
     position: relative;
-    z-index: 2;
-  }
-
-  .empty-state{
-    text-align: right;
-    @include mont(13px, 400, $greyType);
-  }
-
-  .section-title{
-    text-align: right;
-  }
-
-  @media (max-width: $mobile){
-    padding:0 10px 30px;
-    &:after{
-      right: 0px;
+    text-transform: capitalize;
+    &:before{
+      content:"";
+      height: 9px;
+      width: 9px;
+      background: $red;
+      border-radius: 100%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
     }
-    .section-title{
-      text-align: center;
-    }
-    .empty-state{
-      text-align: center;
-    }
-    .records-card{
-      margin:0 auto 15px;
+  }
+  @media (max-width: 350px){
+    padding:0 20px;
+  }
+}
+
+.workout-logs{
+  .header{
+    display: flex;
+    flex-flow:row nowrap;
+    justify-content:space-between;
+    align-items:center;
+    width: 100%;
+    margin-bottom: 20px;
+    p{
+      font-family: "Questrial";
+      font-size: 16px;
+      color:$white;
+      strong{
+        color:$red;
+      }
+      @media (max-width: 350px){
+        font-size: 14px;
+      }
     }
   }
 }
 
-.past-workouts-list{
-  margin-bottom: 60px;
-  .stats{
-    margin-bottom: 30px;
+.records-title{
+  font-family: "Questrial";
+  font-size: 16px;
+  color:$white;
+  margin-bottom: 20px;
+  strong{
+    color:$red;
   }
-  .btn{
-    margin-bottom: 15px;
+  @media (max-width: 350px){
+    font-size: 14px;
   }
 }
 
+.workout-logs-list{
+  margin-bottom: 40px;
+}
 
 .Dashboard, .History{
   .animation-introduction{

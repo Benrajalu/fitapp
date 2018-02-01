@@ -11,9 +11,13 @@ import {authenticateUser, resetUser} from './actions/UserActions';
 import AwareLoader from "./templates/containers/AwareLoader.js"; 
 import MenuContainer from "./templates/containers/MenuContainer.js"; 
 
+// Make sure page is on top when loaded
+import ScrollToTop from './templates/blocks/ScrollToTop.js';
+
 // Pages
 import LoginContainer from './templates/containers/LoginContainer.js';
 import Dashboard from './templates/pages/Dashboard.js';
+import History from './templates/pages/History.js';
 import NoMatch from './templates/pages/NoMatch.js';
 
 import './styles/placeholder.css';
@@ -23,7 +27,8 @@ const mapStateToProps = state => {
   return{
     user: state.user, 
     loading: state.loading, 
-    menu:state.menu
+    menu:state.menu, 
+    routines: state.routines
   }
 };
 // Passing the various actions needed at this stage from the store through the props
@@ -136,34 +141,37 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className={this.props.user.uid ? 'App logged-in' : 'App logged-off' }>
-          {this.props.user.uid ? <div id="nav-zone" className="zone"><MenuContainer /></div> : false}
-          {this.state.userChecked ?
-            <div id="contents-zone" className="zone">
-              <main id="mainContents" className={this.props.menu.status === "opened" ? "menuActive" : undefined}>
-                <div className="container-fluid no-padding">
-                {this.props.user.uid ? 
-                  <Switch>
-                    <Route exact path="/" component={Dashboard}/>
-                    <Redirect from="/login" to="/"/>
-                    <Route component={NoMatch}/>
-                  </Switch>
-                :
-                  <Switch>
-                    <Route exact path="/login" component={LoginContainer}/>
-                    <Redirect from="/" to="/login"/>
-                    <Route component={NoMatch}/>
-                  </Switch>
-                }
-                </div>
-              </main>
-            </div>
-            :
-            null
-          }
+        <ScrollToTop>
+          <div className={this.props.user.uid ? 'App logged-in' : 'App logged-off' }>
+            {this.props.user.uid ? <div id="nav-zone" className="zone"><MenuContainer /></div> : false}
+            {this.state.userChecked ?
+              <div id="contents-zone" className="zone">
+                <main id="mainContents" className={this.props.menu.status === "opened" ? "menuActive" : undefined}>
+                  <div className="container-fluid no-padding">
+                  {this.props.user.uid ? 
+                    <Switch>
+                      <Route exact path="/" component={Dashboard}/>
+                      <Route exact path="/history" component={History}/>
+                      <Redirect from="/login" to="/"/>
+                      <Route component={NoMatch}/>
+                    </Switch>
+                  :
+                    <Switch>
+                      <Route exact path="/login" component={LoginContainer}/>
+                      <Redirect from="/" to="/login"/>
+                      <Route component={NoMatch}/>
+                    </Switch>
+                  }
+                  </div>
+                </main>
+              </div>
+              :
+              null
+            }
 
-          <AwareLoader loading="LOADING" />
-        </div>
+            <AwareLoader loading="LOADING" />
+          </div>
+        </ScrollToTop>
       </BrowserRouter>
     );
   }

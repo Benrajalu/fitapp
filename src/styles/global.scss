@@ -6,7 +6,9 @@ body, html{
 }
 
 .logged-in #mainContents{
-  padding-top: 30px;
+  @media (min-width: 721px){
+    padding-top: 30px;
+  }
 }
 
 .align-right{

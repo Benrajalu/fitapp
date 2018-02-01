@@ -1,3 +1,7 @@
+import {watchLogs, watchRecords} from './WorkoutLogActions';
+import {watchRoutines} from './RoutinesActions';
+import {watchExercises} from './ExercisesActions';
+
 // Login actions
 export const setUserName = (displayName) => ({
     type: 'SET_USER_NAME', 
@@ -46,6 +50,10 @@ export function authenticateUser(data) {
     dispatch(setUserProfilePicture(profilePicture));
     dispatch(setUserSettings(settings));
     dispatch(setUserUid(uid));
+    dispatch(watchLogs());
+    dispatch(watchRoutines());
+    dispatch(watchExercises());
+    dispatch(watchRecords());
   }
 }
 

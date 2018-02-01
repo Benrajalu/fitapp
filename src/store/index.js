@@ -1,5 +1,5 @@
-import { createStore, compose, applyMiddleware } from 'redux'
-import { reduxFirestore } from 'redux-firestore'
+import { createStore, applyMiddleware } from 'redux' // Use compose if need firebase again
+//import { reduxFirestore } from 'redux-firestore'
 import firebase from 'firebase'
 import 'firebase/firestore'
 
@@ -18,16 +18,11 @@ firebase.initializeApp(config);
 // Initialize Cloud Firestore through Firebase
 firebase.firestore();
 
-// Add reduxFirestore store enhancer to store creator
-const createStoreWithFirebase = compose(
-  reduxFirestore(firebase), // firebase instance as first argument
-)(createStore);
-
 
 
 // Create store with reducers and initial state
 const initialState = {};
-export const store = createStoreWithFirebase(
+export const store = createStore(
   rootReducer, 
   initialState,
   applyMiddleware(thunk, logger)

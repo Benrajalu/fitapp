@@ -1,53 +1,103 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Routines from '../blocks/Routines';
 
-import '../styles/modals.css';
+import '../../styles/modals.css';
 
 class RoutineLauncherModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animate: " animate"
+      hideRoutines: false
     }
-    this.closeModal = this.closeModal.bind(this);
+    this.applyOrder = this.applyOrder.bind(this);
   }
-  componentDidMount() {
-    const _this = this;
-    setTimeout(function(){
-      _this.setState({
-        animate: false
-      })
-    }, 100);
-  }
-  closeModal() {
+
+  applyOrder(value, event){
+    event.preventDefault();
     const _this = this;
     this.setState({
-      animate: " animate"
+      hideRoutines: true
     });
-    setTimeout(function(){
-      // References the parent method for displaying a modal that's in Dashboard.js
-      _this.props.modalCloser();
-    }, 300);
+    setTimeout(() => {
+      _this.setState({
+        hideRoutines: false
+      })
+    }, 100);
+    if (value !== "none"){
+      this.setState({
+        order:value
+      });
+    }
+    else{
+      this.setState({
+        order:false
+      });
+    }
   }
 
   render() {
-    const displayStatus = this.props.shouldAppear;
+    const displayStatus = this.props.menu.workouts;
+    let routines =[];
+    if(this.props.routinesList.length > 0 && this.props.routinesList){
+      routines = this.props.routinesList.sort((a, b) => {
+        var c, d;
+        switch(this.state.order){
+          case 'low-use':
+            c = new Date(a.lastPerformed);
+            d = new Date(b.lastPerformed);
+          break;
+
+          case 'new': 
+            c = new Date(a.dateCreated);
+            d = new Date(b.dateCreated);
+          break;
+
+          case 'old':
+            c = new Date(a.dateCreated);
+            d = new Date(b.dateCreated);
+          break;
+
+          default:
+            c = new Date(a.lastPerformed);
+            d = new Date(b.lastPerformed);
+        }
+
+        if(this.state.order === 'low-use' || this.state.order === 'old'){
+          return c<d ? -1 : c>d ? 1 : 0;
+        }
+        else{
+          return c>d ? -1 : c<d ? 1 : 0;
+        }
+
+      });
+    }
 
     return (
-      <div className={"routineLauncher popin " + displayStatus + this.state.animate}>
+      <div className={"popin routines-collapse " + displayStatus}>
         <div className="modal-header">
           <div className="container">
-            <p className="title">Choisissez un entraînement</p>
-            <button className="closer" onClick={this.closeModal}>Fermer</button>
+            <p className="title">Choisir une routine</p>
+            <button className="closer" onClick={this.props.closeModal.bind(this)}><FontAwesomeIcon icon={['far', 'times']} size="1x" /></button>
+          </div>
+        </div>
+        <div className="modal-options">
+          <div className="container">
+            <ul className="options">
+              <li><button className={!this.state.order ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'none')}><span>Utilisation la plus récente</span></button></li>
+              <li><button className={this.state.order && this.state.order === "low-use" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'low-use')}><span>Utilisation la moins récente</span></button></li>
+              <li><button className={this.state.order && this.state.order === "new" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'new')}><span>Création la plus récente</span></button></li>
+              <li><button className={this.state.order && this.state.order === "old" ? "filter active" : "filter"} onClick={this.applyOrder.bind(this, 'old')}><span>Création la moins récente</span></button></li>
+            </ul>
           </div>
         </div>
         <div className="modal-contents">
           { this.props.routinesList.length !== 0 ?
             <div className="container">
-              <Routines list={this.props.routinesList} exercisesDatabase={this.props.exercises} />
+              {this.state.hideRoutines ? false : <Routines list={routines} exercisesDatabase={this.props.exercises} user={this.props.user} closeModal={this.props.closeModal}/>}
             </div>
           :
             <div className="container">
@@ -64,7 +114,6 @@ class RoutineLauncherModal extends Component {
 }
 
 RoutineLauncherModal.propTypes = {
-  shouldAppear: PropTypes.string.isRequired,  
   routinesList: PropTypes.array.isRequired,  
   exercises: PropTypes.array.isRequired,  
 }

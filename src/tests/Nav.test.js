@@ -2,25 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow} from 'enzyme';
-import Nav from '../blocks/Nav';
-import UserLog from '../blocks/UserLog';
+import Nav from '../templates/blocks/Nav';
+import UserLog from '../templates/blocks/UserLog';
 
 import users from '../data/users.json';
+import exercises from '../data/exercises.json';
 
 import FontAwesome from './fontawesome-all.min.js';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <MemoryRouter>
-      <Nav />
-    </MemoryRouter>, 
-  div);
-});
-
 test('has 4 menu entries', () => {
+  const menuProps ={
+    status: "closed", 
+    workouts: "closed", 
+    layout: "default"
+  };
+  const routineProps={
+    routines: users[0].routines
+  };
+  const exercisesProps={
+    list: exercises
+  }
   const dash = shallow(
-    <Nav />
+    <Nav menu={menuProps} routines={routineProps} exercises={exercisesProps}/>
   );
   
   // Expecting to find 5 menu entries
