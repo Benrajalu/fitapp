@@ -1,18 +1,20 @@
-@import "styles/_mixins.scss";
+@import 'styles/_mixins.scss';
 
-.empty-workouts{
+.empty-workouts,
+.routine-detail.empty {
   background: linear-gradient(180deg, #262626 58%, #383838 100%);
-  padding:30px;
+  padding: 30px;
   text-align: center;
   margin-bottom: 30px;
   width: 100%;
-  p{
+  display: block;
+  p {
     @include mont(13px, 400, $greyType);
     margin-bottom: 15px;
   }
 }
 
-.routine-detail{
+.routine-detail {
   /* Rectangle */
   background: linear-gradient(180deg, #262626 58%, #383838 100%);
   box-shadow: inset 0px -2px 4px rgba(0, 0, 0, 0.55);
@@ -20,176 +22,176 @@
   overflow: hidden;
   margin-bottom: 30px;
   display: flex;
-  flex-flow:column;
-  align-items:stretch;
-  justify-content:flex-start;
-  transition:all 300ms ease-out;
-  .routine-heading{
-    padding:15px;
+  flex-flow: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  transition: all 300ms ease-out;
+  .routine-heading {
+    padding: 15px;
     border-bottom: 1px solid #191919;
     position: relative;
     display: flex;
-    flex-flow:row nowrap;
-    justify-content:space-between;
-    align-items:center;
-    button{
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    button {
       background: transparent;
-      margin:0px;
+      margin: 0px;
       cursor: pointer;
-      border:0px;
-      &.description{
+      border: 0px;
+      &.description {
         text-align: left;
       }
     }
-    p{
+    p {
       @include mont(10px, 500, $greyType);
       text-transform: uppercase;
       line-height: 1;
       margin-bottom: 3px;
-      @media (max-width: $mobile){
+      @media (max-width: $mobile) {
         font-size: 10px;
       }
     }
-    .title{
+    .title {
       @include mont(13px, 500, $white);
       text-transform: uppercase;
       padding-right: 20px;
-      @media (max-width: $mobile){
+      @media (max-width: $mobile) {
         font-size: 15px;
       }
     }
-    ul{
+    ul {
       display: flex;
       overflow: auto;
-      flex-flow:row nowrap;
+      flex-flow: row nowrap;
       margin-top: 3px;
       width: 100%;
-      li{
+      li {
         @include mont(10px, 600, $greyType);
         white-space: nowrap;
-        &:after{
-          content:"•";
+        &:after {
+          content: '•';
           display: inline-block;
           vertical-align: middle;
-          margin:0 3px;
+          margin: 0 3px;
         }
-        &:last-child{
-          &:after{
+        &:last-child {
+          &:after {
             display: none;
           }
         }
       }
     }
 
-    &.with-actions{
+    &.with-actions {
       display: flex;
       width: 100%;
-      flex-direction:row;
-      flex-wrap:nowrap;
-      justify-content:space-between;
-      align-items:center;
-      padding:0px 10px;
-      .description{
-        padding:20px 15px 20px 20px;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0px 10px;
+      .description {
+        padding: 20px 15px 20px 20px;
         position: relative;
         overflow: hidden;
-        color:$white;
-        flex-grow:2;
-        .icon{
+        color: $white;
+        flex-grow: 2;
+        .icon {
           position: absolute;
-          top:50%;
+          top: 50%;
           left: 0px;
-          transform:translateY(-50%);
-          color:$white;
-          svg{
+          transform: translateY(-50%);
+          color: $white;
+          svg {
             width: 13px;
             height: 13px;
-            transform:rotate(0deg);
-            transition:all 300ms ease-out;
-            transform-origin:center center
+            transform: rotate(0deg);
+            transition: all 300ms ease-out;
+            transform-origin: center center;
           }
         }
-        &.open{
-          .icon svg{
-            transform:rotate(-180deg);
+        &.open {
+          .icon svg {
+            transform: rotate(-180deg);
           }
         }
       }
-      .action{
+      .action {
         cursor: pointer;
-        border:0px;
+        border: 0px;
         height: 28px;
         background: $red;
         box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 40px;
         display: flex;
-        align-items:center;
-        justify-content:center;
-        padding:15px;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
         text-decoration: none;
         @include mont(10px, 500, $white);
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        transition:all 200ms ease-out;
+        transition: all 200ms ease-out;
         width: 83px;
         min-width: 83px;
         white-space: nowrap;
-        svg{
+        svg {
           width: 10px;
           height: 10px;
           margin-right: 6px;
         }
-        &:hover{
+        &:hover {
           background: $blue;
         }
       }
     }
   }
 
-  .routine-body{
-    flex-grow:2;
-    .routine-log{
-      min-width:220px;
+  .routine-body {
+    flex-grow: 2;
+    .routine-log {
+      min-width: 220px;
       background: #171717;
       //border: 1px solid #292929;
       margin-right: 11px;
       border-radius: 3px;
       overflow: hidden;
-      .description{
-        padding:9px;
+      .description {
+        padding: 9px;
       }
-      .report{
-        padding:9px;
+      .report {
+        padding: 9px;
         border-top: 1px solid #292929;
-        p{
+        p {
           @include mont(11px, 700, $greyType);
-          strong{
-            color:$white;
+          strong {
+            color: $white;
             letter-spacing: 1px;
           }
-          span{
-            color:$red;
+          span {
+            color: $red;
           }
         }
       }
-      .progress-bar{
+      .progress-bar {
         position: relative;
         height: 5px;
         background: #454545;
         box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
         margin-bottom: 4px;
-        .progress{
+        .progress {
           position: absolute;
-          top:0px;
+          top: 0px;
           left: 0px;
           height: 100%;
           background: $red;
         }
       }
-      .header{
+      .header {
         display: block;
         margin-bottom: 8px;
-        .exercise-name{
+        .exercise-name {
           @include mont(11px, 700, $white);
           margin-bottom: 4px;
           white-space: nowrap;
@@ -198,40 +200,40 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        p{
+        p {
           @include mont(8px, 400, $greyType);
           text-transform: uppercase;
         }
       }
-      .objectives{
+      .objectives {
         border-top: 1px solid $red;
         display: flex;
-        flex-flow:row nowrap;
+        flex-flow: row nowrap;
         margin-bottom: 8px;
-        justify-content:space-between;
-        align-items:flex-start;
-        p{
+        justify-content: space-between;
+        align-items: flex-start;
+        p {
           @include mont(9px, 500, $greyType);
           padding-top: 7px;
           position: relative;
-          strong{
+          strong {
             display: block;
             @include mont(13px, 500, $white);
             margin-bottom: 2px;
           }
         }
-        .units{
+        .units {
           display: flex;
-          flex-flow:row nowrap;
-          justify-content:flex-end;
-          align-items:flex-start;
-          flex-grow:2;
+          flex-flow: row nowrap;
+          justify-content: flex-end;
+          align-items: flex-start;
+          flex-grow: 2;
           max-width: 120px;
-          p{
+          p {
             margin-left: 20px;
             text-align: right;
-            &:before{
-              content:"";
+            &:before {
+              content: '';
               width: 1px;
               height: 4px;
               background: $red;
@@ -243,31 +245,31 @@
           }
         }
       }
-      .status{
+      .status {
         margin-bottom: 8px;
-        &:last-child{
+        &:last-child {
           margin-bottom: 0px;
         }
       }
     }
 
-    &.log{
+    &.log {
       display: flex;
-      flex-direction:row;
-      flex-wrap:nowrap;
+      flex-direction: row;
+      flex-wrap: nowrap;
       -webkit-overflow-scrolling: touch;
       -ms-overflow-style: -ms-autohiding-scrollbar;
-      justify-content:flex-start;
-      align-items:stretch;
+      justify-content: flex-start;
+      align-items: stretch;
       overflow: auto;
-      .routine-breakdown{
-        width:95px;
-        padding:15px 18px;
-        box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
-        p{
+      .routine-breakdown {
+        width: 95px;
+        padding: 15px 18px;
+        box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+        p {
           @include mont(11px, 500, $greyType);
           margin-bottom: 8px;
-          strong{
+          strong {
             display: block;
             color: $white;
             font-size: 15px;
@@ -275,86 +277,75 @@
           }
         }
       }
-      .routine-exercices{
-        flex-grow:2;
+      .routine-exercices {
+        flex-grow: 2;
         display: flex;
-        flex-direction:row;
-        flex-wrap:nowrap;
+        flex-direction: row;
+        flex-wrap: nowrap;
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        justify-content:flex-start;
-        align-items:stretch;
+        justify-content: flex-start;
+        align-items: stretch;
         overflow: auto;
-        box-sizing:border-box;
-        padding:15px;
-        .list{
+        box-sizing: border-box;
+        padding: 15px;
+        .list {
           display: flex;
-          flex-direction:row;
-          flex-wrap:nowrap;
+          flex-direction: row;
+          flex-wrap: nowrap;
         }
       }
     }
 
-    &.workout{
-      padding:10px;
+    &.workout {
+      padding: 10px;
     }
 
-    &.details{
+    &.details {
       display: flex;
-      flex-direction:column;
-      justify-content:space-between;
-      align-items:center;
-      justify-content:flex-start;
-      padding:20px 15px;
-      .routine-log{
-        flex:0 0 auto;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 15px;
+      .routine-log {
+        flex: 0 0 auto;
         display: block;
-        width:100%;
-        padding:0px;
-        margin:0px auto 12px;
+        width: 100%;
+        padding: 0px;
+        margin: 0px auto 12px;
         border-right: 0px;
         overflow: hidden;
         position: relative;
-        &:last-child{
+        &:last-child {
           margin-bottom: 0px;
         }
       }
     }
   }
 
-  .routine-footer{
-    border-top: 1px solid #32374E;
-    display:flex;
-    flex-flow:row nowrap;
-    justify-content:flex-end;
-    align-items:center;
-    padding:0px 0px;
-    background:#383E59;
-    .btn{
-      padding:11px 8px;
+  .routine-footer {
+    border-top: 1px solid #000;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px 0px;
+    background: #151616;
+    .btn {
+      padding: 14px 15px;
       margin-bottom: 0px;
-      border:0px;
-      margin:0px;
+      border: 0px;
+      margin: 0px;
       font-weight: 300;
       border-radius: 0px;
     }
   }
 
-  &.empty{
-    text-align: center;
-    padding:40px 15px;
-    background: transparent;
-    width: 100%;
-    p{
-      @include mont(12, 700, $greyType);
-      margin-bottom: 20px;
-    }
-  }
-
-  @media (max-width: 400px){
-    .routine-body{
-      .routine-log{
-        width:90%;
+  @media (max-width: 400px) {
+    .routine-body {
+      .routine-log {
+        width: 90%;
         min-width: 180px;
         //flex:0 0 70%;
       }
@@ -362,8 +353,8 @@
   }
 }
 
-.popin{
-  .routine-detail{
+.popin {
+  .routine-detail {
     border-radius: 7px;
   }
 }

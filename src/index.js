@@ -8,8 +8,9 @@ import { store } from './store/index';
 import './styles/global.css';
 
 ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>
-    , document.getElementById('root'));
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();

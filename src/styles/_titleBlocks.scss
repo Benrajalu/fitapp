@@ -1,4 +1,4 @@
-.page-header{
+.page-header {
   margin-bottom: 40px;
   font-family: 'Questrial';
   font-size: 47px;
@@ -6,11 +6,50 @@
   margin-bottom: 17px;
 }
 
-.section-title{
+.page-intro {
+  /* Rectangle 2 */
+  //background: linear-gradient(180.88deg, #1c1c1c 3.82%, #2b2b2b 98.18%);
+  padding: 25px 0px;
+  .container {
+    display: block;
+  }
+  .page-header {
+    margin-bottom: 0px;
+    font-size: 37px;
+  }
+  a {
+    @include mont(11px, 500, $greyType);
+    text-transform: uppercase;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+    svg {
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      display: inline-block;
+      position: relative;
+      left: 0px;
+      top: -1px;
+      transition: all 200ms ease-out;
+    }
+    &:hover {
+      svg {
+        left: -2px;
+      }
+    }
+  }
+  @media (min-width: 721px) {
+    margin-top: -30px;
+    padding: 35px 0px;
+  }
+}
+
+.section-title {
   @include mont(18px, 700, $white);
   text-transform: uppercase;
   margin-bottom: 25px;
-  @media (max-width: $mobile){
+  @media (max-width: $mobile) {
     font-size: 16px;
   }
 }

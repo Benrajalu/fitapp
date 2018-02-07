@@ -1,16 +1,19 @@
-import { createStore, applyMiddleware } from 'redux' // Use compose if need firebase again
+import { createStore, applyMiddleware } from 'redux'; // Use compose if need firebase again
 //import { reduxFirestore } from 'redux-firestore'
-import firebase from 'firebase'
-import 'firebase/firestore'
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 import rootReducer from '../reducers/index';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger'
+import logger from 'redux-logger';
+
+import userData from '../data/users.json';
+import exercisesDatabase from '../data/exercises.json';
 
 const config = {
-  apiKey: "AIzaSyCk5jCqyW5yNP32nTn5yha6PEi2wSFuCKg",
-  authDomain: "fit-app-io.firebaseapp.com",
-  projectId: "fit-app-io"
+  apiKey: 'AIzaSyCk5jCqyW5yNP32nTn5yha6PEi2wSFuCKg',
+  authDomain: 'fit-app-io.firebaseapp.com',
+  projectId: 'fit-app-io'
 };
 
 firebase.initializeApp(config);
@@ -18,13 +21,23 @@ firebase.initializeApp(config);
 // Initialize Cloud Firestore through Firebase
 firebase.firestore();
 
-
-
 // Create store with reducers and initial state
 const initialState = {};
 export const store = createStore(
-  rootReducer, 
+  rootReducer,
   initialState,
+  applyMiddleware(thunk, logger)
+);
+
+// Test store for, well, tests
+const fakeInitialState = {
+  routines: {
+    routines: userData[0].routines
+  }
+};
+export const fakeStore = createStore(
+  rootReducer,
+  fakeInitialState,
   applyMiddleware(thunk, logger)
 );
 

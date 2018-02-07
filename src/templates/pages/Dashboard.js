@@ -6,7 +6,6 @@ import WeeklyCounterContainer from '../containers/WeeklyCounterContainer';
 import WorkoutsHistoryContainer from '../containers/WorkoutsHistoryContainer';
 import RecordsHistoryContainer from '../containers/RecordsHistoryContainer';
 
-
 import '../../styles/Dashboard.css';
 
 class Dashboard extends Component {
@@ -17,22 +16,22 @@ class Dashboard extends Component {
     };
   }
 
-
-  componentDidMount(){
-    document.title = "FitApp. - Dashboard";
+  componentDidMount() {
+    document.title = 'FitApp. - Dashboard';
     const _this = this;
     setTimeout(() => {
       _this.setState({
-        mounted:true
+        mounted: true
       });
     }, 200);
   }
 
-
   render() {
     return (
-      <div className={this.state.mounted ? "Dashboard loaded" : "Dashboard"}>
-        <p className="mainLogo">fit<strong>app</strong></p>
+      <div className={this.state.mounted ? 'Dashboard loaded' : 'Dashboard'}>
+        <p className="mainLogo">
+          fit<strong>app</strong>
+        </p>
         <div className="container">
           <DashboardIntroContainer />
         </div>
@@ -41,7 +40,9 @@ class Dashboard extends Component {
           <div className="large-9 medium-8 columns workout-logs">
             <div className="header">
               <WeeklyCounterContainer />
-              <NavLink to="/history" strict exact className="btn btn-default">Historique</NavLink>
+              <NavLink to="/history" strict exact className="btn btn-default">
+                Historique
+              </NavLink>
             </div>
             <WorkoutsHistoryContainer limit="week" />
           </div>
@@ -51,7 +52,7 @@ class Dashboard extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

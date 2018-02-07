@@ -2,33 +2,38 @@ import React, { Component } from 'react';
 
 import WorkoutsHistoryContainer from '../containers/WorkoutsHistoryContainer';
 import RecordsHistoryContainer from '../containers/RecordsHistoryContainer';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
 class History extends Component {
   constructor(props) {
     super(props);
-    this.state={
-      mounted:false
-    }
+    this.state = {
+      mounted: false
+    };
     /*this.displayModal = this.displayModal.bind(this);*/
   }
 
-  componentDidMount(){
-    document.title = "FitApp. - Historique de vos entraînements";
+  componentDidMount() {
+    document.title = 'FitApp. - Historique de vos entraînements';
     const _this = this;
     setTimeout(() => {
       _this.setState({
-        mounted:true
+        mounted: true
       });
-    }, 200)
+    }, 200);
   }
-
 
   render() {
     return (
-      <div className={this.state.mounted ? "History loaded" : "History"}>
-        <p className="mainLogo">fit<strong>app</strong></p>
-        <div className="container">
-          <h1 className="page-header">Historique</h1>
+      <div className={this.state.mounted ? 'History loaded' : 'History'}>
+        <div className="container-fluid page-intro">
+          <div className="container">
+            <Link to="/">
+              <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
+            </Link>
+            <h1 className="page-header">Historique</h1>
+          </div>
         </div>
 
         <div className="container">
@@ -42,7 +47,7 @@ class History extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
