@@ -1,4 +1,4 @@
-@import 'styles/_mixins.scss';
+@import "styles/_mixins.scss";
 
 .empty-workouts,
 .routine-detail.empty {
@@ -48,6 +48,7 @@
       text-transform: uppercase;
       line-height: 1;
       margin-bottom: 3px;
+      text-align: right;
       @media (max-width: $mobile) {
         font-size: 10px;
       }
@@ -70,7 +71,7 @@
         @include mont(10px, 600, $greyType);
         white-space: nowrap;
         &:after {
-          content: '•';
+          content: "•";
           display: inline-block;
           vertical-align: middle;
           margin: 0 3px;
@@ -233,7 +234,7 @@
             margin-left: 20px;
             text-align: right;
             &:before {
-              content: '';
+              content: "";
               width: 1px;
               height: 4px;
               background: $red;
@@ -349,6 +350,48 @@
         min-width: 180px;
         //flex:0 0 70%;
       }
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  flex-flow: row nowrap;
+  overflow: auto;
+  align-items: center;
+  margin-bottom: 15px;
+  .legend {
+    font-family: "Questrial";
+    font-size: 10px;
+    color: $greyType;
+    padding-right: 10px;
+    text-transform: uppercase;
+  }
+  button {
+    display: block;
+    background: #2f2e33;
+    border-radius: 100%;
+    text-transform: uppercase;
+    border: 1px solid #2f2e33;
+    text-align: center;
+    font-family: "Questrial";
+    font-size: 10px;
+    color: $white;
+    margin-right: 5px;
+    width: 30px;
+    height: 30px;
+    line-height: 28px;
+    padding: 0px;
+    transition: all 200ms ease-out;
+    &:hover {
+      background: transparent;
+    }
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      width: 15px;
+      height: 15px;
     }
   }
 }

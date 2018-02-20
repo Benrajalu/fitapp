@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import ReactCrop from "react-image-crop";
 import { connect } from "react-redux";
 import { database } from "../../store/";
