@@ -1,8 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { connect } from 'react-redux';
+import { watchRoutines } from '../../actions/RoutinesActions';
+import { changeLayout } from '../../actions/MenuActions';
 
 import RoutineMaker from '../blocks/RoutineMaker';
+
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    menu: state.menu,
+    routines: state.routines,
+    exercises: state.exercises
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    watchRoutines: () => {
+      dispatch(watchRoutines());
+    },
+    changeLayout: layout => {
+      dispatch(changeLayout(layout));
+    }
+  };
+};
 
 class NewRoutine extends Component {
   constructor(props) {
@@ -40,11 +63,18 @@ class NewRoutine extends Component {
         </div>
 
         <div className="container animation-contents">
-          <RoutineMaker postHandler={this.handleFormPost} />
+          <RoutineMaker
+            postHandler={this.handleFormPost}
+            user={this.props.user}
+            exercises={this.props.exercises.list}
+            menuState={this.props.menu}
+            toggleMenu={this.props.changeLayout}
+            watchRoutines={this.props.watchRoutines}
+          />
         </div>
       </div>
     );
   }
 }
 
-export default NewRoutine;
+export default connect(mapStateToProps, mapDispatchToProps)(NewRoutine);

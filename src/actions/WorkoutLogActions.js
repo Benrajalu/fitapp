@@ -1,49 +1,67 @@
-import {database} from '../store/';
+import { database } from "../store/";
 
 // Logs actions
-export const getAllLogs = (newLogs) => ({
-    type: 'GET_ALL_LOGS', 
-    workoutLogs: newLogs
+export const getAllLogs = newLogs => ({
+  type: "GET_ALL_LOGS",
+  workoutLogs: newLogs
+});
+export const resetLogs = () => ({
+  type: "RESET_LOGS",
+  workoutLogs: []
 });
 
 // Records actions
-export const getAllRecords = (newRecords) => ({
-    type: 'GET_ALL_RECORDS', 
-    records: newRecords
+export const getAllRecords = newRecords => ({
+  type: "GET_ALL_RECORDS",
+  records: newRecords
+});
+export const resetRecords = newRecords => ({
+  type: "RESET_RECORDS",
+  records: []
 });
 
 export function watchLogs() {
   // Redux Thunk will inject dispatch here:
   return (dispatch, getState) => {
     const user = getState().user.uid;
-    
-    database.collection('users').doc(user).collection('workoutLog').get().then((snapshot) => {
-      const output = [];
-      snapshot.forEach((doc) => {
-        let data = doc.data();
-            data.id = doc.id;
-        output.push(data);
+
+    database
+      .collection("users")
+      .doc(user)
+      .collection("workoutLog")
+      .get()
+      .then(snapshot => {
+        const output = [];
+        snapshot.forEach(doc => {
+          let data = doc.data();
+          data.id = doc.id;
+          output.push(data);
+        });
+        dispatch(getAllLogs(output));
       });
-      dispatch(getAllLogs(output));
-    });
-  }
+  };
 }
 
 export function watchRecords() {
   // Redux Thunk will inject dispatch here:
   return (dispatch, getState) => {
     const user = getState().user.uid;
-    
-    database.collection('users').doc(user).collection('personalRecords').get().then((snapshot) => {
-      const output = [];
-      snapshot.forEach((doc) => {
-        let data = doc.data();
-            data.id = doc.id;
-        output.push(data);
+
+    database
+      .collection("users")
+      .doc(user)
+      .collection("personalRecords")
+      .get()
+      .then(snapshot => {
+        const output = [];
+        snapshot.forEach(doc => {
+          let data = doc.data();
+          data.id = doc.id;
+          output.push(data);
+        });
+        dispatch(getAllRecords(output));
       });
-      dispatch(getAllRecords(output));
-    });
-  }
+  };
 }
 
 /*export function resetUser() {

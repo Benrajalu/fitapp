@@ -1,32 +1,32 @@
-button{
+button {
   cursor: pointer;
-  &:focus{
-    outline:0;
+  &:focus {
+    outline: 0;
   }
-  &:disabled{
-    cursor:default;
+  &:disabled {
+    cursor: default;
   }
 }
-.btn{
-  padding:0px;
+.btn {
+  padding: 0px;
   line-height: 1;
-  margin:0px;
+  margin: 0px;
   text-decoration: none;
   display: inline-block;
   border: 1px solid $white;
   border-radius: 3px;
   text-align: center;
-  padding:5px 10px;
+  padding: 5px 10px;
   background: transparent;
-  transition:all 200ms ease-out;
+  transition: all 200ms ease-out;
   @include mont(12px, 300, $white);
   cursor: pointer;
-  &:hover:not(:disabled){
+  &:hover:not(:disabled) {
     background: $red;
-    border-color:$red;
+    border-color: $red;
   }
 
-  svg{
+  svg {
     width: 10px;
     height: 10px;
     margin-right: 4px;
@@ -34,129 +34,155 @@ button{
     vertical-align: middle;
   }
 
-  &.btn-ghost{
+  &.no-border {
+    border: 0px;
+  }
+
+  &.btn-ghost {
     border-color: $greyType;
-    color:$greyType;
+    color: $greyType;
     border-radius: 0px;
-    &:hover{
-      color:$white;
+    &:hover {
+      color: $white;
     }
   }
 
-  &.btn-grey{
-    background: #2E2E2E;
-    border-color: #2E2E2E;
+  &.submit-button {
+    display: block;
+    margin: 0 auto 15px;
+    width: 100%;
+    background: #2e2e2e;
+    border-color: #2e2e2e;
     color: $white;
-    &:hover{
+    padding: 10px 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 700;
+    &:hover {
       border-color: $white;
-      background:transparent;
-      color:#2E2E2E;
+      background: #000;
+      color: $red;
     }
   }
 
-  &.facebook{
+  &.btn-grey {
+    background: #2e2e2e;
+    border-color: #2e2e2e;
+    color: $white;
+    &:hover {
+      border-color: $white;
+      background: transparent;
+      color: #2e2e2e;
+    }
+  }
+
+  &.facebook {
     background: #3b5998;
     border-color: #3b5998;
-    &:hover{
+    &:hover {
       background: transparent;
+      color: #3b5998;
+      border-color: #3b5998;
     }
   }
-  &.google{
+  &.google {
     background: #dd4b39;
     border-color: #dd4b39;
-    &:hover{
+    &:hover {
       background: transparent;
+      color: #dd4b39;
+      border-color: #dd4b39;
     }
   }
 
-  &.btn-caps{
+  &.btn-caps {
     text-transform: uppercase;
   }
 
-  &.btn-green{
+  &.btn-green {
     background: $green;
-    &:hover:not(:disabled){
+    &:hover:not(:disabled) {
       background: transparent;
     }
   }
 
-  &.btn-danger{
+  &.btn-danger {
     border-color: $red;
-    color:$red;
+    color: $red;
     font-weight: 300;
     letter-spacing: 0.5px;
-    &:hover:not(:disabled){
+    &:hover:not(:disabled) {
       background: $red;
-      color:$white;
+      color: $white;
     }
-    &:disabled{
-      color:$greyType;
+    &:disabled {
+      color: $greyType;
       border-color: $greyType;
     }
   }
 
-  &.btn-transparent{
+  &.btn-transparent {
     border-color: transparent;
-    &:hover{
-      color:$green;
+    &:hover {
+      color: $green;
       background-color: transparent;
     }
   }
 
-  &.btn-size-s{
+  &.btn-size-s {
     font-size: 10px;
-    padding:5px 10px;
+    padding: 5px 10px;
     letter-spacing: 0.5px;
   }
 
-  &.btn-block{
+  &.btn-block {
     display: block;
     width: 100%;
   }
 
-  &.btn-big{
-    padding:15px 10px;
+  &.btn-big {
+    padding: 15px 10px;
     font-size: 14px;
     text-transform: uppercase;
     border-radius: 0px;
-    &.w-radius{
+    &.w-radius {
       border-radius: 3px;
     }
-    &:hover:not(:disabled){
-      background:$blue;
-      border-color:$blue;
+    &:hover:not(:disabled) {
+      background: $blue;
+      border-color: $blue;
     }
   }
 
-  &:disabled{
+  &:disabled {
     cursor: default;
-    opacity:0.5;
+    opacity: 0.5;
   }
 
-  @media (max-width: $mobile){
+  @media (max-width: $mobile) {
     font-size: 11px;
   }
 }
 
-.value-button{
+.value-button {
   display: inline-block;
   height: 30px;
   width: 30px;
-  background: #32374E;
+  background: #32374e;
   border-radius: 100%;
   line-height: 30px;
   text-align: center;
   font-size: 13px;
-  color:$greyType;
-  transition:all 200ms ease-out;
+  color: $greyType;
+  transition: all 200ms ease-out;
   cursor: pointer;
-  padding:0px;
-  border:0px;
-  &:hover{
-    color:$green;
+  padding: 0px;
+  border: 0px;
+  &:hover {
+    color: $green;
     background: $white;
   }
-  &:focus{
-    outline:0;
+  &:focus {
+    outline: 0;
   }
 }

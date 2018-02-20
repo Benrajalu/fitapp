@@ -54,7 +54,7 @@
         width: 33px;
         height: 100%;
         border-left: 1px solid #2c3045;
-        content: '>';
+        content: ">";
         text-align: center;
         line-height: 92px;
         @include mont(14px, 300, $greyType);
@@ -162,7 +162,7 @@
 .container {
   display: flex;
   justify-content: space-between;
-  align-items: top;
+  align-items: flex-start;
   width: 100%;
   @media (max-width: $tablet) {
     flex-wrap: wrap;

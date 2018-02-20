@@ -1,4 +1,4 @@
-@import 'styles/_mixins.scss';
+@import "styles/_mixins.scss";
 
 #mainNav {
   .navbar-header {
@@ -75,7 +75,7 @@
           a {
             &:after {
               transition: all 200ms ease-out;
-              content: '';
+              content: "";
               width: 15px;
               height: 4px;
               border-radius: 6px;
@@ -142,7 +142,7 @@
 
       @media (min-width: 721px) {
         h1 {
-          font-family: 'Questrial';
+          font-family: "Questrial";
           font-size: 25px;
           color: #fff;
           display: block;
@@ -221,7 +221,7 @@
       position: relative;
       box-shadow: inset 2px 0px 5px rgba(0, 0, 0, 0.2);
       p {
-        font-family: 'Questrial';
+        font-family: "Questrial";
         font-size: 20px;
         color: #fff;
         display: block;
@@ -312,7 +312,6 @@
       width: 100%;
       position: relative;
       .profile {
-        filter: grayscale(100);
         background-size: cover;
         width: 100%;
         height: 250px;
@@ -335,7 +334,7 @@
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
       }
       p {
-        font-family: 'Questrial';
+        font-family: "Questrial";
         font-size: 16px;
         color: #000;
       }
@@ -347,5 +346,13 @@
     height: 100%;
     background: #000;
     z-index: 97;
+  }
+}
+
+@media (max-width: 720px) {
+  .hidden {
+    #mainNav .navbar-header .container .list li button.trigger {
+      top: 15px;
+    }
   }
 }

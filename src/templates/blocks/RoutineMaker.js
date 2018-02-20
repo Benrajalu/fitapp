@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router';
-//import {firebaseAuth, database} from '../utils/fire';
+import { Link } from 'react-router-dom';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { database } from '../../store/';
 
+import InlineLoader from '../blocks/InlineLoader';
 import ExercisePicker from '../blocks/ExercisePicker';
 import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
 
@@ -14,6 +17,7 @@ class RoutineMaker extends Component {
   constructor(props) {
     super(props);
     const timestamp = new Date();
+    const defaultName = 'Routine ' + moment(timestamp).format('DD-MM-YY');
 
     // Defaults
     this.state = {
@@ -24,7 +28,8 @@ class RoutineMaker extends Component {
         color: '#1FC3AF',
         exercises: [],
         dateCreated: timestamp.getTime(),
-        lastPerformed: timestamp.getTime()
+        lastPerformed: timestamp.getTime(),
+        name: defaultName
       },
       errors: {}
     };
@@ -35,9 +40,11 @@ class RoutineMaker extends Component {
     this.updateExercises = this.updateExercises.bind(this);
     this.customizeExercise = this.customizeExercise.bind(this);
     this.organizeExercises = this.organizeExercises.bind(this);
+    this.removeExercise = this.removeExercise.bind(this);
   }
 
   componentDidMount() {
+    this.props.toggleMenu('hidden');
     if (this.props.editRoutine) {
       const timestamp = new Date();
 
@@ -61,6 +68,10 @@ class RoutineMaker extends Component {
         isEdit: true
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.toggleMenu('default');
   }
 
   validate(event) {
@@ -91,7 +102,7 @@ class RoutineMaker extends Component {
       () => {
         // If it's still false, then we proceed
         if (!this.state.errors) {
-          const userId = this.state.user.uid,
+          const userId = this.props.user.uid,
             addedRoutine = this.state.newRoutine,
             _this = this,
             verb = this.state.isEdit ? 'put' : 'post';
@@ -100,7 +111,7 @@ class RoutineMaker extends Component {
             saving: true
           });
 
-          /*if (verb === 'post') {
+          if (verb === 'post') {
             database
               .collection('users')
               .doc(userId)
@@ -108,6 +119,7 @@ class RoutineMaker extends Component {
               .doc(addedRoutine.routineId.toString())
               .set(addedRoutine)
               .then(() => {
+                _this.props.watchRoutines();
                 _this.setState({
                   saving: false,
                   successRedirect: true
@@ -121,12 +133,13 @@ class RoutineMaker extends Component {
               .doc(addedRoutine.routineId.toString())
               .update(addedRoutine)
               .then(() => {
+                _this.props.watchRoutines();
                 _this.setState({
                   saving: false,
                   successRedirect: true
                 });
               });
-          }*/
+          }
         }
       }
     );
@@ -159,6 +172,12 @@ class RoutineMaker extends Component {
     this.setState({
       newRoutine: routineSnapshot
     });
+  }
+
+  removeExercise(data) {
+    let currentExercises = this.state.newRoutine.exercises;
+    currentExercises.splice(data, 1);
+    this.updateExercises(currentExercises);
   }
 
   customizeExercise(index, event) {
@@ -219,12 +238,14 @@ class RoutineMaker extends Component {
     if (this.state.newRoutine.exercises.length > 0) {
       listExercises = this.state.newRoutine.exercises.map((value, index) => (
         <ExerciseCustomizer
-          database={this.state.exercisesDatabase}
+          database={this.props.exercises}
           currentExercise={value}
           key={index + '-' + value.exerciseId}
           index={index}
+          last={index === this.state.newRoutine.exercises.length - 1}
           newValues={this.customizeExercise}
           organize={this.organizeExercises}
+          removeExercise={this.removeExercise}
         />
       ));
     }
@@ -233,18 +254,14 @@ class RoutineMaker extends Component {
       <div id="RoutineMaker">
         {this.state.loading ? (
           <div className="container empty">
-            <div className="inlineLoader">
-              <p>Sauvegarde en cours...</p>
-            </div>
+            <InlineLoader copy="Chargement de la routine" />
           </div>
         ) : (
           <form onSubmit={this.validate}>
             <div className="routine-labels">
               <div
                 className={
-                  this.state.errors.name
-                    ? 'form-group main has-error'
-                    : 'form-group main'
+                  this.state.errors.name ? 'form-group has-error' : 'form-group'
                 }>
                 <label>Nom de l'entraînement</label>
                 <input
@@ -252,14 +269,7 @@ class RoutineMaker extends Component {
                   name="name"
                   className="form-control"
                   onChange={this.handleInputChange}
-                  value={
-                    this.state.newRoutine.name
-                      ? this.state.newRoutine.name
-                      : 'Routine ' +
-                        moment(this.state.newRoutine.lastPerformed).format(
-                          'DD-MM-YY'
-                        )
-                  }
+                  value={this.state.newRoutine.name}
                   placeholder="Ex: Routine du Lundi"
                 />
                 {this.state.errors.name ? (
@@ -276,6 +286,19 @@ class RoutineMaker extends Component {
                   ? ' routine-exercises empty'
                   : 'routine-exercises'
               }>
+              <h3 className="label">
+                {this.state.newRoutine.exercises.length > 0
+                  ? this.state.newRoutine.exercises.length
+                  : null}{' '}
+                Exercice{this.state.newRoutine.exercises.length > 1 ||
+                this.state.newRoutine.exercises.length === 0
+                  ? 's'
+                  : null}{' '}
+                lié{this.state.newRoutine.exercises.length > 1 ||
+                this.state.newRoutine.exercises.length === 0
+                  ? 's'
+                  : null}
+              </h3>
               <div
                 className={
                   this.state.errors.exercises
@@ -290,38 +313,59 @@ class RoutineMaker extends Component {
                 ) : (
                   false
                 )}
-                <button
-                  className="btn btn-caps"
-                  type="button"
-                  onClick={this.displayModal}>
-                  {this.state.newRoutine.exercises.length > 0
-                    ? 'Modifier les exercices'
-                    : 'Ajouter un exercice'}
-                </button>
               </div>
             </div>
 
             {this.state.saving ? (
-              <div className="routine-footer align-center">
-                <div className="inlineLoader">
-                  <p>Sauvegarde en cours...</p>
-                </div>
+              <div className="routine-footer saving">
+                <InlineLoader copy="Sauvegarde en cours" />
               </div>
             ) : (
               <div className="routine-footer">
+                <Link to="/" className="btn rewind">
+                  <FontAwesomeIcon icon={['fas', 'arrow-left']} size="1x" />
+                </Link>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={this.displayModal}>
+                  {this.state.newRoutine.exercises.length > 0 ? (
+                    <Fragment>
+                      <FontAwesomeIcon icon={['fal', 'edit']} size="1x" />{' '}
+                      Modifier les exercices
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <FontAwesomeIcon icon={['fal', 'plus']} size="1x" />{' '}
+                      Ajouter un exercice
+                    </Fragment>
+                  )}
+                </button>
                 {this.state.isEdit ? (
                   <button
                     type="submit"
-                    className="btn btn-green btn-big btn-block"
-                    id="final-submit">
-                    Modifier cet entraînement
+                    className="btn important"
+                    disabled={
+                      this.state.newRoutine.exercises.length <= 0 ||
+                      this.state.newRoutine.name.length <= 0
+                        ? true
+                        : false
+                    }>
+                    <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
+                    Enregistrer la routine
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="btn btn-green btn-big btn-block"
-                    id="final-submit">
-                    Créer cet entraînement
+                    className="btn important"
+                    disabled={
+                      this.state.newRoutine.exercises.length <= 0 ||
+                      this.state.newRoutine.name.length <= 0
+                        ? true
+                        : false
+                    }>
+                    <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
+                    Créer la routine
                   </button>
                 )}
                 {this.state.success ? (
@@ -347,18 +391,14 @@ class RoutineMaker extends Component {
           </form>
         )}
 
-        {this.state.modalDisplay ? (
-          <ExercisePicker
-            exercisesDatabase={this.state.exercisesDatabase}
-            shouldAppear={this.state.modalDisplay ? 'visible' : 'hidden'}
-            modalCloser={this.displayModal}
-            updateExercises={this.updateExercises}
-            settings={this.state.user}
-            pickedExercises={this.state.newRoutine.exercises}
-          />
-        ) : (
-          false
-        )}
+        <ExercisePicker
+          exercisesDatabase={this.props.exercises}
+          shouldAppear={this.state.modalDisplay ? 'opened' : 'closed'}
+          modalCloser={this.displayModal}
+          updateExercises={this.updateExercises}
+          settings={this.props.user}
+          pickedExercises={this.state.newRoutine.exercises}
+        />
       </div>
     );
   }

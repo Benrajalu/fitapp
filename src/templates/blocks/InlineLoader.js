@@ -1,16 +1,24 @@
 import React from 'react';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 class InlineLoader extends React.Component {
   render() {
     return (
-      <div className="inlineLoader">
-        <div className="bits">
-          <i />
-          <i />
-          <i />
-          <i />
-        </div>
-        <p>Suppression en cours</p>
+      <div
+        className={
+          this.props.type ? 'inlineLoader ' + this.props.type : 'inlineLoader'
+        }>
+        {this.props.type && this.props.type === 'error' ? (
+          <FontAwesomeIcon icon={['far', 'exclamation-triangle']} size="1x" />
+        ) : (
+          <div className="bits">
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+        )}
+        <p>{this.props.copy ? this.props.copy : 'Suppression en cours'}</p>
       </div>
     );
   }

@@ -47,21 +47,25 @@ html {
   label {
     display: block;
     margin-bottom: 5px;
-    @include mont(10px, 700, $greyType);
+    font-family: 'Questrial';
+    font-size: 10px;
+    color: $greyType;
     letter-spacing: 1px;
+    text-transform: uppercase;
   }
   input[type='text'],
   input[type='email'],
   input[type='password'] {
     display: block;
     width: 100%;
-    border: 1px solid $white;
-    background: $white;
+    border: 0px;
+    border-bottom: 1px solid $greyType;
+    background: transparent;
     margin-bottom: 0px;
     line-height: 30px;
-    padding: 0 10px;
+    padding: 0;
     height: 30px;
-    @include mont(12px, 400, $greyType);
+    @include mont(15px, 300, $white);
     transition: all 200ms ease-out;
     &:focus {
       outline: 0;
@@ -75,52 +79,8 @@ html {
   width: 100%;
   position: relative;
   text-align: center;
-  margin: 0 0 20px;
+  margin: 10px auto 20px;
   min-width: 0px;
-  /*&:before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-image: -webkit-linear-gradient(
-      90deg,
-      rgba(212, 47, 47, 1) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(212, 47, 47, 1) 50%,
-      rgba(212, 47, 47, 1) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -o-linear-gradient(
-      90deg,
-      rgba(212, 47, 47, 1) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(212, 47, 47, 1) 50%,
-      rgba(212, 47, 47, 1) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: linear-gradient(
-      90deg,
-      rgba(212, 47, 47, 1) 25%,
-      rgba(0, 0, 0, 0) 25%,
-      rgba(0, 0, 0, 0) 50%,
-      rgba(212, 47, 47, 1) 50%,
-      rgba(212, 47, 47, 1) 75%,
-      rgba(0, 0, 0, 0) 75%,
-      rgba(0, 0, 0, 0)
-    );
-    -webkit-background-size: 40px 40px;
-    background-size: 40px 40px;
-    -webkit-animation: progress-bar-stripes 2s linear infinite;
-    -o-animation: progress-bar-stripes 2s linear infinite;
-    animation: progress-bar-stripes 2s linear infinite;
-  }*/
   .bits {
     display: flex;
     width: 30px;
@@ -160,6 +120,15 @@ html {
     text-transform: uppercase;
     margin-bottom: 0px !important;
   }
+  &.error {
+    color: $red;
+    svg {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 10px;
+      display: block;
+    }
+  }
 }
 
 .App {
@@ -167,24 +136,40 @@ html {
   flex-direction: column;
   height: 100vh;
   .zone {
-    flex-grow: 1;
+    flex-grow: 2;
     width: 100%;
     overflow: auto;
+    background: #000;
+    transition: all 200ms ease-out;
     &#nav-zone {
+      flex-grow: 1;
       height: 60px;
+      max-height: 60px;
       overflow: visible;
       @media (max-width: 720px) {
         order: 2;
+        &.hidden {
+          max-height: 0px;
+          overflow: hidden;
+        }
       }
+    }
+    &#contents-zone {
+      display: flex;
+      flex-flow: column;
+      justify-content: stretch;
     }
   }
   #mainContents {
+    display: flex;
+    flex-grow: 1;
     background: #000000;
     position: relative;
     z-index: 95;
-    min-height: 100vh;
+    //min-height: 100vh;
     transition: all 200ms ease-out;
     right: 0px;
+    overflow: auto;
     &.menuActive {
       right: 320px;
     }

@@ -8,7 +8,6 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import userData from '../data/users.json';
-import exercisesDatabase from '../data/exercises.json';
 
 const config = {
   apiKey: 'AIzaSyCk5jCqyW5yNP32nTn5yha6PEi2wSFuCKg',

@@ -1,197 +1,246 @@
 @import "styles/_mixins.scss";
 
-#ExercisePicker{
+#ExercisePicker {
   padding-top: 0px;
   padding-bottom: 0px;
   display: flex;
-  flex-direction:column;
-  justify-content:space-bewteen;
-  align-items:stretch;
-  .currentPick{
-    box-shadow:inset 0 -2px 5px rgba(0,0,0,0.5);
+  flex-direction: column;
+  justify-content: space-bewteen;
+  align-items: stretch;
+  .main-list .container {
+    align-items: stretch;
+  }
+  .currentPick {
+    box-shadow: 0px -3px 11px rgba(20, 20, 20, 0.8);
     display: flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:15px 0px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 15px 0px;
     overflow: auto;
     min-height: 150px;
-    .container{
-      display: block;
-      padding:0px 5px;
-      h4{
-        @include mont(14px, 300, $white);
-        text-transform: uppercase;
-        margin-bottom: 20px;
-        text-align: center;
+    position: relative;
+    z-index: 99;
+    .container {
+      display: flex;
+      padding: 0px 5px;
+      flex-grow: 2;
+      justify-content: space-between;
+      flex-flow: column;
+      align-items: center;
+      h4 {
+        font-family: "Questrial";
+        font-size: 13px;
+        color: #828282;
+        margin-bottom: 0px;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
       }
-      .current-exercises{
+      .current-exercises {
         display: block;
         text-align: center;
         white-space: nowrap;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        .exercise-pick{
+        transition: all 300ms ease-in-out;
+        transform: scale(1);
+        &.animated {
+          transform: scale(1.3);
+        }
+        .exercise-pick {
           display: inline-block;
-          align-items:center;
-          background:$blue;
-          border:0px;
-          border-radius: 3px;
+          align-items: center;
+          background: #383838;
+          border: 0px;
+          border-radius: 8px;
           overflow: hidden;
-          @include mont(13px, 400, $white);
-          margin:0 5px 5px;
-          padding:10px 40px 10px 10px;
+          @include mont(9px, 700, $white);
+          margin: 0 5px 0 0;
+          padding: 13px 55px 13px 13px;
           cursor: pointer;
           white-space: nowrap;
           position: relative;
-          &:hover{
-            .remove{
-              color:$white;
-              background: $green;
+          text-transform: uppercase;
+          &:hover {
+            .remove {
+              color: $white;
+              background: $red;
             }
           }
-          .remove{
+          .remove {
             position: absolute;
-            top:50%;
-            right: 10px;
-            transform:translateY(-50%);
-            transition:all 200ms ease-out;
+            top: 50%;
+            right: 9px;
+            transform: translateY(-50%);
+            transition: all 200ms ease-out;
             border-radius: 100%;
             text-align: center;
-            color:$green;
-            height: 20px;
-            width: 20px;
-            background: $white;
+            color: $green;
+            height: 28px;
+            width: 28px;
+            background: #212121;
             margin-left: 10px;
             font-size: 14px;
-            i{
-              position: relative;
-              top:0.5px;
+            line-height: 28px;
+            text-align: center;
+            color: $white;
+            svg {
+              width: 9px;
+              vertical-align: middle;
             }
           }
         }
       }
-      .empty-state{
+      .empty-state {
         @include mont(14px, 400, $greyType);
         white-space: normal;
-        padding:0 10px;
+        padding: 0 10px;
+      }
+      .close-button {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        border-radius: 40px;
+        border: 1px solid $red;
+        background: $red;
+        text-transform: uppercase;
+        transition: all 100ms ease-out;
+        max-width: 240px;
+        @include mont(9px, 500, $white);
+        &:hover {
+          background: #000;
+        }
       }
 
-      @media (max-width: 520px){
-        flex-direction:column;
-        > *{
+      @media (max-width: 520px) {
+        flex-direction: column;
+        > * {
           width: 100%;
         }
-        h4{
+        h4 {
           width: 100%;
           text-align: center;
         }
       }
     }
   }
-  .main-list{
+  .main-list {
     overflow: auto;
     padding-top: 20px;
     padding-bottom: 40px;
-    flex-grow:2;
-    .container{
-      flex-direction:row;
-      flex-wrap:wrap;
-      .exercise-panel{
-        width:30%;
+    flex-grow: 2;
+    .container {
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 0px 10px;
+      .exercise-panel {
+        width: 30%;
       }
 
-      @media (max-width:970px){
+      @media (max-width: 970px) {
         max-width: 700px;
-        margin:0 auto;
-        .exercise-panel{
-          width:48%;
-        }
-      }
-
-      @media (max-width:560px){
-        max-width: 420px;
-        .exercise-panel{
-          width:100%;
+        margin: 0 auto;
+        .exercise-panel {
+          width: 48%;
         }
       }
     }
   }
 }
 
-.exercise-panel{
+.exercise-panel {
   display: flex;
-  flex-flow:row nowrap;
-  align-items:stretch;
-  justify-content:space-bewteen;
-  margin:0 auto 30px;
-  background: #494B65;
+  flex-flow: column;
+  justify-content: space-between;
+  margin: 0 auto 15px;
+  background: #212121;
   border-radius: 3px;
-  overflow: visible;
   position: relative;
-  .action{
-    position: relative;
+  overflow: hidden;
+  .description {
     display: flex;
-    flex-flow:column nowrap;
-    justify-content:center;
-    align-items:stretch;
-    button{
-      background: $green;
-      top:0px;
-      left: 0px;
-      width: 100%;
-      flex-grow:2;
-      border:0px;
-      border-radius:0px 3px 3px 0;
-      padding:5px 10px;
-      font-size: 13px;
-      color:$white;
-      transition:all 200ms ease-out;
-      cursor: pointer;
-      &:focus{
-        outline:0;
-      }
-      &:hover{
-        background: $white;
-        color:$green;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 10px;
+    position: relative;
+    width: 100%;
+    background: transparent;
+    border: 0px transparent;
+    cursor: pointer;
+    &:hover {
+      .icon {
+        background: $red;
       }
     }
   }
-  .description{
-    flex-grow:2;
-    padding:15px;
-    position: relative;
+  .icon {
+    min-width: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    background: #545454;
+    align: flex-start;
+    border-radius: 100%;
+    text-align: center;
+    line-height: 24px;
+    color: $white;
+    transition: all 200ms ease-out;
+    svg {
+      display: inline-block;
+      height: 9px;
+      width: 9px;
+    }
   }
-  .exercise-heading{
-    @include mont(12px, 300, $greyType);
-    margin-bottom: 5px;
+  .exercise-heading {
+    text-align: left;
+    padding-right: 10px;
+    h3 {
+      @include mont(12px, 700, $white);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    p {
+      @include mont(8px, 400, $greyType);
+      text-transform: uppercase;
+    }
   }
-  .exercise-body{
+  .exercise-body {
     @include mont(20px, 300, $white);
-    h3{
+    h3 {
       margin-bottom: 10px;
     }
   }
-  .exercise-footer{
-    position: absolute;
-    left: 15px;
-    bottom: 0px;
-    transform:translateY(50%);
-    a{
-      display: inline-block;
-      line-height: 25px;
-      padding:0 8px;
-      z-index: 2;
-      background: #2C3045;
-      @include mont(10px, 400, $white);
+  .exercise-footer {
+    a {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 10px;
+      background: #424242;
+      @include mont(8px, 500, $white);
       text-transform: uppercase;
       text-decoration: none;
-      border-radius: 2px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      transition:all 200ms ease-out;
-      &:hover{
-        color:$green;
+      transition: all 200ms ease-out;
+      &:hover {
+        color: $red;
+      }
+      .icon {
+        min-width: 10px;
+        min-height: 10px;
+        max-height: 10px;
+        max-width: 10px;
+        line-height: 10px;
+        background: transparent;
+        svg {
+          height: 10px;
+          width: 10px;
+        }
       }
     }
   }

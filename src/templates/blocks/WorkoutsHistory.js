@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import WorkoutHistoryDetail from '../blocks/WorkoutHistoryDetail';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import React, { Component } from "react";
+import WorkoutHistoryDetail from "../blocks/WorkoutHistoryDetail";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 
-import moment from 'moment';
-import 'moment/locale/fr';
+import moment from "moment";
+import "moment/locale/fr";
 
 class WorkoutsHistory extends Component {
   render() {
@@ -17,12 +17,12 @@ class WorkoutsHistory extends Component {
     });
 
     // Output items according to limits on component
-    if (this.props.limit === 'week') {
+    if (this.props.limit === "week") {
       let now = moment().valueOf();
       workoutItems = workouts.filter(obj => {
         let timeOfWorkout = moment(obj.timestamp).valueOf();
         let startOfWeek = moment(now)
-          .startOf('week')
+          .startOf("week")
           .valueOf();
         return moment(timeOfWorkout).isAfter(startOfWeek);
       });
@@ -46,8 +46,11 @@ class WorkoutsHistory extends Component {
         ) : (
           <div className="empty-workouts">
             <p>Aucun entraînement cette semaine</p>
-            <button className="btn btn-ghost">
-              <FontAwesomeIcon icon={['fas', 'play']} size="1x" /> Lancer une
+            <button
+              className="btn btn-ghost"
+              onClick={this.props.triggerWorkoutWindow.bind(this)}
+            >
+              <FontAwesomeIcon icon={["fas", "play"]} size="1x" /> Lancer une
               scéance
             </button>
           </div>

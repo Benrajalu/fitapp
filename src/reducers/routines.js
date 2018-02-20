@@ -4,7 +4,11 @@ const initialState = {
 
 export const routines = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ALL_ROUTINES':
+    case "GET_ALL_ROUTINES":
+      return Object.assign({}, state, {
+        routines: action.routines
+      });
+    case "RESET_ROUTINES":
       return Object.assign({}, state, {
         routines: action.routines
       });

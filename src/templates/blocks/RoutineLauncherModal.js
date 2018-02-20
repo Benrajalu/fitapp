@@ -140,7 +140,10 @@ class RoutineLauncherModal extends Component {
           this.props.routinesList.length &&
           this.props.routinesList.length !== 0 ? (
             <div className="container main-container">
-              <Link to="/new-routine" className="btn btn-ghost">
+              <Link
+                to="/new-routine"
+                className="btn btn-ghost"
+                onClick={this.props.closeModal.bind(this)}>
                 <FontAwesomeIcon icon={['fas', 'plus']} size="1x" />
                 Créer un entraînement
               </Link>

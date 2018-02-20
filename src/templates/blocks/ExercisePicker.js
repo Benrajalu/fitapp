@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import ExercisePickerDetails from '../blocks/ExercisePickerDetails';
 import ExercisePickerPick from '../blocks/ExercisePickerPick';
@@ -19,6 +20,7 @@ class ExercisePicker extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.addExercise = this.addExercise.bind(this);
     this.removeExercise = this.removeExercise.bind(this);
+    this.applyFilter = this.applyFilter.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,118 +41,154 @@ class ExercisePicker extends Component {
   }
 
   closeModal() {
-    const _this = this;
-    this.setState({
-      animate: ' animate'
-    });
-    setTimeout(function() {
-      // References the parent method for displaying a modal that's in Dashboard.js
-      _this.props.modalCloser();
-    }, 300);
+    this.props.modalCloser();
   }
   addExercise(data) {
     let currentExercises = this.state.exercises;
     currentExercises.push(data);
     this.setState({
-      exercises: currentExercises
+      exercises: currentExercises,
+      animateList: true
     });
     this.props.updateExercises(this.state.exercises);
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        animateList: false
+      });
+    }, 100);
   }
   removeExercise(data) {
-    console.log(data);
     let currentExercises = this.state.exercises;
-    let i;
-    for (i = 0; i < currentExercises.length; i++) {
-      // Find where the exercice is in the array and remove it. If there's more than one of that exercise, only one of them gets removed
-      if (currentExercises[i].exerciseId === data) {
-        currentExercises.splice(i, 1);
-        i = currentExercises.length;
-      }
-    }
+    currentExercises.splice(data, 1);
     this.setState({
-      exercises: currentExercises
+      exercises: currentExercises,
+      animateList: true
     });
     this.props.updateExercises(this.state.exercises);
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        animateList: false
+      });
+    }, 100);
+  }
+
+  applyFilter(filter) {
+    let exerciseList = [];
+    switch (filter) {
+      case 'none':
+        this.setState({
+          filtered: false,
+          filter: false
+        });
+        break;
+
+      case 'barbell':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.type === 'barbell'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'barbell'
+        });
+        break;
+
+      case 'dumbbell':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.type === 'dumbbell'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'dumbbell'
+        });
+        break;
+
+      case 'cable':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.type === 'cable'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'cable'
+        });
+        break;
+
+      case 'calisthenics':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.type === 'calisthenics'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'calisthenics'
+        });
+        break;
+
+      case 'cardio':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.type === 'cardio'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'cardio'
+        });
+        break;
+
+      case 'lower-body':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.muscleGroup === 'lower-body'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'lower-body'
+        });
+        break;
+
+      case 'upper-body':
+        exerciseList = this.props.exercisesDatabase.filter(
+          obj => obj.muscleGroup === 'upper-body'
+        );
+        this.setState({
+          filtered: exerciseList,
+          filter: 'upper-body'
+        });
+        break;
+
+      default:
+        this.setState({
+          filtered: false,
+          filter: false
+        });
+        break;
+    }
   }
 
   render() {
     // Initializing pop-in state
     const displayStatus = this.props.shouldAppear,
       sortFunction = (a, b) => {
-        return a.muscleGroup < b.muscleGroup
-          ? -1
-          : a.muscleGroup > b.muscleGroup ? 1 : 0;
+        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
       };
 
     // Sorting and filtering exercises by types and muscle groups when relevant
-    const barbellExercises = this.props.exercisesDatabase
-      .filter(obj => obj.type === 'barbell')
-      .sort(sortFunction);
-    const dumbbellExercises = this.props.exercisesDatabase
-      .filter(obj => obj.type === 'dumbbell')
-      .sort(sortFunction);
-    const cableExercises = this.props.exercisesDatabase
-      .filter(obj => obj.type === 'cable')
-      .sort(sortFunction);
-    const cardioExercises = this.props.exercisesDatabase.filter(
-      obj => obj.type === 'cardio'
-    );
-    const calisthenicsExercises = this.props.exercisesDatabase.filter(
-      obj => obj.type === 'calisthenics'
-    );
+    const listedExercises = this.state.filtered
+      ? this.state.filtered.sort(sortFunction)
+      : this.props.exercisesDatabase.sort(sortFunction);
 
     // Looping through the filtered ans sorted output to create the DOM elements
-    const showBarbells = barbellExercises.map(value => (
-        <ExercisePickerDetails
-          data={value}
-          handleClick={this.addExercise}
-          key={value.id}
-          exercisesDatabase={this.props.exercisesDatabase}
-          userSettings={this.props.user}
-        />
-      )),
-      showDumbbells = dumbbellExercises.map(value => (
-        <ExercisePickerDetails
-          data={value}
-          handleClick={this.addExercise}
-          key={value.id}
-          exercisesDatabase={this.props.exercisesDatabase}
-          userSettings={this.props.user}
-        />
-      )),
-      showCables = cableExercises.map(value => (
-        <ExercisePickerDetails
-          data={value}
-          handleClick={this.addExercise}
-          key={value.id}
-          exercisesDatabase={this.props.exercisesDatabase}
-          userSettings={this.props.user}
-        />
-      )),
-      showCalithenics = calisthenicsExercises.map(value => (
-        <ExercisePickerDetails
-          data={value}
-          handleClick={this.addExercise}
-          key={value.id}
-          exercisesDatabase={this.props.exercisesDatabase}
-          userSettings={this.props.user}
-        />
-      )),
-      showCardio = cardioExercises.map(value => (
-        <ExercisePickerDetails
-          data={value}
-          handleClick={this.addExercise}
-          key={value.id}
-          exercisesDatabase={this.props.exercisesDatabase}
-          userSettings={this.props.user}
-        />
-      ));
+    const showExercises = listedExercises.map(value => (
+      <ExercisePickerDetails
+        data={value}
+        handleClick={this.addExercise}
+        key={value.id}
+        exercisesDatabase={this.props.exercisesDatabase}
+        userSettings={this.props.user}
+      />
+    ));
 
     // Listing any current exercice added to the routine and setting a default message for none.
     let currentExercisesList = (
-      <p className="empty-state">
-        Choisissez vos exercises ci-dessous pour construire votre entraînement
-      </p>
+      <p className="empty-state">Aucun exercice sélectionné</p>
     );
     if (this.state.exercises.length > 0) {
       currentExercisesList = this.state.exercises.map((value, index) => (
@@ -158,35 +196,136 @@ class ExercisePicker extends Component {
           database={this.props.exercisesDatabase}
           currentExercise={value}
           handleClick={this.removeExercise}
+          index={index}
           key={value.exerciseId + '-' + new Date().getTime() + index}
         />
       ));
     }
 
     return (
-      <div className={'popin large ' + displayStatus + this.state.animate}>
+      <div className={'popin ' + displayStatus}>
         <div className="modal-header">
           <div className="container">
-            <p className="title">Choisissez vos exercices</p>
+            <p className="title">Choisir des exercices</p>
             <button className="closer" onClick={this.closeModal}>
-              Fermer
+              <FontAwesomeIcon icon={['far', 'times']} size="1x" />
             </button>
           </div>
         </div>
+        <div className="modal-options">
+          <div className="container">
+            <ul className="options">
+              <li>
+                <button
+                  className={!this.state.filter ? 'filter active' : 'filter'}
+                  onClick={this.applyFilter.bind(this, 'none')}>
+                  <span>Tous</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'barbell'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'barbell')}>
+                  <span>Barre</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'dumbbell'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'dumbbell')}>
+                  <span>Haltères</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'cable'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'cable')}>
+                  <span>Câble</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'calisthenics'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'calisthenics')}>
+                  <span>Calisthenics</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'cardio'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'cardio')}>
+                  <span>Cardio</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'upper-body'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'upper-body')}>
+                  <span>Haut du corps</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className={
+                    this.state.filter && this.state.filter === 'lower-body'
+                      ? 'filter active'
+                      : 'filter'
+                  }
+                  onClick={this.applyFilter.bind(this, 'lower-body')}>
+                  <span>Bas du corps</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="modal-contents" id="ExercisePicker">
+          <div className="main-list">
+            <div className="container">{showExercises}</div>
+          </div>
           <div className="currentPick">
             <div className="container">
-              <h4>Exercices sélectionnés</h4>
-              <div className="current-exercises">{currentExercisesList}</div>
-            </div>
-          </div>
-          <div className="main-list">
-            <div className="container">
-              {showBarbells}
-              {showDumbbells}
-              {showCables}
-              {showCalithenics}
-              {showCardio}
+              <h4>
+                <FontAwesomeIcon icon={['far', 'angle-up']} size="1x" />{' '}
+                <span>Sélectionnez vos exercices ci-dessus</span>{' '}
+                <FontAwesomeIcon icon={['far', 'angle-up']} size="1x" />
+              </h4>
+              <div
+                className={
+                  this.state.animateList
+                    ? 'current-exercises animated'
+                    : 'current-exercises'
+                }>
+                {currentExercisesList}
+              </div>
+              <button onClick={this.closeModal} className="close-button">
+                {this.state.exercises.length > 0
+                  ? 'Configurez ces exercises'
+                  : 'Modifier la routine'}
+              </button>
             </div>
           </div>
         </div>

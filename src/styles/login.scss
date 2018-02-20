@@ -1,120 +1,124 @@
 @import "styles/_mixins.scss";
 
-#login{
+#login {
   min-height: 100vh;
-  padding:0px 20px;
+  padding: 0px 20px;
   display: flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   background-color: #000;
-  background-image:url('./background.png');
+  background-image: url("./background.png");
   background-size: cover;
   background-position: center;
-  &.loading{
-    .loader{
-      opacity:1;
+  &.loading {
+    .loader {
+      opacity: 1;
       z-index: 99;
     }
-    .contents, header{
-      opacity:0;
+    .contents,
+    header {
+      opacity: 0;
       z-index: 1;
     }
   }
 
-  header{
-    p{
+  header {
+    p {
       font-family: "Questrial";
       font-size: 30px;
       color: #fff;
       display: block;
-      margin:20px auto;
-      strong{
-        color: #D42F2F;
+      margin: 20px auto;
+      strong {
+        color: #d42f2f;
       }
     }
   }
 
-  .contents{
+  .contents {
     //flex-grow:1;
     text-align: left;
-    transition:all 200ms ease-out;
+    transition: all 200ms ease-out;
     opacity: 1;
     position: relative;
     z-index: 99;
     width: 100%;
     max-width: 320px;
-    @media (min-width: 721px){
-      flex-grow:1;
+    @media (min-width: 721px) {
+      flex-grow: 1;
       display: flex;
-      flex-flow:column;
-      justify-content:center;
+      flex-flow: column;
+      justify-content: center;
     }
-    h1{
+    h1 {
       font-family: "Questrial";
       font-size: 40px;
       color: $white;
       margin-bottom: 45px;
-      padding:0 15px;
+      padding: 0 15px;
     }
 
-    .login-box{
+    .login-box {
       width: 100%;
       padding-bottom: 70px;
-      h4{
+      h4 {
         font-family: "Questrial";
         font-size: 14px;
         color: $white;
         margin-bottom: 15px;
       }
-      .btn{
+      .btn {
         display: block;
         width: 100%;
-        margin:0 auto 15px;
+        margin: 0 auto 15px;
         @include mont(15px, 400, $white);
         text-transform: none;
-        padding:9px;
+        padding: 9px;
         border-radius: 3px;
       }
-      hr{
-        margin:0px;
+      hr {
+        margin: 0px;
         margin-bottom: 10px;
-        border:0px;
+        border: 0px;
         display: block;
-        border-bottom: 1px solid #2C3045;
+        border-bottom: 1px solid #2c3045;
       }
 
-      .socialAccount{
+      .socialAccount {
         margin-bottom: 25px;
       }
-      .mailAccount{
-        p{
+      .mailAccount {
+        p {
           text-align: center;
           @include mont(10px, 700, $white);
-          margin:0 auto 15px;
+          margin: 0 auto 15px;
           line-height: 1.3;
-          a{
+          a {
             text-decoration: underline;
           }
         }
 
-        .form-group{
-          margin:0 auto 15px;
-          label{
+        .form-group {
+          margin: 0 auto 15px;
+          label {
             font-family: "Questrial";
             font-size: 11px;
             margin-bottom: 5px;
             color: $white;
           }
-          input[type="text"], input[type="email"], input[type="password"]{
-            background: #F2F2F2;
-            border-color:transparent;
+          input[type="text"],
+          input[type="email"],
+          input[type="password"] {
+            background: #f2f2f2;
+            border-color: transparent;
             border-radius: 3px;
             @include mont(12px, 400, #303033);
             line-height: 35px;
             height: 35px;
-            &:focus{
-              border-color: #6F6F75;
+            padding: 0 10px;
+            &:focus {
+              border-color: #6f6f75;
             }
           }
         }
@@ -122,7 +126,7 @@
     }
   }
 
-  .loader{
+  .loader {
     opacity: 0;
     z-index: 0;
   }

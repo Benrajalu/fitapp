@@ -1,28 +1,30 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import React, { Component } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import { firebaseAuth, database } from './store/';
+import { firebaseAuth, database } from "./store/";
 
-import { connect } from 'react-redux';
-import { getLoading, removeLoading } from './actions/';
-import { authenticateUser, resetUser } from './actions/UserActions';
+import { connect } from "react-redux";
+import { getLoading, removeLoading } from "./actions/";
+import { authenticateUser, resetUser } from "./actions/UserActions";
 
 // Navigation and loader
-import AwareLoader from './templates/containers/AwareLoader.js';
-import MenuContainer from './templates/containers/MenuContainer.js';
+import AwareLoader from "./templates/containers/AwareLoader.js";
+import MenuContainer from "./templates/containers/MenuContainer.js";
 
 // Make sure page is on top when loaded
-import ScrollToTop from './templates/blocks/ScrollToTop.js';
+import ScrollToTop from "./templates/blocks/ScrollToTop.js";
 
 // Pages
-import LoginContainer from './templates/containers/LoginContainer.js';
-import Dashboard from './templates/pages/Dashboard.js';
-import History from './templates/pages/History.js';
-import AllRoutines from './templates/pages/AllRoutines.js';
-import NewRoutine from './templates/pages/NewRoutine.js';
-import NoMatch from './templates/pages/NoMatch.js';
+import LoginContainer from "./templates/containers/LoginContainer.js";
+import Dashboard from "./templates/pages/Dashboard.js";
+import History from "./templates/pages/History.js";
+import AllRoutines from "./templates/pages/AllRoutines.js";
+import NewRoutine from "./templates/pages/NewRoutine.js";
+import EditRoutine from "./templates/pages/EditRoutine.js";
+import Settings from "./templates/pages/Settings.js";
+import NoMatch from "./templates/pages/NoMatch.js";
 
-import './styles/placeholder.css';
+import "./styles/placeholder.css";
 
 // Passing the state down through the connect down below
 const mapStateToProps = state => {
@@ -62,41 +64,73 @@ class App extends Component {
 
   authListener() {
     const _this = this;
-    this.fireBaseListener = firebaseAuth.onAuthStateChanged(function(user) {
-      if (user !== null) {
-        _this.props.removeLoading();
-        const query = database.collection('users').doc(user.uid);
-        query.onSnapshot(
-          doc => {
-            if (!doc.exists) {
-              console.log("User doesn't exist");
-              _this.initiateDefaultUser(user);
-            } else {
-              var rawdata = doc.data();
-              rawdata.uid = user.uid;
-              _this.props.authenticateUser(rawdata);
-              _this.setState({
-                userChecked: true
-              });
+    this.fireBaseListener = firebaseAuth.onAuthStateChanged(
+      function(user) {
+        if (user !== null && !_this.props.user.deleting) {
+          _this.props.removeLoading();
+          const query = database.collection("users").doc(user.uid);
+          query.onSnapshot(
+            doc => {
+              if (!doc.exists && !_this.props.user.deleting) {
+                console.log("User doesn't exist");
+                _this.initiateDefaultUser(user);
+              } else if (doc.exists && !_this.props.user.deleting) {
+                var rawdata = doc.data();
+                rawdata.uid = user.uid;
+                _this.props.authenticateUser(rawdata);
+                _this.setState({
+                  userChecked: true
+                });
+              } else {
+                console.log("Proceeding with marked for deletion");
+                database
+                  .collection("users")
+                  .doc(user.uid)
+                  .delete()
+                  .then(() => {
+                    console.log("user data removed");
+                    firebaseAuth.currentUser
+                      .delete()
+                      .then(() => {
+                        console.log("user deleted");
+                        firebaseAuth.signOut().then(() => {
+                          _this.props.resetUser();
+                        });
+                      })
+                      .catch(error => {
+                        console.log("User already deleted");
+                        console.log(error);
+                      });
+                  })
+                  .catch(error => {
+                    console.log("Can't logout");
+                  });
+              }
+            },
+            error => {
+              console.log("User logged out");
+              _this.props.resetUser();
             }
-          },
-          error => {
-            console.log('User logged out');
-          }
-        );
-      } else {
-        console.log('not loggedin');
-        _this.setState({
-          userChecked: true
-        });
+          );
+        } else {
+          console.log("not loggedin");
+          _this.props.resetUser();
+          _this.setState({
+            userChecked: true
+          });
+        }
+      },
+      error => {
+        console.log("done");
       }
-    });
+    );
   }
 
   initiateDefaultUser(user) {
-    const query = database.collection('users'),
+    console.log("initiation of defaults for new user");
+    const query = database.collection("users"),
       email = user.email,
-      name = user.displayName ? user.displayName : user.email.split('@')[0],
+      name = user.displayName ? user.displayName : user.email.split("@")[0],
       photo = user.photoURL ? user.photoURL : false,
       settings = {
         baseBarbell: 20,
@@ -114,7 +148,7 @@ class App extends Component {
         settings: settings
       })
       .then(() => {
-        let newQuery = database.collection('users').doc(user.uid);
+        let newQuery = database.collection("users").doc(user.uid);
         newQuery.get().then(doc => {
           var rawdata = doc.data();
           rawdata.uid = user.uid;
@@ -148,11 +182,10 @@ class App extends Component {
       <BrowserRouter>
         <ScrollToTop>
           <div
-            className={
-              this.props.user.uid ? 'App logged-in' : 'App logged-off'
-            }>
+            className={this.props.user.uid ? "App logged-in" : "App logged-off"}
+          >
             {this.props.user.uid ? (
-              <div id="nav-zone" className="zone">
+              <div id="nav-zone" className={"zone " + this.props.menu.layout}>
                 <MenuContainer />
               </div>
             ) : (
@@ -163,25 +196,20 @@ class App extends Component {
                 <main
                   id="mainContents"
                   className={
-                    this.props.menu.status === 'opened'
-                      ? 'menuActive'
+                    this.props.menu.status === "opened"
+                      ? "menuActive"
                       : undefined
-                  }>
+                  }
+                >
                   <div className="container-fluid no-padding">
                     {this.props.user.uid ? (
                       <Switch>
                         <Route exact path="/" component={Dashboard} />
-                        <Route
-                          exact
-                          path="/all-routines"
-                          component={AllRoutines}
-                        />
+                        <Route path="/all-routines" component={AllRoutines} />
                         <Route exact path="/history" component={History} />
-                        <Route
-                          exact
-                          path="/new-routine"
-                          component={NewRoutine}
-                        />
+                        <Route path="/new-routine" component={NewRoutine} />
+                        <Route path="/edit/:id" component={EditRoutine} />
+                        <Route path="/settings" component={Settings} />
                         <Redirect from="/login" to="/" />
                         <Route component={NoMatch} />
                       </Switch>

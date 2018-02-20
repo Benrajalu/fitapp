@@ -3,20 +3,21 @@ import React, { Component } from 'react';
 import '../../styles/NoMatch.css';
 
 class NoMatch extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      mounted:false
-    }
+    this.state = {
+      mounted: false
+    };
   }
-  componentDidMount(){
+  componentDidMount() {
     document.title = "FitApp. - Cette page n'existe pas !";
     const _this = this;
+    console.log(this.props);
     setTimeout(() => {
       _this.setState({
-        mounted:true
+        mounted: true
       });
-    }, 200)
+    }, 200);
   }
 
   render() {
@@ -28,7 +29,7 @@ class NoMatch extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
