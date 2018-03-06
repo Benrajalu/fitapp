@@ -1,4 +1,4 @@
-@import 'styles/_mixins.scss';
+@import "styles/_mixins.scss";
 
 #RoutineMaker {
   width: 100%;
@@ -29,7 +29,7 @@
         text-transform: uppercase;
         margin-bottom: 10px;
       }
-      input[type='text'] {
+      input[type="text"] {
         border: 0px;
         background: transparent;
         border-bottom: 1px solid $white;
@@ -58,7 +58,7 @@
     }
     &.empty {
       p {
-        font-family: 'Questrial';
+        font-family: "Questrial";
         font-size: 13px;
         color: #828282;
         padding: 40px 0;
@@ -194,13 +194,13 @@
           .input {
             padding: 10px 15px;
             p {
-              font-family: 'Questrial';
+              font-family: "Questrial";
               font-size: 14px;
               color: $greyType;
               text-transform: uppercase;
             }
           }
-          input {
+          input[type="number"] {
             @include mont(36px, 700, $white);
             background: transparent;
             width: 90px;
@@ -209,7 +209,8 @@
             display: block;
             margin: 0 auto 0px;
             text-align: center;
-            padding: 0px;
+            padding: 0px 0px;
+            height: auto;
             transform: scale(1);
             transition: all 200ms ease-out;
           }

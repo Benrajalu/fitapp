@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import RoutineDetail from '../blocks/RoutineDetail';
+import RoutineDetail from "../blocks/RoutineDetail";
 
 class Routines extends Component {
   render() {
@@ -19,6 +19,7 @@ class Routines extends Component {
         user={this.props.user}
         refresh={this.props.refresh}
         delay={index * 100}
+        toggleModal={this.props.toggleModal}
       />
     ));
 

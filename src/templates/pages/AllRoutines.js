@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { watchRoutines } from '../../actions/RoutinesActions';
+import { closeMenu } from '../../actions/MenuActions';
+import { toggleModal } from '../../actions/ModalActions';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 //import {firebaseAuth, database} from '../utils/fire';
 
 import Routines from '../blocks/Routines';
-
-import '../../styles/AllRoutines.css';
 
 const mapStateToProps = state => {
   return {
@@ -23,6 +23,12 @@ const mapDispatchToProps = dispatch => {
   return {
     watchRoutines: () => {
       dispatch(watchRoutines());
+    },
+    closeMenu: () => {
+      dispatch(closeMenu());
+    },
+    toggleModal: data => {
+      dispatch(toggleModal(data));
     }
   };
 };
@@ -157,6 +163,8 @@ class AllRoutines extends Component {
                       editable="true"
                       user={this.props.user}
                       refresh={this.props.watchRoutines}
+                      closeModal={this.props.closeMenu}
+                      toggleModal={this.props.toggleModal}
                     />
                   ) : null}
                 </div>

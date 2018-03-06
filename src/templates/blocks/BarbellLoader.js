@@ -1,7 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-
-import "../styles/weightLoader.css";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class BarbellLoader extends Component {
   constructor(props) {
@@ -42,7 +40,7 @@ class BarbellLoader extends Component {
           : 1;
       this.decomposeWeight(rack, remains, startingPoint, container);
     } else {
-      console.log("error:");
+      console.log('error:');
       console.log(weight);
       console.log(rack);
       console.log(startingPoint);
@@ -110,7 +108,7 @@ class BarbellLoader extends Component {
       loadHelper = (
         <div className="load">
           <div className="barbell">
-            {this.props.settings.baseBarbell + "kg"}
+            {this.props.settings.baseBarbell + 'kg'}
           </div>
         </div>
       );
@@ -122,9 +120,9 @@ class BarbellLoader extends Component {
         // For each number of that type of disc...
         for (let z = 0; z < loadsToUse[y][orderedKeys[y]]; z++) {
           // Then push a dsic in the loadsWrapper array
-          let discSize = "disc size-" + orderedKeys[y].replace(".", "-");
+          let discSize = 'disc size-' + orderedKeys[y].replace('.', '-');
           loadsWrapper.push(
-            <div className={discSize} key={"disc-" + z + " - " + y}>
+            <div className={discSize} key={'disc-' + z + ' - ' + y}>
               <p>{orderedKeys[y]} kg</p>
             </div>
           );
@@ -134,7 +132,7 @@ class BarbellLoader extends Component {
       loadHelper = (
         <div className="load">
           <div className="barbell">
-            {this.props.settings.baseBarbell + "kg"}
+            {this.props.settings.baseBarbell + 'kg'}
           </div>
           {loadsWrapper}
         </div>
@@ -145,11 +143,11 @@ class BarbellLoader extends Component {
       <div>
         {this.state.remainingWeight ? (
           <div className="alert alert-info">
-            Poids calculé{" "}
+            Poids calculé{' '}
             <strong>
-              {" "}
+              {' '}
               -{this.state.remainingWeight - this.props.settings.baseBarbell}kg
-            </strong>{" "}
+            </strong>{' '}
             (disques non disponibles)
           </div>
         ) : (

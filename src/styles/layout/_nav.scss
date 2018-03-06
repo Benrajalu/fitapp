@@ -35,10 +35,14 @@
         justify-content: center;
         li {
           flex-grow: 1;
+          flex-basis: 25%;
           text-align: center;
           position: relative;
           height: 60px;
           line-height: 60px;
+          &.middle {
+            flex-grow: 2;
+          }
           &:not(.middle) {
             overflow: hidden;
           }
@@ -105,6 +109,7 @@
             height: 62px;
             background: #d42f2f;
             box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 99;
             svg {
               position: absolute;
               left: 50%;
@@ -340,11 +345,7 @@
       }
     }
   }
-  .routines-collapse.popin {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: #000;
+  .routines-collapse.selection-overlay {
     z-index: 97;
   }
 }

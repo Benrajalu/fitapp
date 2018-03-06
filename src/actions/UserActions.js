@@ -38,6 +38,11 @@ export const setUserUid = uid => ({
   uid: uid
 });
 
+export const setUserWeight = userWeight => ({
+  type: "SET_USER_WEIGHT",
+  userWeight: userWeight
+});
+
 export const removeUser = () => ({
   type: "REMOVE_USER"
 });
@@ -53,7 +58,8 @@ export function authenticateUser(data) {
     profilePicture = data.profilePicture,
     signinEmail = data.signinEmail,
     uid = data.uid,
-    settings = data.settings;
+    settings = data.settings,
+    userWeight = data.userWeight;
 
   return dispatch => {
     // Reducers may handle this to set a flag like isFetching
@@ -63,6 +69,7 @@ export function authenticateUser(data) {
     dispatch(setUserProfilePicture(profilePicture));
     dispatch(setUserSettings(settings));
     dispatch(setUserUid(uid));
+    dispatch(setUserWeight(userWeight));
     dispatch(watchRoutines());
     dispatch(watchLogs());
     dispatch(watchExercises());

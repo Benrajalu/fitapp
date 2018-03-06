@@ -1,36 +1,37 @@
-import React, { Component } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { firebaseAuth, database } from "./store/";
+import { firebaseAuth, database } from './store/';
 
-import { connect } from "react-redux";
-import { getLoading, removeLoading } from "./actions/";
-import { authenticateUser, resetUser } from "./actions/UserActions";
+import { connect } from 'react-redux';
+import { getLoading, removeLoading } from './actions/';
+import { authenticateUser, resetUser } from './actions/UserActions';
 
 // Navigation and loader
-import AwareLoader from "./templates/containers/AwareLoader.js";
-import MenuContainer from "./templates/containers/MenuContainer.js";
+import AwareLoader from './templates/containers/AwareLoader.js';
+import ModalFactory from './templates/factories/Modals.js';
+import MenuContainer from './templates/containers/MenuContainer.js';
 
 // Make sure page is on top when loaded
-import ScrollToTop from "./templates/blocks/ScrollToTop.js";
+import ScrollToTop from './templates/blocks/ScrollToTop.js';
 
 // Pages
-import LoginContainer from "./templates/containers/LoginContainer.js";
-import Dashboard from "./templates/pages/Dashboard.js";
-import History from "./templates/pages/History.js";
-import AllRoutines from "./templates/pages/AllRoutines.js";
-import NewRoutine from "./templates/pages/NewRoutine.js";
-import EditRoutine from "./templates/pages/EditRoutine.js";
-import Settings from "./templates/pages/Settings.js";
-import NoMatch from "./templates/pages/NoMatch.js";
-
-import "./styles/placeholder.css";
+import LoginContainer from './templates/containers/LoginContainer.js';
+import Dashboard from './templates/pages/Dashboard.js';
+import History from './templates/pages/History.js';
+import AllRoutines from './templates/pages/AllRoutines.js';
+import NewRoutine from './templates/pages/NewRoutine.js';
+import EditRoutine from './templates/pages/EditRoutine.js';
+import Settings from './templates/pages/Settings.js';
+import Workout from './templates/pages/Workout.js';
+import NoMatch from './templates/pages/NoMatch.js';
 
 // Passing the state down through the connect down below
 const mapStateToProps = state => {
   return {
     user: state.user,
     loading: state.loading,
+    modals: state.modals,
     menu: state.menu,
     routines: state.routines
   };
@@ -68,7 +69,7 @@ class App extends Component {
       function(user) {
         if (user !== null && !_this.props.user.deleting) {
           _this.props.removeLoading();
-          const query = database.collection("users").doc(user.uid);
+          const query = database.collection('users').doc(user.uid);
           query.onSnapshot(
             doc => {
               if (!doc.exists && !_this.props.user.deleting) {
@@ -82,23 +83,23 @@ class App extends Component {
                   userChecked: true
                 });
               } else {
-                console.log("Proceeding with marked for deletion");
+                console.log('Proceeding with marked for deletion');
                 database
-                  .collection("users")
+                  .collection('users')
                   .doc(user.uid)
                   .delete()
                   .then(() => {
-                    console.log("user data removed");
+                    console.log('user data removed');
                     firebaseAuth.currentUser
                       .delete()
                       .then(() => {
-                        console.log("user deleted");
+                        console.log('user deleted');
                         firebaseAuth.signOut().then(() => {
                           _this.props.resetUser();
                         });
                       })
                       .catch(error => {
-                        console.log("User already deleted");
+                        console.log('User already deleted');
                         console.log(error);
                       });
                   })
@@ -108,12 +109,12 @@ class App extends Component {
               }
             },
             error => {
-              console.log("User logged out");
+              console.log('User logged out');
               _this.props.resetUser();
             }
           );
         } else {
-          console.log("not loggedin");
+          console.log('not loggedin');
           _this.props.resetUser();
           _this.setState({
             userChecked: true
@@ -121,16 +122,16 @@ class App extends Component {
         }
       },
       error => {
-        console.log("done");
+        console.log('done');
       }
     );
   }
 
   initiateDefaultUser(user) {
-    console.log("initiation of defaults for new user");
-    const query = database.collection("users"),
+    console.log('initiation of defaults for new user');
+    const query = database.collection('users'),
       email = user.email,
-      name = user.displayName ? user.displayName : user.email.split("@")[0],
+      name = user.displayName ? user.displayName : user.email.split('@')[0],
       photo = user.photoURL ? user.photoURL : false,
       settings = {
         baseBarbell: 20,
@@ -148,7 +149,7 @@ class App extends Component {
         settings: settings
       })
       .then(() => {
-        let newQuery = database.collection("users").doc(user.uid);
+        let newQuery = database.collection('users').doc(user.uid);
         newQuery.get().then(doc => {
           var rawdata = doc.data();
           rawdata.uid = user.uid;
@@ -182,25 +183,38 @@ class App extends Component {
       <BrowserRouter>
         <ScrollToTop>
           <div
-            className={this.props.user.uid ? "App logged-in" : "App logged-off"}
-          >
+            className={
+              'App ' +
+              (this.props.user.uid ? 'logged-in' : 'logged-off') +
+              (this.props.modals.status === 'opened' ? ' overlay' : ' ')
+            }>
             {this.props.user.uid ? (
-              <div id="nav-zone" className={"zone " + this.props.menu.layout}>
+              <div
+                id="nav-zone"
+                className={
+                  'zone ' +
+                  this.props.menu.layout +
+                  (this.props.loading.overlay !== false ? ' overlay' : ' ')
+                }>
                 <MenuContainer />
               </div>
             ) : (
               false
             )}
             {this.state.userChecked ? (
-              <div id="contents-zone" className="zone">
+              <div
+                id="contents-zone"
+                className={
+                  'zone ' +
+                  (this.props.loading.overlay !== false ? ' overlay' : ' ')
+                }>
                 <main
                   id="mainContents"
                   className={
-                    this.props.menu.status === "opened"
-                      ? "menuActive"
+                    this.props.menu.status === 'opened'
+                      ? 'menuActive'
                       : undefined
-                  }
-                >
+                  }>
                   <div className="container-fluid no-padding">
                     {this.props.user.uid ? (
                       <Switch>
@@ -209,6 +223,7 @@ class App extends Component {
                         <Route exact path="/history" component={History} />
                         <Route path="/new-routine" component={NewRoutine} />
                         <Route path="/edit/:id" component={EditRoutine} />
+                        <Route path="/workout/:id" component={Workout} />
                         <Route path="/settings" component={Settings} />
                         <Redirect from="/login" to="/" />
                         <Route component={NoMatch} />
@@ -226,6 +241,7 @@ class App extends Component {
             ) : null}
 
             <AwareLoader loading="LOADING" />
+            <ModalFactory />
           </div>
         </ScrollToTop>
       </BrowserRouter>

@@ -1,21 +1,15 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import ReactCrop from "react-image-crop";
-import { connect } from "react-redux";
-import { database } from "../../store/";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import ReactCrop from 'react-image-crop';
+import { connect } from 'react-redux';
+import { database } from '../../store/';
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import AccountDeleteModal from "../blocks/AccountDeleteModal";
-import InlineLoader from "../blocks/InlineLoader";
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import InlineLoader from '../blocks/InlineLoader';
 
-import defaultAvatar from "../../images/default-avatar.png";
+import defaultAvatar from '../../images/default-avatar.png';
 
-import "../../styles/ReactCrop.css";
-import "../../styles/Settings.css";
-
-import { watchRoutines } from "../../actions/RoutinesActions";
-import { changeLayout } from "../../actions/MenuActions";
-import { removeUser, resetUser } from "../../actions/UserActions";
+import { toggleModal } from '../../actions/ModalActions';
 
 const mapStateToProps = state => {
   return {
@@ -28,17 +22,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    watchRoutines: () => {
-      dispatch(watchRoutines());
-    },
-    removeUser: () => {
-      dispatch(removeUser());
-    },
-    resetUser: () => {
-      dispatch(resetUser());
-    },
-    changeLayout: layout => {
-      dispatch(changeLayout(layout));
+    toggleModal: value => {
+      dispatch(toggleModal(value));
     }
   };
 };
@@ -64,13 +49,14 @@ class Settings extends Component {
     this.repeat = this.repeat.bind(this);
 
     this.state = {
-      user: { uid: "0" },
+      user: { uid: '0' },
       mounted: false,
       userId: false,
       loading: true,
-      userName: "",
+      userName: '',
       userPic: false,
-      userEmail: "",
+      userEmail: '',
+      userWeight: null,
       crop: {
         aspect: 1
       },
@@ -80,13 +66,13 @@ class Settings extends Component {
       },
       wrongEmail: false,
       previewImage: undefined,
-      animate: " animate",
+      animate: ' animate',
       isPressed: false
     };
   }
 
   componentDidMount() {
-    document.title = "FitApp. - Vos paramètres";
+    document.title = 'FitApp. - Vos paramètres';
     const _this = this;
     this.setState({
       loading: false,
@@ -94,27 +80,31 @@ class Settings extends Component {
       settings: this.props.user.settings,
       userName: this.props.user.displayName,
       userPic: this.props.user.profilePicture,
-      userEmail: this.props.user.contactEmail
+      userEmail: this.props.user.contactEmail,
+      userWeight: this.props.user.userWeight
+        ? parseFloat(this.props.user.userWeight)
+        : ''
     });
     setTimeout(() => {
       _this.setState({
         mounted: true
       });
     }, 200);
+    console.log(this.props.userWeight);
   }
 
   repeat(direction, event) {
     // Launch the tuner function
     let value;
     switch (direction) {
-      case "less":
+      case 'less':
         value =
           this.state.settings.baseBarbell > 0
             ? this.state.settings.baseBarbell - 1
             : 0;
         break;
 
-      case "more":
+      case 'more':
         value = this.state.settings.baseBarbell + 1;
         break;
 
@@ -177,21 +167,21 @@ class Settings extends Component {
     this.setState(
       {
         settings: currentWeights,
-        savingWeights: "saving"
+        savingWeights: 'saving'
       },
       () => {
-        const updateQuery = database.collection("users").doc(this.state.userId),
+        const updateQuery = database.collection('users').doc(this.state.userId),
           value = this.state.settings.availableWeights,
           _this = this;
 
         updateQuery
           .update({
-            "settings.availableWeights": value
+            'settings.availableWeights': value
           })
           .then(function(response) {
-            console.log("Congrats, settings saved !");
+            console.log('Congrats, settings saved !');
             _this.setState({
-              savingWeights: "saved"
+              savingWeights: 'saved'
             });
             setTimeout(function() {
               _this.setState({
@@ -215,21 +205,21 @@ class Settings extends Component {
     this.setState(
       {
         settings: currentSettings,
-        savingBarbell: "saving"
+        savingBarbell: 'saving'
       },
       () => {
-        const updateQuery = database.collection("users").doc(this.state.userId),
+        const updateQuery = database.collection('users').doc(this.state.userId),
           value = this.state.settings.baseBarbell,
           _this = this;
 
         updateQuery
           .update({
-            "settings.baseBarbell": value
+            'settings.baseBarbell': value
           })
           .then(function(response) {
-            console.log("Congrats, settings saved !");
+            console.log('Congrats, settings saved !');
             _this.setState({
-              savingBarbell: "saved"
+              savingBarbell: 'saved'
             });
             setTimeout(function() {
               _this.setState({
@@ -249,9 +239,9 @@ class Settings extends Component {
       value = false;
     const stateSnapshot = this.state;
 
-    if (updatedField !== "userImage") {
+    if (updatedField !== 'userImage') {
       value = event.target.value;
-      if (updatedField === "userEmail") {
+      if (updatedField === 'userEmail') {
         const regex = new RegExp(
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
@@ -356,10 +346,10 @@ class Settings extends Component {
       var cropWidth = crop.width / 100 * imageWidth;
       var cropHeight = crop.height / 100 * imageHeight;
 
-      var canvas = document.createElement("canvas");
+      var canvas = document.createElement('canvas');
       canvas.width = cropWidth;
       canvas.height = cropHeight;
-      var ctx = canvas.getContext("2d");
+      var ctx = canvas.getContext('2d');
 
       ctx.drawImage(
         image,
@@ -372,7 +362,7 @@ class Settings extends Component {
         cropWidth,
         cropHeight
       );
-      return canvas.toDataURL("image/jpeg");
+      return canvas.toDataURL('image/jpeg');
     };
 
     const preview = cropImage(this.state.newPic, this.state.crop);
@@ -396,11 +386,15 @@ class Settings extends Component {
     } else {
       event.preventDefault();
       this.setState({
-        saving: "Patientez..."
+        saving: 'Patientez...'
       });
-      const updateQuery = database.collection("users").doc(this.state.userId),
+      const updateQuery = database.collection('users').doc(this.state.userId),
         displayName = this.state.userName,
         contactEmail = this.state.userEmail,
+        userWeight =
+          this.state.userWeight && this.state.userWeight.length > 0
+            ? this.state.userWeight
+            : false,
         profilePicture = this.state.previewImage
           ? this.state.previewImage
           : this.state.userPic,
@@ -410,12 +404,13 @@ class Settings extends Component {
         .update({
           displayName: displayName,
           contactEmail: contactEmail,
-          profilePicture: profilePicture
+          profilePicture: profilePicture,
+          userWeight: userWeight
         })
         .then(function(response) {
-          console.log("Congrats, settings saved !");
+          console.log('Congrats, settings saved !');
           _this.setState({
-            saving: "Modifications enregistrées !"
+            saving: 'Modifications enregistrées !'
           });
           setTimeout(function() {
             _this.setState({
@@ -452,18 +447,17 @@ class Settings extends Component {
 
     return (
       <div
-        className={this.state.mounted ? "Settings loaded" : "Settings"}
-        id="Settings"
-      >
+        className={this.state.mounted ? 'Settings loaded' : 'Settings'}
+        id="Settings">
         <div className="container-fluid page-intro">
           <div className="container">
             <Link to="/">
-              <FontAwesomeIcon icon={["fas", "angle-left"]} size="1x" /> Retour
+              <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
             </Link>
             <h1 className="page-header">Paramètres</h1>
             <div
               className="profilePic"
-              style={{ backgroundImage: "url(" + visibleImage + ")" }}
+              style={{ backgroundImage: 'url(' + visibleImage + ')' }}
             />
           </div>
         </div>
@@ -489,20 +483,18 @@ class Settings extends Component {
                   <div
                     className={
                       this.state.isPressed
-                        ? "barbell-load pressed " + this.state.direction
-                        : "barbell-load"
-                    }
-                  >
+                        ? 'barbell-load pressed ' + this.state.direction
+                        : 'barbell-load'
+                    }>
                     <button
                       className="button"
                       type="button"
                       onMouseUp={this.onMouseUp.bind(this)}
-                      onMouseDown={this.onMouseDown.bind(this, "less")}
+                      onMouseDown={this.onMouseDown.bind(this, 'less')}
                       onTouchEnd={this.onMouseUp.bind(this)}
                       onTouchCancel={this.onMouseUp.bind(this)}
-                      onTouchStart={this.onMouseDown.bind(this, "less")}
-                    >
-                      <FontAwesomeIcon icon={["fas", "minus"]} size="1x" />
+                      onTouchStart={this.onMouseDown.bind(this, 'less')}>
+                      <FontAwesomeIcon icon={['fas', 'minus']} size="1x" />
                     </button>
                     <div className="input">
                       <p>kg</p>
@@ -516,12 +508,11 @@ class Settings extends Component {
                       className="button"
                       type="button"
                       onMouseUp={this.onMouseUp.bind(this)}
-                      onMouseDown={this.onMouseDown.bind(this, "more")}
+                      onMouseDown={this.onMouseDown.bind(this, 'more')}
                       onTouchEnd={this.onMouseUp.bind(this)}
                       onTouchCancel={this.onMouseUp.bind(this)}
-                      onTouchStart={this.onMouseDown.bind(this, "more")}
-                    >
-                      <FontAwesomeIcon icon={["fas", "plus"]} size="1x" />
+                      onTouchStart={this.onMouseDown.bind(this, 'more')}>
+                      <FontAwesomeIcon icon={['fas', 'plus']} size="1x" />
                     </button>
                   </div>
                 )}
@@ -557,7 +548,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-25">25kg</label>
                   </div>
                   <div className="free-weights">
@@ -572,7 +563,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-20">20kg</label>
                   </div>
                   <div className="free-weights">
@@ -602,7 +593,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-10">10kg</label>
                   </div>
                   <div className="free-weights">
@@ -617,7 +608,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-5">5kg</label>
                   </div>
                   <div className="free-weights">
@@ -632,7 +623,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-2.5">2.5kg</label>
                   </div>
                   <div className="free-weights">
@@ -647,7 +638,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-1.25">1.25kg</label>
                   </div>
                   <div className="free-weights">
@@ -662,7 +653,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-1">1kg</label>
                   </div>
                   <div className="free-weights">
@@ -677,7 +668,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-0.5">0.5kg</label>
                   </div>
                   <div className="free-weights">
@@ -692,7 +683,7 @@ class Settings extends Component {
                           ? true
                           : false
                       }
-                    />{" "}
+                    />{' '}
                     <label htmlFor="input-0.25">0.25kg</label>
                   </div>
                 </form>
@@ -713,8 +704,7 @@ class Settings extends Component {
               ) : (
                 <form
                   className="panel-body form no-padding"
-                  onSubmit={this.handleFormSubmit}
-                >
+                  onSubmit={this.handleFormSubmit}>
                   <div id="profile">
                     <div className="fields">
                       <div className="form-group">
@@ -765,14 +755,30 @@ class Settings extends Component {
                             />
                             <button
                               className="btn btn-danger"
-                              onClick={this.cancelNewPic.bind(this)}
-                            >
+                              onClick={this.cancelNewPic.bind(this)}>
                               Annuler
                             </button>
                           </div>
                         ) : (
                           false
                         )}
+                      </div>
+                      <div className="form-group">
+                        <p>
+                          Pour avoir une estimation de la dépense calorique de
+                          vos séances, entrez ces informations :
+                        </p>
+                        <label htmlFor="weight">Poids</label>
+                        <div className="input-wrapper">
+                          <input
+                            type="number"
+                            id="weight"
+                            name="userWeight"
+                            onChange={this.updateAccount}
+                            value={this.state.userWeight}
+                          />
+                          <p className="input-legend">kg</p>
+                        </div>
                       </div>
                       <div className="buttons">
                         {this.state.saving ? (
@@ -786,32 +792,22 @@ class Settings extends Component {
                               this.state.userName.length === 0
                                 ? true
                                 : false
-                            }
-                          >
+                            }>
                             Valider
                           </button>
                         )}
                         <button
                           type="button"
                           className="btn btn-danger no-border"
-                          onClick={this.togglePopin}
-                        >
+                          onClick={this.props.toggleModal.bind(this, {
+                            type: 'account'
+                          })}>
                           Supprimer ce compte
                         </button>
                       </div>
                     </div>
                   </div>
                 </form>
-              )}
-              {this.state.deletePopin ? (
-                <AccountDeleteModal
-                  modalCloser={this.togglePopin}
-                  user={this.props.user}
-                  resetUser={this.props.resetUser}
-                  removeUser={this.props.removeUser}
-                />
-              ) : (
-                false
               )}
             </div>
           </div>

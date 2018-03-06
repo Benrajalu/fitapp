@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import ExercisePickerDetails from '../blocks/ExercisePickerDetails';
-import ExercisePickerPick from '../blocks/ExercisePickerPick';
-
-import '../../styles/modals.css';
-import '../../styles/ExercisePicker.css';
+import ExercisePickerDetails from '../../blocks/ExercisePickerDetails';
+import ExercisePickerPick from '../../blocks/ExercisePickerPick';
 
 class ExercisePicker extends Component {
   constructor(props) {
@@ -203,7 +200,7 @@ class ExercisePicker extends Component {
     }
 
     return (
-      <div className={'popin ' + displayStatus}>
+      <div className={'selection-overlay ' + displayStatus}>
         <div className="modal-header">
           <div className="container">
             <p className="title">Choisir des exercices</p>

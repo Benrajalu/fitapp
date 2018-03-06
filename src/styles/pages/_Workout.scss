@@ -1,0 +1,431 @@
+@import 'styles/_mixins.scss';
+
+#Workout {
+  .workout-grid {
+    display: flex;
+    height: 100vh;
+    flex-flow: column;
+    align-items: strech;
+    justify-content: space-between;
+    > .head {
+      min-height: 55px;
+      height: 55px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: #282929;
+      box-shadow: 0 2px 4px rgba(120, 120, 120, 0.4);
+      z-index: 3;
+      > .container {
+        align-items: center;
+        padding: 0px;
+        flex-flow: row nowrap;
+      }
+      h1 {
+        @include mont(12px, 400, $white);
+        padding-right: 10px;
+        small {
+          color: $greyType;
+        }
+      }
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 35px;
+        color: $white;
+        svg {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          transition: all 200ms ease-out;
+        }
+      }
+    }
+    > .contents {
+      flex-grow: 2;
+      overflow: auto;
+      z-index: 2;
+      padding: 20px 0;
+      .routine-detail {
+        width: 100%;
+      }
+      .routine-log {
+        margin-bottom: 20px;
+      }
+      &.empty {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-flow: column;
+        .message {
+          text-align: center;
+          padding: 0px;
+          margin-bottom: 55px;
+          p {
+            margin: 0px 0px 20px;
+            padding: 0 10px;
+            font-family: 'Questrial';
+            font-size: 16px;
+            color: $white;
+          }
+          .btn {
+            display: block;
+            width: 100%;
+            text-transform: uppercase;
+            border-radius: 0px;
+            padding: 8px 10px;
+          }
+        }
+      }
+    }
+    > .footer {
+      z-index: 3;
+      height: 60px;
+      min-height: 60px;
+      padding: 0px;
+      background: #0d0d0d;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -2px 4px rgba(20, 20, 20, 0.4);
+      overflow: hidden;
+      #stopwatch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 2;
+        padding: 0 16px;
+        min-width: 60%;
+        border: 0px;
+        line-height: 1;
+        background: transparent;
+        p {
+          font-family: 'Questrial';
+          color: $white;
+          font-size: 30px;
+        }
+        .stopwatch-btn {
+          height: 45px;
+          width: 45px;
+          display: flex;
+          border-radius: 100%;
+          background: $red;
+          align-items: center;
+          justify-content: center;
+          margin-right: 30px;
+          border: 3px solid $red;
+          color: $white;
+          transition: all 200ms ease-out;
+          position: relative;
+          overflow: hidden;
+          border: 0px;
+          div {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(150%);
+            transition: all 200ms ease-out;
+            opacity: 0;
+            svg {
+              width: 14px;
+              height: 14px;
+            }
+            &.visible {
+              transform: translateX(-50%) translateY(-50%);
+              opacity: 1;
+            }
+          }
+          &.running {
+            background: transparent;
+            border: 3px solid $white;
+          }
+        }
+      }
+      .action-zone {
+        height: 60px;
+        display: flex;
+        flex-grow: 1;
+        background: #222323;
+        position: relative;
+        min-width: 40%;
+      }
+      .action {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        flex-grow: 1;
+        background: #222323;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border: 0px;
+        @include mont(9px, 400, $white);
+        text-transform: uppercase;
+        min-width: 40%;
+        transition: all 200ms ease-out;
+        transform: translateY(-100%);
+        &.active {
+          transform: translateY(0%);
+        }
+        svg {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          margin-right: 10px;
+        }
+        span {
+          text-align: left;
+        }
+      }
+
+      @media (min-width: 721px) {
+        position: fixed;
+        bottom: 0px;
+        left: 50%;
+        max-width: 1000px;
+        width: 100%;
+        transform: translateX(-50%);
+      }
+    }
+
+    .step {
+      transition: all 200ms ease-out;
+      transform: translateY(-100%);
+      width: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      &.active {
+        position: relative;
+        transform: translateY(-0%);
+      }
+    }
+  }
+
+  .workout-card {
+    width: 100%;
+    display: block;
+    background: #383e59;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    overflow: hidden;
+    > .heading {
+      text-align: center;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-bewteen;
+      align-items: center;
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+      .title {
+        flex-grow: 1;
+        @include mont(18px, 300, $white);
+        strong {
+          display: inline-block;
+          font-size: 400;
+          letter-spacing: 1px;
+          color: $greyType;
+          &.done {
+            color: $green;
+          }
+        }
+      }
+      .btn {
+        border-radius: 0px;
+        background-color: $green;
+        width: 40px;
+        min-height: 40px;
+        &:focus {
+          outline: 0;
+        }
+      }
+    }
+    .body {
+      padding: 0px 0px;
+      border-top: 1px solid #494b65;
+      .input-zone {
+        text-align: center;
+        position: relative;
+        @include mont(16px, 400, $blue);
+        margin-bottom: 25px;
+        padding: 15px 5px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        .input {
+          margin: 0 10px;
+        }
+        input {
+          @include mont(26px, 300, $white);
+          background: transparent;
+          width: 90px;
+          border: 0px;
+          border-bottom: 1px solid $green;
+          line-height: 30px;
+          display: block;
+          margin: 0 auto 10px;
+          text-align: center;
+          padding: 0px;
+        }
+      }
+
+      .helper-buttons {
+        background: #32374e;
+        display: flex;
+        width: 100%;
+        padding: 5px 0px;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: 1px solid #494b65;
+        a,
+        button {
+          white-space: nowrap;
+          display: inline-block;
+          @include mont(9px, 400, $white);
+          text-transform: uppercase;
+          text-decoration: none;
+          transition: all 200ms ease-out;
+          line-height: 1;
+          margin: 0px;
+          padding: 0 10px;
+          line-height: 20px;
+          background: transparent;
+          border: 0px;
+          border-radius: 0px;
+          &:hover {
+            color: $green;
+          }
+        }
+        @media (max-width: 450px) {
+          flex-flow: row wrap;
+          justify-content: space-between;
+          padding: 0px;
+          a,
+          button {
+            line-height: 35px;
+            display: block;
+            width: 100%;
+            text-align: center;
+          }
+          li {
+            width: 50%;
+            &:nth-child(2) {
+              border-right: 1px solid #494b65;
+            }
+            &:first-child {
+              border-top: 1px solid #494b65;
+              width: 100%;
+              order: 3;
+            }
+          }
+        }
+      }
+
+      .set-counter {
+        padding: 0px 0px;
+        .set-heading {
+          text-align: center;
+          padding: 0px 10px;
+          @include mont(14px, 300, $white);
+          h4 {
+            display: inline-block;
+            background: #32374e;
+            border-radius: 8px;
+            padding: 5px 10px;
+          }
+          strong {
+            color: $greyType;
+            transition: all 200ms ease-out;
+            font-weight: 400;
+            letter-spacing: 1px;
+          }
+        }
+        .set-body {
+          padding: 20px 15px;
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          justify-content: space-between;
+          .rangeslider {
+            flex-grow: 2;
+            margin: 0 10px;
+          }
+        }
+        &:last-child {
+          margin-bottom: 20px;
+        }
+
+        &.completed {
+          .set-heading {
+            strong {
+              color: $green;
+            }
+          }
+
+          .rangeslider {
+            .rangeslider__fill {
+              background: $green;
+            }
+          }
+        }
+      }
+
+      .rangeslider {
+        border-radius: 3px;
+        background: $greyType;
+        .rangeslider__handle-tooltip {
+          @include mont(13px, 700, $white);
+          letter-spacing: 1px;
+          border-radius: 2px;
+          background-color: $blue;
+          &:after {
+            border-top-color: $blue;
+          }
+        }
+        .rangeslider__handle {
+          background: $white;
+          border: 1px solid $greyType;
+          &:after {
+            background: $green;
+            box-shadow: 0px 0px 0px transparent;
+          }
+          &:focus {
+            outline: 0;
+          }
+        }
+        .rangeslider__fill {
+          background: $blue;
+          border-radius: 3px;
+          transition: background 200ms ease-out;
+        }
+      }
+    }
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  @media (min-width: 721px) {
+    margin-top: -30px;
+    .workout-grid {
+      display: block;
+      .contents {
+        &.empty {
+          .message {
+            margin: 80px auto;
+          }
+        }
+      }
+    }
+  }
+}

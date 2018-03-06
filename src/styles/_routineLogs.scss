@@ -1,0 +1,184 @@
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.routine-log {
+  min-width: 220px;
+  background: #171717;
+  //border: 1px solid #292929;
+  margin-right: 11px;
+  border-radius: 3px;
+  overflow: hidden;
+  .description {
+    padding: 9px;
+  }
+  .report {
+    padding: 9px;
+    border-top: 1px solid #292929;
+    p {
+      @include mont(11px, 700, $greyType);
+      strong {
+        color: $white;
+        letter-spacing: 1px;
+      }
+      span {
+        color: $red;
+      }
+    }
+  }
+  .progress-bar {
+    position: relative;
+    height: 5px;
+    background: #454545;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+    margin-bottom: 4px;
+    .progress {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 100%;
+      background: $red;
+    }
+  }
+  .header {
+    display: block;
+    margin-bottom: 8px;
+    .exercise-name {
+      @include mont(11px, 700, $white);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    p {
+      @include mont(8px, 400, $greyType);
+      text-transform: uppercase;
+    }
+  }
+  .objectives {
+    border-top: 1px solid $red;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 8px;
+    justify-content: space-between;
+    align-items: flex-start;
+    p {
+      @include mont(9px, 500, $greyType);
+      padding-top: 7px;
+      position: relative;
+      strong {
+        display: block;
+        @include mont(13px, 500, $white);
+        margin-bottom: 2px;
+      }
+    }
+    .units {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: flex-end;
+      align-items: flex-start;
+      flex-grow: 2;
+      max-width: 120px;
+      p {
+        margin-left: 20px;
+        text-align: right;
+        &:before {
+          content: '';
+          width: 1px;
+          height: 4px;
+          background: $red;
+          position: absolute;
+          top: 0px;
+          left: 50%;
+          margin-left: 0.5px;
+        }
+      }
+    }
+  }
+  .status {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  &.launcher {
+    display: flex;
+    flex-flow: row nowrap;
+    background: #2f2f2f;
+    align-items: stretch;
+    width: 100%;
+    > .description {
+      padding: 9px;
+      flex-grow: 2;
+    }
+    > .completion {
+      width: 90px;
+      min-width: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0px;
+      border-left: 1px solid #000;
+      position: relative;
+      padding: 0px;
+      background: 0px;
+      cursor: pointer;
+      box-shadow: inset 1px 0px 3px rgba(0, 0, 0, 0.2);
+      transition: all 200ms ease-out;
+      &:hover {
+        box-shadow: inset 1px 0px 3px rgba(0, 0, 0, 0.5);
+      }
+      .copy {
+        position: absolute;
+        top: 50%;
+        left: 0px;
+        width: 100%;
+        transform: translateY(-50%);
+        text-align: center;
+        p {
+          @include mont(10px, 400, $greyType);
+          text-transform: uppercase;
+          &.counter {
+            font-size: 15px;
+            letter-spacing: 3px;
+            color: $white;
+            margin-bottom: 2px;
+          }
+        }
+      }
+      .circular-chart {
+        margin: 0 auto;
+        width: 69px;
+        height: 69px;
+        display: block;
+        box-sizing: content-box;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+        border-radius: 100%;
+        * {
+          box-sizing: content-box;
+        }
+        .circle-bg,
+        .circle {
+          width: 100%;
+        }
+        .circle-bg {
+          fill: none;
+          stroke: #808080;
+          stroke-width: 1px;
+        }
+        .circle {
+          fill: none;
+          stroke: $red;
+          stroke-width: 1px;
+          stroke-linecap: round;
+          animation: progress 1s ease-out forwards;
+        }
+      }
+    }
+  }
+}

@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import Routines from '../blocks/Routines';
-
-import '../../styles/modals.css';
+import Routines from '../../blocks/Routines';
 
 class RoutineLauncherModal extends Component {
   constructor(props) {
@@ -78,7 +76,7 @@ class RoutineLauncherModal extends Component {
     }
 
     return (
-      <div className={'popin routines-collapse ' + displayStatus}>
+      <div className={'selection-overlay routines-collapse ' + displayStatus}>
         <div className="modal-header">
           <div className="container">
             <p className="title">Choisir une routine</p>

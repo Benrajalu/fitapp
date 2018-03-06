@@ -1,0 +1,30 @@
+.active-routine {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  .routine-heading {
+    text-align: center;
+    padding-bottom: 20px;
+    .title {
+      @include mont(20px, 700, $white);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      padding: 0 15px;
+    }
+    .dot {
+      display: block;
+      margin: 0 auto 16px;
+      background: $red;
+      border-radius: 100px;
+      width: 9px;
+      height: 9px;
+    }
+    p {
+      @include mont(12px, 500, #828282);
+    }
+  }
+
+  .routine-body {
+    padding: 0 16px;
+  }
+}

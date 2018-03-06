@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import UserLog from './UserLog';
-import RoutineLauncherModal from './RoutineLauncherModal';
+import RoutineLauncherModal from './Overlays/RoutineLauncherModal';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { firebaseAuth } from '../../store/';
-
-import '../../styles/nav.css';
-
-import users from '../../data/users.json';
 
 class Nav extends Component {
   constructor(props) {
@@ -17,10 +13,6 @@ class Nav extends Component {
       user: {}
     };
     this.logOff = this.logOff.bind(this);
-  }
-
-  componentDidMount() {
-    this.setState({ user: users[0] });
   }
 
   logOff(event) {

@@ -33,6 +33,10 @@ export const user = (state = initialState, action) => {
             return Object.assign({}, state, {
                 uid: action.uid
             });
+        case "SET_USER_WEIGHT":
+            return Object.assign({}, state, {
+                userWeight: action.userWeight
+            });
         case "REMOVE_USER":
             return Object.assign({}, state, {
                 deleting: true

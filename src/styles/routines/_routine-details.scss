@@ -1,19 +1,4 @@
-@import "styles/_mixins.scss";
-
-.empty-workouts,
-.routine-detail.empty {
-  background: linear-gradient(180deg, #262626 58%, #383838 100%);
-  padding: 30px;
-  text-align: center;
-  margin-bottom: 30px;
-  width: 100%;
-  display: block;
-  p {
-    @include mont(13px, 400, $greyType);
-    margin-bottom: 15px;
-  }
-}
-
+@import 'styles/_mixins.scss';
 .routine-detail {
   /* Rectangle */
   background: linear-gradient(180deg, #262626 58%, #383838 100%);
@@ -71,7 +56,7 @@
         @include mont(10px, 600, $greyType);
         white-space: nowrap;
         &:after {
-          content: "•";
+          content: '•';
           display: inline-block;
           vertical-align: middle;
           margin: 0 3px;
@@ -151,108 +136,6 @@
 
   .routine-body {
     flex-grow: 2;
-    .routine-log {
-      min-width: 220px;
-      background: #171717;
-      //border: 1px solid #292929;
-      margin-right: 11px;
-      border-radius: 3px;
-      overflow: hidden;
-      .description {
-        padding: 9px;
-      }
-      .report {
-        padding: 9px;
-        border-top: 1px solid #292929;
-        p {
-          @include mont(11px, 700, $greyType);
-          strong {
-            color: $white;
-            letter-spacing: 1px;
-          }
-          span {
-            color: $red;
-          }
-        }
-      }
-      .progress-bar {
-        position: relative;
-        height: 5px;
-        background: #454545;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
-        margin-bottom: 4px;
-        .progress {
-          position: absolute;
-          top: 0px;
-          left: 0px;
-          height: 100%;
-          background: $red;
-        }
-      }
-      .header {
-        display: block;
-        margin-bottom: 8px;
-        .exercise-name {
-          @include mont(11px, 700, $white);
-          margin-bottom: 4px;
-          white-space: nowrap;
-          text-transform: uppercase;
-          display: block;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        p {
-          @include mont(8px, 400, $greyType);
-          text-transform: uppercase;
-        }
-      }
-      .objectives {
-        border-top: 1px solid $red;
-        display: flex;
-        flex-flow: row nowrap;
-        margin-bottom: 8px;
-        justify-content: space-between;
-        align-items: flex-start;
-        p {
-          @include mont(9px, 500, $greyType);
-          padding-top: 7px;
-          position: relative;
-          strong {
-            display: block;
-            @include mont(13px, 500, $white);
-            margin-bottom: 2px;
-          }
-        }
-        .units {
-          display: flex;
-          flex-flow: row nowrap;
-          justify-content: flex-end;
-          align-items: flex-start;
-          flex-grow: 2;
-          max-width: 120px;
-          p {
-            margin-left: 20px;
-            text-align: right;
-            &:before {
-              content: "";
-              width: 1px;
-              height: 4px;
-              background: $red;
-              position: absolute;
-              top: 0px;
-              left: 50%;
-              margin-left: 0.5px;
-            }
-          }
-        }
-      }
-      .status {
-        margin-bottom: 8px;
-        &:last-child {
-          margin-bottom: 0px;
-        }
-      }
-    }
 
     &.log {
       display: flex;
@@ -351,53 +234,5 @@
         //flex:0 0 70%;
       }
     }
-  }
-}
-
-.pagination {
-  display: flex;
-  justify-content: flex-end;
-  flex-flow: row nowrap;
-  overflow: auto;
-  align-items: center;
-  margin-bottom: 15px;
-  .legend {
-    font-family: "Questrial";
-    font-size: 10px;
-    color: $greyType;
-    padding-right: 10px;
-    text-transform: uppercase;
-  }
-  button {
-    display: block;
-    background: #2f2e33;
-    border-radius: 100%;
-    text-transform: uppercase;
-    border: 1px solid #2f2e33;
-    text-align: center;
-    font-family: "Questrial";
-    font-size: 10px;
-    color: $white;
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
-    line-height: 28px;
-    padding: 0px;
-    transition: all 200ms ease-out;
-    &:hover {
-      background: transparent;
-    }
-    svg {
-      display: inline-block;
-      vertical-align: middle;
-      width: 15px;
-      height: 15px;
-    }
-  }
-}
-
-.popin {
-  .routine-detail {
-    border-radius: 7px;
   }
 }

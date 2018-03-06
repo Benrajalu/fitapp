@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { database } from '../../store/';
 
-import InlineLoader from '../blocks/InlineLoader';
-import ExercisePicker from '../blocks/ExercisePicker';
-import ExerciseCustomizer from '../blocks/ExerciseCustomizer';
+import ExercisePicker from './Overlays/ExercisePicker';
+import InlineLoader from './InlineLoader';
+import ExerciseCustomizer from './ExerciseCustomizer';
 
 import moment from 'moment';
 import 'moment/locale/fr';
-
-import '../../styles/RoutineMaker.css';
 
 class RoutineMaker extends Component {
   constructor(props) {

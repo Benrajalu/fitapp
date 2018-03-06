@@ -116,12 +116,81 @@
         }
 
         .form-group {
+          p {
+            @include mont(10px, 400, $greyType);
+            margin-bottom: 15px;
+            line-height: 1.2;
+          }
           input[type="email"],
-          input[type="text"] {
+          input[type="text"],
+          input[type="number"] {
             + p {
               @include mont(11px, 300, $red);
               letter-spacing: 0.5px;
               padding-top: 5px;
+            }
+          }
+          .input-wrapper {
+            position: relative;
+            input {
+              padding-right: 30px;
+              + p {
+                position: absolute;
+                top: 0%;
+                right: 0px;
+                color: $white;
+                width: 30px;
+                height: 100%;
+                display: flex;
+                align-content: center;
+                justify-content: center;
+              }
+            }
+          }
+          .inline-fields {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            padding-top: 2px;
+            input {
+              position: absolute;
+              left: 0px;
+              z-index: -1;
+              visibility: hidden;
+              &:checked + label {
+                color: $white;
+                &:before {
+                  background-color: $red;
+                }
+              }
+            }
+            label {
+              margin-bottom: 0px;
+              padding-right: 10px;
+              color: $white;
+              position: relative;
+              padding-left: 15px;
+              z-index: 2;
+              color: $greyType;
+              &:before {
+                content: "";
+                display: inline-block;
+                vertical-align: middle;
+                width: 10px;
+                height: 10px;
+                border-radius: 100%;
+                background: transparent;
+                background: #403f48;
+                position: absolute;
+                top: 50%;
+                left: 0px;
+                transition: all 200ms ease-out;
+                transform: translateY(-50%);
+                box-shadow: inset 2px -2px 3px rgba(0, 0, 0, 0.4);
+              }
             }
           }
           .fake-button {

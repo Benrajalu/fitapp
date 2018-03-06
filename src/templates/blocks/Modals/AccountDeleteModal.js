@@ -1,12 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import InlineLoader from "../blocks/InlineLoader";
-import { Redirect } from "react-router";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import InlineLoader from '../../blocks/InlineLoader';
+import { Redirect } from 'react-router';
 
-import { firebaseAuth, fire, database } from "../../store/";
-
-import "../../styles/modals.css";
+import { firebaseAuth, fire, database } from '../../../store/';
 
 class AccountDeleteModal extends Component {
   constructor(props) {
@@ -27,22 +25,22 @@ class AccountDeleteModal extends Component {
     const _this = this;
     setTimeout(function() {
       _this.setState({
-        visible: " visible"
+        visible: ' visible'
       });
     }, 100);
 
     let provider;
     switch (firebaseAuth.currentUser.providerData[0].providerId) {
-      case "google.com":
-        provider = "google";
+      case 'google.com':
+        provider = 'google';
         break;
 
-      case "password":
-        provider = "password";
+      case 'password':
+        provider = 'password';
         break;
 
-      case "facebook.com":
-        provider = "facebook";
+      case 'facebook.com':
+        provider = 'facebook';
         break;
 
       default:
@@ -81,7 +79,7 @@ class AccountDeleteModal extends Component {
     });
     setTimeout(function() {
       // References the parent method for displaying a modal that's in Dashboard.js
-      _this.props.modalCloser();
+      _this.props.closeModal();
     }, 300);
   }
 
@@ -127,24 +125,24 @@ class AccountDeleteModal extends Component {
     const _this = this;
 
     switch (firebaseAuth.currentUser.providerData[0].providerId) {
-      case "google.com":
-        console.log("google");
+      case 'google.com':
+        console.log('google');
         credentials = fire.auth.GoogleAuthProvider.credential(
           null,
           this.state.userToken
         );
         break;
 
-      case "password":
-        console.log("password");
+      case 'password':
+        console.log('password');
         credentials = fire.auth.EmailAuthProvider.credential(
           firebaseAuth.currentUser.email,
           _this.state.password
         );
         break;
 
-      case "facebook.com":
-        console.log("facebook");
+      case 'facebook.com':
+        console.log('facebook');
         credentials = fire.auth.FacebookAuthProvider.credential(
           this.state.userToken
         );
@@ -159,13 +157,14 @@ class AccountDeleteModal extends Component {
       .then(() => {
         _this.props.removeUser();
         database
-          .collection("users")
+          .collection('users')
           .doc(_this.props.user.uid)
           .set({
             delete: true
           })
           .then(() => {
-            console.log("user marked for deletion");
+            console.log('user marked for deletion');
+            _this.props.closeModal();
           });
       })
       .catch(error => {
@@ -177,7 +176,7 @@ class AccountDeleteModal extends Component {
     let deleteSecurity;
 
     switch (this.state.provider) {
-      case "password":
+      case 'password':
         deleteSecurity = (
           <p>
             <label>Veuillez re-entrer votre mot de passe pour confirmer</label>
@@ -189,7 +188,7 @@ class AccountDeleteModal extends Component {
         );
         break;
 
-      case "facebook":
+      case 'facebook':
         deleteSecurity = (
           <p>
             <label>Veuillez vous ré-identifier avant de confirmer : </label>
@@ -198,8 +197,7 @@ class AccountDeleteModal extends Component {
             ) : (
               <button
                 className="btn facebook"
-                onClick={this.facebookID.bind(this)}
-              >
+                onClick={this.facebookID.bind(this)}>
                 Identification Facebook
               </button>
             )}
@@ -207,7 +205,7 @@ class AccountDeleteModal extends Component {
         );
         break;
 
-      case "google":
+      case 'google':
         deleteSecurity = (
           <p>
             <label>Veuillez vous ré-identifier avant de confirmer : </label>
@@ -229,7 +227,7 @@ class AccountDeleteModal extends Component {
               type="checkbox"
               onChange={this.activateAccountDelete}
               id="security-checkbox"
-            />{" "}
+            />{' '}
             <label htmlFor="security-checkbox">
               Je souhaite supprimer mon compte
             </label>
@@ -238,15 +236,23 @@ class AccountDeleteModal extends Component {
     }
 
     return (
-      <div className={"popin overlay " + this.state.visible}>
+      <div className={'modal ' + this.state.visible}>
         <div className="modal-contents">
-          <div className="container">
+          <div className="container padding-left">
             {!this.state.inProgress ? (
-              <div className="panel alert">
-                <div className="panel-body">
+              <div className="window alert">
+                <div className="window-head">
+                  <div className="title">
+                    <h3>Supprimer ce compte</h3>
+                  </div>
+                  <button className="close" onClick={this.closeModal}>
+                    <FontAwesomeIcon icon={['fas', 'times']} size="1x" />
+                  </button>
+                </div>
+                <div className="window-body">
                   <div className="icon">
                     <FontAwesomeIcon
-                      icon={["far", "exclamation-triangle"]}
+                      icon={['far', 'exclamation-triangle']}
                       size="1x"
                     />
                   </div>
@@ -263,8 +269,7 @@ class AccountDeleteModal extends Component {
                   <button
                     className="btn ok"
                     onClick={this.deleteAccount.bind(this)}
-                    disabled={this.state.accountDelete ? false : true}
-                  >
+                    disabled={this.state.accountDelete ? false : true}>
                     Supprimer mon compte
                   </button>
                   <button className="btn" onClick={this.closeModal}>
@@ -273,11 +278,11 @@ class AccountDeleteModal extends Component {
                 </div>
               </div>
             ) : (
-              <div className="panel alert">
-                <div className="panel-body">
+              <div className="window alert">
+                <div className="window-body">
                   <div className="icon">
                     <FontAwesomeIcon
-                      icon={["far", "exclamation-triangle"]}
+                      icon={['far', 'exclamation-triangle']}
                       size="1x"
                     />
                   </div>
@@ -297,7 +302,7 @@ class AccountDeleteModal extends Component {
 }
 
 AccountDeleteModal.propTypes = {
-  modalCloser: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired
 };
 
 export default AccountDeleteModal;

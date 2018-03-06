@@ -3,7 +3,7 @@
 
 body,
 html {
-  background: #000000;
+  background: #000;
 }
 
 .logged-in #mainContents {
@@ -11,7 +11,6 @@ html {
     padding-top: 30px;
   }
 }
-
 .align-right {
   text-align: right;
 }
@@ -19,12 +18,33 @@ html {
   text-align: center;
 }
 
-@import 'styles/grid';
-@import 'styles/loader';
+@import 'styles/layout/grid';
+@import 'styles/layout/baseLayout';
+@import 'styles/layout/nav';
+
+@import 'styles/utils/loaders';
+@import 'styles/utils/ReactCrop';
+
 @import 'styles/titleBlocks';
 @import 'styles/buttons';
-@import 'styles/progressBars';
 @import 'styles/panels';
+@import 'styles/RecordsLogs';
+@import 'styles/routines';
+@import 'styles/WeekCounter';
+@import 'styles/weightLoader';
+@import 'styles/routineLogs';
+
+@import 'styles/pages/Login';
+@import 'styles/pages/AllRoutines';
+@import 'styles/pages/RoutineMaker';
+@import 'styles/pages/Dashboard';
+@import 'styles/pages/NoMatch';
+@import 'styles/pages/Settings';
+@import 'styles/pages/Workout';
+
+@import 'styles/overlays/modals';
+@import 'styles/overlays/selectionOverlay';
+@import 'styles/overlays/ExercisePicker';
 
 .nav-tabs {
   display: flex;
@@ -55,7 +75,8 @@ html {
   }
   input[type='text'],
   input[type='email'],
-  input[type='password'] {
+  input[type='password'],
+  input[type='number'] {
     display: block;
     width: 100%;
     border: 0px;
@@ -70,108 +91,6 @@ html {
     &:focus {
       outline: 0;
       border-color: $green;
-    }
-  }
-}
-
-.inlineLoader {
-  display: inline-block;
-  width: 100%;
-  position: relative;
-  text-align: center;
-  margin: 10px auto 20px;
-  min-width: 0px;
-  .bits {
-    display: flex;
-    width: 30px;
-    height: 30px;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    //transform: rotate(-45deg);
-    margin: 0 auto 15px;
-    animation: rotation 1.5s linear infinite normal;
-    i {
-      width: 14px;
-      background: $red;
-      height: 14px;
-      margin-bottom: 2px;
-      animation: bitMovementTopLeft 1s linear infinite;
-      border-radius: 100%;
-      &:nth-child(2) {
-        animation: bitMovementTopRight 1s linear infinite;
-        animation-delay: 150ms;
-      }
-      &:nth-child(3) {
-        animation: bitMovementBottomLeft 1s linear infinite;
-        animation-delay: 300ms;
-      }
-      &:nth-child(4) {
-        animation: bitMovementBottomRight 1s linear infinite;
-        animation-delay: 450ms;
-      }
-    }
-  }
-  p {
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    z-index: 2;
-    @include mont(10px, 400, $greyType);
-    text-transform: uppercase;
-    margin-bottom: 0px !important;
-  }
-  &.error {
-    color: $red;
-    svg {
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 10px;
-      display: block;
-    }
-  }
-}
-
-.App {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  .zone {
-    flex-grow: 2;
-    width: 100%;
-    overflow: auto;
-    background: #000;
-    transition: all 200ms ease-out;
-    &#nav-zone {
-      flex-grow: 1;
-      height: 60px;
-      max-height: 60px;
-      overflow: visible;
-      @media (max-width: 720px) {
-        order: 2;
-        &.hidden {
-          max-height: 0px;
-          overflow: hidden;
-        }
-      }
-    }
-    &#contents-zone {
-      display: flex;
-      flex-flow: column;
-      justify-content: stretch;
-    }
-  }
-  #mainContents {
-    display: flex;
-    flex-grow: 1;
-    background: #000000;
-    position: relative;
-    z-index: 95;
-    //min-height: 100vh;
-    transition: all 200ms ease-out;
-    right: 0px;
-    overflow: auto;
-    &.menuActive {
-      right: 320px;
     }
   }
 }

@@ -6,8 +6,6 @@ import WeeklyCounterContainer from '../containers/WeeklyCounterContainer';
 import WorkoutsHistoryContainer from '../containers/WorkoutsHistoryContainer';
 import RecordsHistoryContainer from '../containers/RecordsHistoryContainer';
 
-import '../../styles/Dashboard.css';
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);

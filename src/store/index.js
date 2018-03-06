@@ -25,8 +25,10 @@ const initialState = {};
 export const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 );
+
+// Add logger to middlewere if needed
 
 // Test store for, well, tests
 const fakeInitialState = {
@@ -37,7 +39,7 @@ const fakeInitialState = {
 export const fakeStore = createStore(
   rootReducer,
   fakeInitialState,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 );
 
 // Firebase utils
