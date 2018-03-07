@@ -46,9 +46,10 @@
     }
     > .contents {
       flex-grow: 2;
+      position: relative;
       overflow: auto;
       z-index: 2;
-      padding: 20px 0;
+      padding: 0px 0;
       .routine-detail {
         width: 100%;
       }
@@ -413,6 +414,70 @@
     &:last-child {
       margin-bottom: 0px;
     }
+  }
+
+  #workout-tabs {
+    background: #2e2e2e;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    height: 0px;
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    transition: all 200ms ease-out;
+    z-index: 2;
+    padding: 0 10px;
+    &.visible {
+      height: 50px;
+      overflow: auto;
+      top: 55px;
+    }
+    li {
+      padding: 0 10px;
+      position: relative;
+      flex-grow: 1;
+      &:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        bottom: 0px;
+        height: 0px;
+        background: $red;
+        transition: all 200ms ease-out;
+        left: 0px;
+      }
+      &.active {
+        button {
+          color: $white;
+        }
+        &:after {
+          height: 2px;
+        }
+      }
+      button {
+        @include mont(11px, 500, #A6A6A6);
+        text-transform: uppercase;
+        border: 0px;
+        background: transparent;
+        white-space: nowrap;
+        transition: all 200ms ease-out;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0px;
+      }
+    }
+  }
+
+  .currentExercise {
+    padding-top: 55px;
   }
 
   @media (min-width: 721px) {

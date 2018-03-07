@@ -7,7 +7,6 @@ import WeightHelperModal from '../../blocks/WeightHelperModal';
 class WorkoutDetails extends Component {
   constructor(props) {
     super(props);
-    this.changeDisplay = this.changeDisplay.bind(this);
     this.setCompletion = this.setCompletion.bind(this);
     this.displayModal = this.displayModal.bind(this);
     this.removeHandicap = this.removeHandicap.bind(this);
@@ -44,13 +43,6 @@ class WorkoutDetails extends Component {
     });
 
     this.props.onReps(newSetlist, this.props.index);
-  }
-
-  changeDisplay(event) {
-    // This is use to toggle the visibility of the sets
-    this.setState({
-      visible: !this.state.visible
-    });
   }
 
   setCompletion(data) {
@@ -98,6 +90,29 @@ class WorkoutDetails extends Component {
     this.props.onUpdate(index, valueObject);
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Update with new setlist if the comonent is reset with new data
+    let newSetlist = [];
+    if (nextProps.contents.setsTarget && nextProps.contents.sets === false) {
+      let y = 0,
+        totalSets = parseFloat(nextProps.contents.setsTarget);
+      for (y; y < totalSets; y++) {
+        newSetlist.push(0);
+      }
+    } else if (nextProps.contents.setsTarget && nextProps.contents.sets) {
+      newSetlist = nextProps.contents.sets;
+    } else if (nextProps.contents.handicap && nextProps.contents.sets) {
+      newSetlist = nextProps.contents.sets;
+    } else {
+      newSetlist.push(0);
+    }
+
+    this.setState({
+      sets: newSetlist
+    });
+    console.log(newSetlist);
+  }
+
   render() {
     // Setting up variables
     const workoutExercise = this.props.contents;
@@ -119,7 +134,7 @@ class WorkoutDetails extends Component {
     let sets = false;
     sets = this.state.sets.map((value, index) => (
       <SetCounter
-        reps={
+        treshold={
           this.props.contents.repTarget
             ? parseInt(this.props.contents.repTarget, 10)
             : parseInt(this.props.contents.handicap, 10)

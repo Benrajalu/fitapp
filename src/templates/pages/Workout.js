@@ -12,6 +12,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import InlineLoader from '../blocks/InlineLoader';
 
 import Stopwatch from '../blocks/WorkoutBlocks/Stopwatch';
+import WorkoutTabs from '../blocks/WorkoutBlocks/WorkoutTabs';
 import WorkoutExerciseTeaser from '../blocks/WorkoutBlocks/WorkoutExerciseTeaser';
 import WorkoutExerciseFull from '../blocks/WorkoutBlocks/WorkoutExerciseFull';
 
@@ -539,6 +540,16 @@ class Workout extends Component {
                 <InlineLoader copy="Chargement du programme" />
               ) : (
                 <Fragment>
+                  <WorkoutTabs
+                    switchToExercise={this.showExercise}
+                    currentExercise={this.state.ongoingExercise}
+                    exercisesDatabase={this.props.exercises.list}
+                    exercises={
+                      this.state.workoutLog.exercises
+                        ? this.state.workoutLog.exercises
+                        : []
+                    }
+                  />
                   <div
                     className={
                       'step active-routine ' +

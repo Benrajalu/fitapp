@@ -34,6 +34,10 @@ class WorkoutExerciseTeaser extends Component {
     });
   }
 
+  componentWillUnmount() {
+    console.log('yep');
+  }
+
   render() {
     // Setting up variables
     const currentExercise = this.props.contents;
