@@ -214,119 +214,219 @@
   .workout-card {
     width: 100%;
     display: block;
-    background: #383e59;
     margin-bottom: 15px;
     border-radius: 3px;
     overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    height: 100%;
     > .heading {
       text-align: center;
       display: flex;
       flex-flow: row nowrap;
-      justify-content: space-bewteen;
+      justify-content: space-between;
       align-items: center;
-      border-radius: 3px 3px 0 0;
-      overflow: hidden;
+      padding: 24px 16px;
+      box-shadow: 0px 4px 4px rgba(41, 41, 41, 0.7);
+      margin-bottom: 16px;
       .title {
-        flex-grow: 1;
-        @include mont(18px, 300, $white);
-        strong {
-          display: inline-block;
-          font-size: 400;
-          letter-spacing: 1px;
-          color: $greyType;
-          &.done {
-            color: $green;
-          }
-        }
+        @include mont(20px, 700, $white);
+        text-transform: uppercase;
+        margin-bottom: 5px;
       }
-      .btn {
-        border-radius: 0px;
-        background-color: $green;
-        width: 40px;
-        min-height: 40px;
-        &:focus {
-          outline: 0;
+      .subtitle {
+        @include mont(12px, 500, #828282);
+        text-transform: uppercase;
+      }
+      .direction {
+        color: $white;
+        flex-grow: 2;
+        text-align: left;
+        &:last-child {
+          text-align: right;
+        }
+        svg {
+          width: 9px;
+          height: 24px;
+        }
+        &:disabled {
+          opacity: 0.5;
         }
       }
     }
     .body {
       padding: 0px 0px;
-      border-top: 1px solid #494b65;
       .input-zone {
-        text-align: center;
-        position: relative;
-        @include mont(16px, 400, $blue);
-        margin-bottom: 25px;
-        padding: 15px 5px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        .input {
-          margin: 0 10px;
-        }
-        input {
-          @include mont(26px, 300, $white);
-          background: transparent;
-          width: 90px;
-          border: 0px;
-          border-bottom: 1px solid $green;
-          line-height: 30px;
-          display: block;
-          margin: 0 auto 10px;
+        margin-bottom: 16px;
+        padding: 0 16px;
+        .col {
           text-align: center;
-          padding: 0px;
+          position: relative;
+          @include mont(16px, 400, $blue);
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: stretch;
+          justify-content: center;
+          transition: all 200ms ease-out;
+          box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+          border: 1px solid #4f4f4f;
+          border-radius: 8px;
+          .fa-minus,
+          .fa-plus {
+            transition: all 200ms ease-out;
+            transform: scale(1);
+          }
+          &.pressed {
+            .input input {
+              color: #5a81cd;
+              transform: scale(1.3);
+            }
+            &.more {
+              box-shadow: inset -8px 0px 5px rgba(0, 0, 0, 0.8),
+                inset 1px 0px 5px rgba(0, 0, 0, 1);
+              .fa-plus {
+                transform: scale(0.7);
+              }
+              .fa-minus {
+                transform: scale(1.1);
+              }
+            }
+            &.less {
+              box-shadow: inset 8px 0px 5px rgba(0, 0, 0, 0.8),
+                inset 1px 0px 5px rgba(0, 0, 0, 1);
+              .fa-minus {
+                transform: scale(0.7);
+              }
+              .fa-plus {
+                transform: scale(1.1);
+              }
+            }
+          }
+          .button {
+            flex-grow: 2;
+            text-align: center;
+            color: $white;
+            border-radius: 0px;
+            background: transparent;
+            border: 0px;
+          }
+          .input {
+            padding: 7px 15px 0;
+            p {
+              font-family: 'Questrial';
+              font-size: 13px;
+              color: $greyType;
+              text-transform: uppercase;
+            }
+          }
+          input[type='number'] {
+            @include mont(36px, 700, $white);
+            background: transparent;
+            width: 90px;
+            border: 0px;
+            line-height: 50px;
+            display: block;
+            margin: 0 auto 0px;
+            text-align: center;
+            padding: 0px 0px;
+            height: auto;
+            transform: scale(1);
+            transition: all 200ms ease-out;
+          }
         }
       }
 
       .helper-buttons {
-        background: #32374e;
         display: flex;
         width: 100%;
         padding: 5px 0px;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
+        flex-flow: row wrap;
+        justify-content: center;
         align-items: center;
-        border-bottom: 1px solid #494b65;
+        margin-bottom: 11px;
         a,
         button {
           white-space: nowrap;
           display: inline-block;
-          @include mont(9px, 400, $white);
-          text-transform: uppercase;
+          @include mont(11px, 500, $white);
           text-decoration: none;
           transition: all 200ms ease-out;
           line-height: 1;
-          margin: 0px;
+          margin: 0px 5px 5px;
           padding: 0 10px;
-          line-height: 20px;
+          line-height: 30px;
           background: transparent;
-          border: 0px;
-          border-radius: 0px;
+          border: 1px solid #8f8f8f;
+          border-radius: 20px;
           &:hover {
-            color: $green;
+            color: $red;
           }
         }
-        @media (max-width: 450px) {
-          flex-flow: row wrap;
+      }
+
+      .setList {
+        padding: 0 16px;
+        .heading {
+          display: flex;
+          flex-flow: row nowrap;
           justify-content: space-between;
-          padding: 0px;
-          a,
-          button {
-            line-height: 35px;
-            display: block;
-            width: 100%;
-            text-align: center;
+          align-items: center;
+          margin-bottom: 16px;
+          .sets-title {
+            @include mont(15px, 500, $greyType);
+            text-transform: uppercase;
           }
-          li {
-            width: 50%;
-            &:nth-child(2) {
-              border-right: 1px solid #494b65;
-            }
-            &:first-child {
-              border-top: 1px solid #494b65;
+
+          .completion-small {
+            width: 43px;
+            min-width: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0px;
+            position: relative;
+            .copy {
+              position: absolute;
+              top: 50%;
+              left: 0px;
               width: 100%;
-              order: 3;
+              transform: translateY(-50%);
+              text-align: center;
+              p {
+                @include mont(12px, 400, $white);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+              }
+            }
+            .circular-chart {
+              margin: 0 auto;
+              width: 43px;
+              height: 43px;
+              display: block;
+              box-sizing: content-box;
+              box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+              border-radius: 100%;
+              * {
+                box-sizing: content-box;
+              }
+              .circle-bg,
+              .circle {
+                width: 100%;
+              }
+              .circle-bg {
+                fill: none;
+                stroke: #808080;
+                stroke-width: 2px;
+              }
+              .circle {
+                fill: none;
+                stroke: $red;
+                stroke-width: 2px;
+                stroke-linecap: round;
+                stroke-dasharray: 0, 100;
+                transition: stroke-dasharray 500ms linear;
+              }
             }
           }
         }
@@ -334,32 +434,85 @@
 
       .set-counter {
         padding: 0px 0px;
+        display: flex;
+        flex-flow: row nowrap;
+        background: #2f2f2f;
+        margin-bottom: 16px;
+        border-radius: 2px;
         .set-heading {
           text-align: center;
           padding: 0px 10px;
           @include mont(14px, 300, $white);
-          h4 {
-            display: inline-block;
-            background: #32374e;
-            border-radius: 8px;
-            padding: 5px 10px;
-          }
-          strong {
-            color: $greyType;
-            transition: all 200ms ease-out;
-            font-weight: 400;
-            letter-spacing: 1px;
+          width: 69px;
+          text-align: center;
+          display: flex;
+          flex-flow: column;
+          justify-content: center;
+          align-items: center;
+          border-right: 1px solid #000000;
+          .count {
+            @include mont(10px, 400, $greyType);
+            text-transform: uppercase;
+            span {
+              color: $white;
+              font-size: 14px;
+              margin-bottom: 3px;
+              letter-spacing: 1px;
+              display: block;
+              text-align: center;
+            }
           }
         }
         .set-body {
-          padding: 20px 15px;
+          padding: 0px;
           display: flex;
           flex-flow: row nowrap;
           align-items: center;
           justify-content: space-between;
+          flex-grow: 2;
+          transition: all 200ms ease-out;
+          box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+          .fa-plus,
+          .fa-minus {
+            transform: scale(1);
+            transition: all 200ms ease-out;
+          }
+          &.pressed {
+            &.more {
+              box-shadow: inset -5px 0px 5px rgba(0, 0, 0, 0.6),
+                inset 1px 0px 5px rgba(0, 0, 0, 0.2);
+              .fa-plus {
+                transform: scale(0.7);
+              }
+              .fa-minus {
+                transform: scale(1.1);
+              }
+            }
+            &.less {
+              box-shadow: inset 5px 0px 5px rgba(0, 0, 0, 0.6),
+                inset 1px 0px 5px rgba(0, 0, 0, 0.2);
+              .fa-minus {
+                transform: scale(0.7);
+              }
+              .fa-plus {
+                transform: scale(1.1);
+              }
+            }
+          }
           .rangeslider {
             flex-grow: 2;
-            margin: 0 10px;
+            margin: 0px;
+          }
+
+          .value-button {
+            height: 66px;
+            background: transparent;
+            color: $white;
+            max-width: 70px;
+            width: 70px;
+            svg {
+              width: 15px;
+            }
           }
         }
         &:last-child {
@@ -367,37 +520,34 @@
         }
 
         &.completed {
-          .set-heading {
-            strong {
-              color: $green;
-            }
-          }
-
           .rangeslider {
             .rangeslider__fill {
-              background: $green;
+              background: $red;
             }
           }
         }
       }
 
       .rangeslider {
+        background: #454545;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 3px;
-        background: $greyType;
+        height: 6px;
         .rangeslider__handle-tooltip {
-          @include mont(13px, 700, $white);
+          @include mont(13px, 700, $red);
           letter-spacing: 1px;
           border-radius: 2px;
-          background-color: $blue;
+          background-color: $white;
           &:after {
-            border-top-color: $blue;
+            border-top-color: $white;
           }
         }
         .rangeslider__handle {
-          background: $white;
-          border: 1px solid $greyType;
+          border: 0px transparent;
+          background: #bdbdbd;
+          box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.28);
           &:after {
-            background: $green;
+            background: transparent;
             box-shadow: 0px 0px 0px transparent;
           }
           &:focus {
@@ -405,7 +555,7 @@
           }
         }
         .rangeslider__fill {
-          background: $blue;
+          background: $red;
           border-radius: 3px;
           transition: background 200ms ease-out;
         }
@@ -477,7 +627,7 @@
   }
 
   .currentExercise {
-    padding-top: 55px;
+    padding-top: 50px;
   }
 
   @media (min-width: 721px) {

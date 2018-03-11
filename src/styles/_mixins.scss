@@ -86,3 +86,9 @@ $orange: #fcc05a;
     background-position: 0 0;
   }
 }
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}

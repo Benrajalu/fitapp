@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import WorkoutHistoryDetail from "../blocks/WorkoutHistoryDetail";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import React, { Component } from 'react';
+import WorkoutHistoryDetail from '../blocks/WorkoutHistoryDetail';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import moment from "moment";
-import "moment/locale/fr";
+import moment from 'moment';
+import 'moment/locale/fr';
 
 class WorkoutsHistory extends Component {
   constructor(props) {
@@ -16,18 +16,17 @@ class WorkoutsHistory extends Component {
   }
 
   changePage(value, event) {
-    console.log(value);
     event.preventDefault();
     let newValue;
     // According to direction parameter, we assess if we go forward or back
     switch (value) {
-      case "less":
+      case 'less':
         // Going back is only possible if you're not going lower than 0, of course
         newValue =
           this.state.pagination - 5 > 0 ? this.state.pagination - 5 : 0;
         break;
 
-      case "more":
+      case 'more':
         // You can't go forward more than the total of items, so if 5 more is overboard you're staying where you've reached
         newValue =
           this.state.pagination + 5 < this.props.workoutLogs.length
@@ -52,8 +51,8 @@ class WorkoutsHistory extends Component {
       pagination: newValue
     });
     document
-      .getElementsByClassName("workout-logs")[0]
-      .scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
+      .getElementsByClassName('workout-logs')[0]
+      .scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
   }
 
   componentDidMount() {
@@ -82,12 +81,12 @@ class WorkoutsHistory extends Component {
     });
 
     // Output items according to limits on component
-    if (this.props.limit === "week") {
+    if (this.props.limit === 'week') {
       let now = moment().valueOf();
       workoutItems = workouts.filter(obj => {
         let timeOfWorkout = moment(obj.timestamp).valueOf();
         let startOfWeek = moment(now)
-          .startOf("week")
+          .startOf('week')
           .valueOf();
         return moment(timeOfWorkout).isAfter(startOfWeek);
       });
@@ -120,18 +119,16 @@ class WorkoutsHistory extends Component {
                 </li>
                 <li>
                   <button
-                    onClick={this.changePage.bind(this, "less")}
-                    title="précédent"
-                  >
-                    <FontAwesomeIcon icon={["far", "angle-left"]} size="1x" />
+                    onClick={this.changePage.bind(this, 'less')}
+                    title="précédent">
+                    <FontAwesomeIcon icon={['far', 'angle-left']} size="1x" />
                   </button>
                 </li>
                 <li>
                   <button
-                    onClick={this.changePage.bind(this, "more")}
-                    title="suivant"
-                  >
-                    <FontAwesomeIcon icon={["far", "angle-right"]} size="1x" />
+                    onClick={this.changePage.bind(this, 'more')}
+                    title="suivant">
+                    <FontAwesomeIcon icon={['far', 'angle-right']} size="1x" />
                   </button>
                 </li>
               </ul>
@@ -142,9 +139,8 @@ class WorkoutsHistory extends Component {
             <p>Aucun entraînement cette semaine</p>
             <button
               className="btn btn-ghost"
-              onClick={this.props.triggerWorkoutWindow.bind(this)}
-            >
-              <FontAwesomeIcon icon={["fas", "play"]} size="1x" /> Lancer une
+              onClick={this.props.triggerWorkoutWindow.bind(this)}>
+              <FontAwesomeIcon icon={['fas', 'play']} size="1x" /> Lancer une
               scéance
             </button>
           </div>

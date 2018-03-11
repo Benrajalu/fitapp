@@ -126,7 +126,6 @@ class AccountDeleteModal extends Component {
 
     switch (firebaseAuth.currentUser.providerData[0].providerId) {
       case 'google.com':
-        console.log('google');
         credentials = fire.auth.GoogleAuthProvider.credential(
           null,
           this.state.userToken
@@ -134,7 +133,6 @@ class AccountDeleteModal extends Component {
         break;
 
       case 'password':
-        console.log('password');
         credentials = fire.auth.EmailAuthProvider.credential(
           firebaseAuth.currentUser.email,
           _this.state.password
@@ -142,7 +140,6 @@ class AccountDeleteModal extends Component {
         break;
 
       case 'facebook.com':
-        console.log('facebook');
         credentials = fire.auth.FacebookAuthProvider.credential(
           this.state.userToken
         );

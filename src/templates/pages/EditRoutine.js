@@ -49,9 +49,6 @@ class EditRoutine extends Component {
       obj => obj.routineId === parseFloat(routineId)
     );
 
-    console.log(routineId);
-    console.log(realRoutine);
-
     if (realRoutine.length > 0) {
       this.setState({
         routine: realRoutine[0],

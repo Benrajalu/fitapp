@@ -139,8 +139,8 @@ class Workout extends Component {
     let changedName = event.target['name'],
       changedValue = event.target.value;
 
-    if (changedName === 'handicap' && changedValue <= 0) {
-      changedValue = 1;
+    if (changedName === 'handicap' && changedValue < 0) {
+      changedValue = 0;
     }
 
     const logSnapshot = this.state.workoutLog;
@@ -209,8 +209,10 @@ class Workout extends Component {
       let repTarget = log[i].repTarget
           ? parseFloat(log[i].repTarget)
           : parseFloat(log[i].handicap),
-        successFullSets = log[i].sets.filter(value => value === repTarget);
-      if (log[i].sets.length === successFullSets.length) {
+        successFullSets = log[i].sets
+          ? log[i].sets.filter(value => value === repTarget)
+          : [];
+      if (log[i].sets && log[i].sets.length === successFullSets.length) {
         // If all repored reps are equal the target, on all sets, then push the exercise index to the array
         completedExercises.push(i);
       }
@@ -485,6 +487,12 @@ class Workout extends Component {
           onUpdate={this.updateRoutine}
           onReps={this.feedReps}
           settings={this.props.user.settings}
+          showExercise={this.showExercise}
+          last={
+            this.state.ongoingExercise + 1 === currentRoutine.exercises.length
+              ? true
+              : false
+          }
         />
       );
     }

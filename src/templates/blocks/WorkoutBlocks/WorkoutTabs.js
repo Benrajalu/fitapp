@@ -14,7 +14,6 @@ class WorkoutTabs extends Component {
     });
   }
   componentDidUpdate() {
-    console.log(this.activeEntry);
     if (this.activeEntry) {
       this.activeEntry.scrollIntoView({
         behavior: 'smooth',

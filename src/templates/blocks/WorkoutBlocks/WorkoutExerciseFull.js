@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 
 import SetCounter from '../../blocks/SetCounter';
 import WeightHelperModal from '../../blocks/WeightHelperModal';
+import IncrementInput from '../../blocks/IncrementInput';
+
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 class WorkoutDetails extends Component {
   constructor(props) {
     super(props);
     this.setCompletion = this.setCompletion.bind(this);
     this.displayModal = this.displayModal.bind(this);
-    this.removeHandicap = this.removeHandicap.bind(this);
-    this.addHandicap = this.addHandicap.bind(this);
     this.state = {
       sets: [],
       modalDisplay: {
@@ -68,28 +69,6 @@ class WorkoutDetails extends Component {
     });
   }
 
-  addHandicap(index) {
-    const currentValue = parseFloat(this.props.contents.handicap),
-      valueObject = {
-        target: {
-          name: 'handicap',
-          value: currentValue + 1
-        }
-      };
-    this.props.onUpdate(index, valueObject);
-  }
-
-  removeHandicap(index) {
-    const currentValue = parseFloat(this.props.contents.handicap),
-      valueObject = {
-        target: {
-          name: 'handicap',
-          value: currentValue > 0 ? currentValue - 1 : 0
-        }
-      };
-    this.props.onUpdate(index, valueObject);
-  }
-
   componentWillReceiveProps(nextProps) {
     // Update with new setlist if the comonent is reset with new data
     let newSetlist = [];
@@ -110,7 +89,6 @@ class WorkoutDetails extends Component {
     this.setState({
       sets: newSetlist
     });
-    console.log(newSetlist);
   }
 
   render() {
@@ -186,10 +164,45 @@ class WorkoutDetails extends Component {
       weightHelper = (
         <li role="presentation">
           <button onClick={this.displayModal.bind(this, 'warmup', 'loadout')}>
-            Répartition des poids
+            Barre finale
           </button>
         </li>
       );
+    }
+
+    // Let's display muscle group and tool name
+    let bodyPart = false,
+      cleanType = false;
+
+    switch (trueExercise.type) {
+      case 'barbell':
+        cleanType = 'Barre';
+        break;
+      case 'dumbbell':
+        cleanType = 'Haltère';
+        break;
+      case 'cable':
+        cleanType = 'Câble';
+        break;
+      case 'calisthenics':
+        cleanType = 'Calisthenics';
+        break;
+      case 'cardio':
+        cleanType = 'Cardio';
+        break;
+      default:
+        cleanType = false;
+    }
+
+    switch (trueExercise.muscleGroup) {
+      case 'lower-body':
+        bodyPart = 'Bas du corps';
+        break;
+      case 'upper-body':
+        bodyPart = 'Haut du corps';
+        break;
+      default:
+        bodyPart = false;
     }
 
     // If there is no set target, then it's cardio so the set is...1
@@ -199,35 +212,25 @@ class WorkoutDetails extends Component {
 
     return (
       <div className="workout-card">
-        <div className="heading" onClick={this.changeDisplay}>
-          <h3 className="title">
-            {trueExercise.name}{' '}
-            <strong
-              className={
-                parseFloat(setTarget) === setsDone.length ? 'done' : ''
-              }>
-              {setsDone.length}/{setTarget}
-            </strong>
-          </h3>
-          {this.state.visible ? (
-            <button
-              onClick={this.changeDisplay}
-              className="btn btn-primary"
-              title={
-                this.state.visible ? "Fermer l'exercice" : "Ouvrir l'exercice"
-              }>
-              <i className="fa fa-angle-up" />
-            </button>
-          ) : (
-            <button
-              onClick={this.changeDisplay}
-              className="btn btn-primary"
-              title={
-                this.state.visible ? "Fermer l'exercice" : "Ouvrir l'exercice"
-              }>
-              <i className="fa fa-angle-down" />
-            </button>
-          )}
+        <div className="heading">
+          <button
+            className="direction"
+            disabled={this.props.index > 0 ? false : true}
+            onClick={this.props.showExercise.bind(this, this.props.index - 1)}>
+            <FontAwesomeIcon icon={['far', 'angle-left']} size="1x" />
+          </button>
+          <div className="title-wrap">
+            <h3 className="title">{trueExercise.name} </h3>
+            <p className="subtitle">
+              {cleanType} {bodyPart ? ' • ' + bodyPart : false}
+            </p>
+          </div>
+          <button
+            className="direction"
+            disabled={this.props.last ? true : false}
+            onClick={this.props.showExercise.bind(this, this.props.index + 1)}>
+            <FontAwesomeIcon icon={['far', 'angle-right']} size="1x" />
+          </button>
         </div>
         <div className="body">
           {trueExercise.type !== 'cardio' || warmupButton || weightHelper ? (
@@ -253,27 +256,49 @@ class WorkoutDetails extends Component {
             false
           )}
           <div className="input-zone">
-            <button
-              className="value-button"
-              onClick={this.removeHandicap.bind(this, this.props.index)}>
-              <i className="fa fa-minus" />
-            </button>
-            <div className="input">
-              <input
-                type="number"
-                name="handicap"
-                value={this.props.contents.handicap}
-                onChange={this.props.onUpdate.bind(this, this.props.index)}
-              />
-              <p>{handicapType}</p>
-            </div>
-            <button
-              className="value-button"
-              onClick={this.addHandicap.bind(this, this.props.index)}>
-              <i className="fa fa-plus" />
-            </button>
+            <IncrementInput
+              value={parseFloat(this.props.contents.handicap)}
+              updater={this.props.onUpdate}
+              index={this.props.index}
+              currentExercise={this.props.contents}
+              name="handicap"
+              unit={handicapType}
+            />
           </div>
-          {sets}
+          <div className="setList">
+            <div className="heading">
+              <h4 className="sets-title">Sets</h4>
+              <div className="completion-small">
+                <div className="copy">
+                  <p>
+                    {setsDone.length}/{setTarget}
+                  </p>
+                </div>
+                <svg
+                  viewBox="0 0 36 36"
+                  preserveAspectRatio="xMidYMid meet"
+                  className="circular-chart">
+                  <path
+                    className="circle-bg"
+                    d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <path
+                    className="circle"
+                    style={{
+                      strokeDasharray:
+                        setsDone.length * 100 / setTarget + ', 100'
+                    }}
+                    d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className="sets">{sets}</div>
+          </div>
         </div>
 
         {warmupWindow && this.state.modalDisplay.warmup ? warmupWindow : false}
