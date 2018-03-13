@@ -108,7 +108,9 @@ class BarbellLoader extends Component {
       loadHelper = (
         <div className="load">
           <div className="barbell">
-            {this.props.settings.baseBarbell + 'kg'}
+            <span className="barWeight">
+              {this.props.settings.baseBarbell + 'kg'}
+            </span>
           </div>
         </div>
       );
@@ -132,7 +134,9 @@ class BarbellLoader extends Component {
       loadHelper = (
         <div className="load">
           <div className="barbell">
-            {this.props.settings.baseBarbell + 'kg'}
+            <span className="barWeight">
+              {this.props.settings.baseBarbell + 'kg'}
+            </span>
           </div>
           {loadsWrapper}
         </div>

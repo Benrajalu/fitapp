@@ -91,8 +91,6 @@ class SetCounter extends Component {
   }
 
   tuneValue(direction, index, event) {
-    let newValue, eventObject, value;
-
     if (direction === 'more') {
       this.addValue();
       this.setState({

@@ -1,4 +1,4 @@
-@import "styles/_mixins.scss";
+@import 'styles/_mixins.scss';
 
 .modal {
   position: fixed;
@@ -21,7 +21,7 @@
     padding-top: 60px;
   }
   &:before {
-    content: "";
+    content: '';
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -89,7 +89,8 @@
       transition: all 200ms ease-out;
       perspective: 1000px;
       .title,
-      .close {
+      .close,
+      .switch {
         transition: all 200ms ease-out;
         transform: translateY(-100%);
         transform-origin: top center;
@@ -123,7 +124,7 @@
           position: relative;
           overflow: visible;
           &:after {
-            content: "";
+            content: '';
             width: 120px;
             height: 120px;
             border-radius: 100%;
@@ -173,7 +174,8 @@
     .window {
       .window-head {
         .title,
-        .close {
+        .close,
+        .switch {
           transform: translateY(0);
           opacity: 1;
           h3,
@@ -209,7 +211,7 @@
     .title {
       background: #fff;
       padding: 0px 20px;
-      font-family: "Questrial";
+      font-family: 'Questrial';
       font-size: 13px;
       text-align: center;
       text-transform: uppercase;
@@ -219,6 +221,27 @@
       justify-content: center;
       max-width: 200px;
       height: 47px;
+    }
+    .switch {
+      background: $red;
+      border: 0px;
+      padding: 0 12px;
+      color: $white;
+      transition: all 200ms ease-out;
+      height: 47px;
+      width: 47px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+      }
+      &:hover {
+        color: $red;
+        background: $white;
+      }
     }
     .close {
       background: #f2f2f2;
@@ -246,7 +269,7 @@
     background: linear-gradient(180deg, #424242 0%, rgba(89, 89, 89, 0.5) 100%);
     box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.68);
     padding: 25px 15px;
-    p {
+    > p {
       @include mont(14px, 400, #fff);
       line-height: 1.5;
       max-width: 300px;
@@ -266,7 +289,7 @@
       input {
         display: inline-block;
         vertical-align: middle;
-        &[type="password"] {
+        &[type='password'] {
           display: block;
           text-align: center;
           margin: 0 auto;
@@ -308,6 +331,19 @@
       }
       &:last-child {
         margin-bottom: 0px;
+      }
+    }
+    &.no-padding {
+      padding: 0px;
+    }
+    .panel {
+      background: transparent;
+      margin-bottom: 0px;
+      box-shadow: 0 0 transparent;
+      border-radius: 0px;
+      max-width: 100%;
+      .panel-footer {
+        border-radius: 0px;
       }
     }
   }

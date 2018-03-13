@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { watchRoutines } from "../../actions/RoutinesActions";
-import { toggleModal } from "../../actions/ModalActions";
-import { removeUser, resetUser } from "../../actions/UserActions";
+import { watchRoutines } from '../../actions/RoutinesActions';
+import { toggleModal } from '../../actions/ModalActions';
+import { removeUser, resetUser } from '../../actions/UserActions';
 
 // Modal imports
-import RoutineDelete from "../blocks/Modals/RoutineDelete";
-import AccountDeleteModal from "../blocks/Modals/AccountDeleteModal";
+import RoutineDelete from '../blocks/Modals/RoutineDelete';
+import AccountDeleteModal from '../blocks/Modals/AccountDeleteModal';
+import WeightHelperModal from '../blocks/Modals/WeightHelperModal';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -46,7 +47,7 @@ class ModalFactory extends Component {
   }
 
   componentDidMount() {
-    console.log("coucou modal factory");
+    console.log('coucou modal factory');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,10 +59,10 @@ class ModalFactory extends Component {
   render() {
     var modalToDisplay = null;
     switch (this.state.type) {
-      case "delete":
+      case 'delete':
         modalToDisplay = (
           <RoutineDelete
-            shouldAppear={"visible"}
+            shouldAppear={'visible'}
             target={this.props.modals.data.id}
             routines={this.props.routines.routines}
             closeModal={this.props.toggleModal}
@@ -71,7 +72,7 @@ class ModalFactory extends Component {
         );
         break;
 
-      case "account":
+      case 'account':
         modalToDisplay = (
           <AccountDeleteModal
             closeModal={this.props.toggleModal}
@@ -82,6 +83,33 @@ class ModalFactory extends Component {
         );
         break;
 
+      case 'warmup':
+        modalToDisplay = (
+          <WeightHelperModal
+            closeModal={this.props.toggleModal}
+            targetWindow="warmup"
+            name={this.props.modals.data.name}
+            weight={parseFloat(this.props.modals.data.handicap)}
+            maxReps={parseFloat(this.props.modals.data.repTarget)}
+            type={this.props.modals.data.exoType}
+            settings={this.props.user.settings}
+          />
+        );
+        break;
+
+      case 'loadout':
+        modalToDisplay = (
+          <WeightHelperModal
+            closeModal={this.props.toggleModal}
+            targetWindow="loadout"
+            name={this.props.modals.data.name}
+            weight={parseFloat(this.props.modals.data.handicap)}
+            maxReps={parseFloat(this.props.modals.data.repTarget)}
+            type={this.props.modals.data.exoType}
+            settings={this.props.user.settings}
+          />
+        );
+        break;
       default:
         modalToDisplay = null;
     }

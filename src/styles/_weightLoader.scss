@@ -1,165 +1,150 @@
-@import "../styles/mixins";
+@import '../styles/mixins';
 
-.load{
+.load {
   position: relative;
   text-align: right;
   height: 110px;
   line-height: 110px;
   padding-right: 95px;
-  margin:20px 0px;
-  .barbell{
+  margin: 20px 0px;
+  .barbell {
     display: block;
     width: 80%;
-    height: 20px;
+    height: 16px;
     //background:#b5b6b8;
-    background:linear-gradient(to top, #8d8e92 45%, #b5b6b8 46%, #b5b6b8);
-    border-radius:0px;
-    line-height: 20px;
+    border-radius: 0px;
+    line-height: 16px;
     text-align: right;
-    padding:0 10px;
-    @include mont(11px, 700, #32374E);
+    padding: 0 10px;
+    @include mont(11px, 700, #32374e);
     font-weight: bold;
     position: absolute;
     right: 0px;
-    top:50%;
-    transform:translateY(-50%);
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 1;
     border-right: 0px;
-    border-radius:4px 0 0 4px;
-    &:after{
-      content: "";
+    background: linear-gradient(180deg, #858585 61.95%, #616161 63.95%), #c4c4c4;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+      inset 0px 2px 2px rgba(255, 255, 255, 0.25);
+    border-radius: 5px 0px 0px 5px;
+    &:after {
+      content: '';
       right: 80px;
-      height: 150%;
+      height: 190%;
       position: absolute;
-      width: 15px;
-      background:#898a8e;
-      background:linear-gradient(to top, #626367 45%, #898a8e 46%, #898a8e);
+      width: 14px;
+      background: linear-gradient(180deg, #858585 61.95%, #616161 63.95%),
+        #c4c4c4;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+        inset 0px 2px 2px rgba(255, 255, 255, 0.25);
       border-radius: 2px;
-      top:50%;
-      transform:translateY(-50%);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .barWeight {
+      @include mont(12px, 500, $white);
+      display: inline-block;
+      position: relative;
+      top: -31px;
+      &:after {
+        content: '';
+        width: 1px;
+        height: 20px;
+        background: $red;
+        display: block;
+        margin: 3px auto 0;
+      }
     }
   }
-  .disc{
+  .disc {
     position: relative;
     z-index: 2;
     display: inline-block;
     vertical-align: middle;
-    width: 20px;
-    border-radius:4px;
+    width: 24px;
+    border-radius: 4px;
     text-align: center;
     line-height: 1;
-    color:#fff;
+    color: #fff;
     letter-spacing: 0.5px;
-    margin-left:2px;
-    transition:all 200ms ease-out;
-    transition-delay:200ms;
-    transform:translateX(-50%);
-    opacity:0;
-    p{
+    margin-left: 2px;
+    transition: all 200ms ease-out;
+    transition-delay: 200ms;
+    transform: translateX(-50%);
+    opacity: 0;
+    /* Rectangle 3.2 */
+    background: linear-gradient(180deg, #2e2e2e 50%, #000000 68.11%), #c4c4c4;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+      inset 0px 2px 2px rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    p {
       display: inline-block;
       vertical-align: middle;
       position: relative;
-      top:-1px;
-      line-height: 1;
-      @include mont(11px, 700, $white);
+      top: -1px;
+      line-height: 1 !important;
+      @include mont(12px, 500, $white);
       margin-bottom: 0px;
     }
-    &.size-25{
-      width:30px;
+    &.size-25 {
+      width: 30px;
       height: 110px;
       line-height: 110px;
-      background:#62ABD6;
-      background:linear-gradient(to bottom, #62ABD6 19%, #67B7E6 20%, #67B7E6 29%, #62ABD6 30%, #62ABD6 59%, #6DC2F4 60%, #6DC2F4 79%, #62ABD6 80%);
-      border-left: 2px solid #67B7E6;
-      border-right: 2px solid transparent;
+      background: #62abd6;
     }
-    &.size-20{
-      width:30px;
+    &.size-20 {
       height: 110px;
       line-height: 110px;
-      border-left: 2px solid #67B7E6;
-      border-right: 2px solid transparent;
-      background:linear-gradient(to bottom, #62ABD6 9%, #6DC2F4 10%, #6DC2F4 19%, #62ABD6 20%, #62ABD6 49%, #508FB6 50%, #508FB6 89%, #62ABD6 90%);
     }
-    &.size-15{
-      width: 25px;
+    &.size-15 {
       height: 100px;
       line-height: 100px;
-      background:linear-gradient(to bottom, #4D8AB0 9%, #579FCD 10%, #579FCD 19%, #4D8AB0 20%, #4D8AB0 49%, #427799 50%, #427799 89%, #4D8AB0 90%);
-      border-left: 2px solid #579FCD;
-      border-right: 2px solid transparent;
     }
-    &.size-10{
-      width: 25px;
+    &.size-10 {
       height: 90px;
       line-height: 90px;
-      background:#43799C;
-      background:linear-gradient(to bottom, #43799C 9%, #4D8FBC 10%, #4D8FBC 19%, #43799C 20%, #43799C 49%, #345E7A 50%, #345E7A 89%, #43799C 90%);
-      border-left: 2px solid #4D8FBC;
-      border-right: 2px solid transparent;
     }
-    &.size-5{
-      width: 20px;
+    &.size-5 {
       height: 70px;
       line-height: 70px;
-      background:linear-gradient(to bottom, #61C7D7 9%, #65D5E7 10%, #65D5E7 19%, #61C7D7 20%, #61C7D7 49%, #53AEBC 50%, #53AEBC 89%, #61C7D7 90%);
-      border-left: 2px solid #65D5E7;
-      border-right: 2px solid transparent;
     }
-    &.size-2-5{
+    &.size-2-5 {
       height: 55px;
       line-height: 55px;
-      background:linear-gradient(to bottom, #57B6C5 9%, #5AC1D1 10%, #5AC1D1 19%, #57B6C5 20%, #57B6C5 49%, #4EA6B4 50%, #4EA6B4 89%, #57B6C5 90%);
-      border-left: 2px solid #5AC1D1;
-      border-right: 2px solid transparent;
-      p{
+      p {
         font-size: 10px;
       }
     }
-    &.size-1-25{
+    &.size-1-25 {
       height: 50px;
       line-height: 50px;
-      background:linear-gradient(to bottom, #4692A1 9%, #4DA5B7 10%, #4DA5B7 19%, #4692A1 20%, #4692A1 49%, #408695 50%, #408695 89%, #4692A1 90%);
-      border-left: 2px solid #4DA5B7;
-      border-right: 2px solid transparent;
-      p{
+      p {
         font-size: 10px;
       }
     }
-    &.size-1{
+    &.size-1 {
       height: 45px;
       line-height: 45px;
-      background:linear-gradient(to bottom, #3F8594 9%, #4491A4 10%, #4491A4 19%, #3F8594 20%, #3F8594 49%, #387685 50%, #387685 89%, #3F8594 90%);
-      border-left: 2px solid #4491A4;
-      border-right: 2px solid transparent;
-      p{
-        font-size: 10px;
-      }
     }
-    &.size-0-5{
+    &.size-0-5 {
       height: 40px;
       line-height: 40px;
-      background:linear-gradient(to bottom, #46CCC4 9%, #49D8D0 10%, #49D8D0 19%, #46CCC4 20%, #46CCC4 49%, #3CB1AB 50%, #3CB1AB 89%, #46CCC4 90%);
-      border-left: 2px solid #49D8D0;
-      border-right: 2px solid transparent;
-      p{
+      p {
         font-size: 10px;
       }
     }
-    &.size-0-25{
+    &.size-0-25 {
       height: 35px;
       line-height: 35px;
-      background:linear-gradient(to bottom, #3BADA7 9%, #41C6BF 10%, #41C6BF 19%, #3BADA7 20%, #3BADA7 49%, #32938E 50%, #32938E 89%, #3BADA7 90%);
-      border-left: 2px solid #41C6BF;
-      border-right: 2px solid transparent;
-      p{
+      p {
         font-size: 10px;
       }
     }
   }
 }
 
-.visible .load .disc{
-  opacity:1;
-  transform:translateX(0px);
+.visible .load .disc {
+  opacity: 1;
+  transform: translateX(0px);
 }

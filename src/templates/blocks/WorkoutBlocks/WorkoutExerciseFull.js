@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import SetCounter from '../../blocks/SetCounter';
-import WeightHelperModal from '../../blocks/WeightHelperModal';
 import IncrementInput from '../../blocks/IncrementInput';
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-class WorkoutDetails extends Component {
+class WorkoutExerciseFull extends Component {
   constructor(props) {
     super(props);
     this.setCompletion = this.setCompletion.bind(this);
@@ -135,26 +134,17 @@ class WorkoutDetails extends Component {
     ) {
       warmupButton = (
         <li role="presentation">
-          <button onClick={this.displayModal.bind(this, 'warmup', 'warmup')}>
+          <button
+            onClick={this.props.toggleModal.bind(this, {
+              type: 'warmup',
+              name: trueExercise.name,
+              handicap: this.props.contents.handicap,
+              repTarget: this.props.contents.repTarget,
+              exoType: trueExercise.type
+            })}>
             Échauffement
           </button>
         </li>
-      );
-      warmupWindow = (
-        <WeightHelperModal
-          closeModal={this.displayModal.bind(this, 'warmup')}
-          shouldAppear={this.state.modalDisplay.warmup ? 'visible' : 'hidden'}
-          targetWindow={
-            this.state.targetWindow ? this.state.targetWindow : 'warmup'
-          }
-          name={trueExercise.name}
-          weight={workoutExercise.handicap}
-          maxReps={
-            workoutExercise.repTarget ? workoutExercise.repTarget : false
-          }
-          type={trueExercise.type}
-          settings={this.props.settings}
-        />
       );
     }
 
@@ -163,7 +153,14 @@ class WorkoutDetails extends Component {
     if (trueExercise.type === 'barbell') {
       weightHelper = (
         <li role="presentation">
-          <button onClick={this.displayModal.bind(this, 'warmup', 'loadout')}>
+          <button
+            onClick={this.props.toggleModal.bind(this, {
+              type: 'loadout',
+              name: trueExercise.name,
+              handicap: this.props.contents.handicap,
+              repTarget: this.props.contents.repTarget,
+              exoType: trueExercise.type
+            })}>
             Barre finale
           </button>
         </li>
@@ -307,7 +304,7 @@ class WorkoutDetails extends Component {
   }
 }
 
-WorkoutDetails.propTypes = {
+WorkoutExerciseFull.propTypes = {
   contents: PropTypes.object.isRequired,
   exercisesDatabase: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
@@ -316,4 +313,4 @@ WorkoutDetails.propTypes = {
   settings: PropTypes.object.isRequired
 };
 
-export default WorkoutDetails;
+export default WorkoutExerciseFull;

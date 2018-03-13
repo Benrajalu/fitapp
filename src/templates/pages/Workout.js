@@ -5,8 +5,8 @@ import { firebaseAuth, database } from '../../store';
 import { connect } from 'react-redux';
 import { watchRoutines } from '../../actions/RoutinesActions';
 import { changeLayout } from '../../actions/MenuActions';
+import { toggleModal } from '../../actions/ModalActions';
 
-import WorkoutDetails from '../blocks/WorkoutDetails';
 import WorkoutExit from '../blocks/WorkoutExit';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import InlineLoader from '../blocks/InlineLoader';
@@ -34,6 +34,9 @@ const mapDispatchToProps = dispatch => {
     },
     changeLayout: layout => {
       dispatch(changeLayout(layout));
+    },
+    toggleModal: data => {
+      dispatch(toggleModal(data));
     }
   };
 };
@@ -488,6 +491,7 @@ class Workout extends Component {
           onReps={this.feedReps}
           settings={this.props.user.settings}
           showExercise={this.showExercise}
+          toggleModal={this.props.toggleModal}
           last={
             this.state.ongoingExercise + 1 === currentRoutine.exercises.length
               ? true

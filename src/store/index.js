@@ -25,7 +25,7 @@ const initialState = {};
 export const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, logger)
 );
 
 // Add logger to middlewere if needed
