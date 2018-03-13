@@ -69,19 +69,24 @@ class WorkoutExerciseFull extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log();
     // Update with new setlist if the comonent is reset with new data
     let newSetlist = [];
     if (nextProps.contents.setsTarget && nextProps.contents.sets === false) {
+      // There is a target for sets, but the setlist hasn't been made yet
       let y = 0,
         totalSets = parseFloat(nextProps.contents.setsTarget);
       for (y; y < totalSets; y++) {
         newSetlist.push(0);
       }
     } else if (nextProps.contents.setsTarget && nextProps.contents.sets) {
+      // There is a target and it's already been set so we reuse it
       newSetlist = nextProps.contents.sets;
     } else if (nextProps.contents.handicap && nextProps.contents.sets) {
+      // There isn't a set target so the target is the handicap (ie: cardio exercices) AND that's been created so we reuse it
       newSetlist = nextProps.contents.sets;
     } else {
+      // None of the condition apply so we set the sets to 1 entry, at 0
       newSetlist.push(0);
     }
 
