@@ -208,9 +208,21 @@ class Workout extends Component {
   }
 
   closeRoutineModal() {
-    this.setState({
-      exitingRoutine: !this.state.exitingRoutine
+    // We trigger the modal factory from here because it enables us to also
+    // stop the stopwatch if it's been triggered and get its data to feed it
+    // into the modal.
+    // Once the flag to stop the modal has been used, we use a timer to remove it
+    const _this = this;
+    this.setState({ stopTimer: true });
+    this.props.toggleModal({
+      type: 'endWorkout',
+      changedRoutine: this.state.changedRoutine,
+      currentRoutine: this.state.workoutLog ? this.state.workoutLog : false,
+      originalRoutine: this.state.routine ? this.state.routine : false
     });
+    setTimeout(() => {
+      _this.setState({ stopTimer: false });
+    }, 100);
   }
 
   getCompletedSets() {
@@ -260,23 +272,22 @@ class Workout extends Component {
           // Then let's check for changes made to the routine AND some have been maxed out
           this.setState({
             upgradeRoutine: completedExercises,
-            saveRoutine: true,
-            exitingRoutine: true
+            saveRoutine: true
           });
         } else if (this.state.changedRoutine) {
           // routine has been changed but no set has been completed
           this.setState({
             saveRoutine: true,
-            exitingRoutine: true,
             upgradeRoutine: false
           });
         } else {
           this.setState({
-            exitingRoutine: true,
             upgradeRoutine: false,
             saveRoutine: false
           });
         }
+
+        this.props.toggleModal();
       }
     );
   }
@@ -510,7 +521,6 @@ class Workout extends Component {
         />
       );
     }
-
     return (
       <div id="Workout" className={this.state.mounted ? 'loaded' : null}>
         {this.state.routine === false ? (
@@ -604,7 +614,10 @@ class Workout extends Component {
             </div>
 
             <div className="footer">
-              <Stopwatch getCurrentTime={this.getCurrentTime} />
+              <Stopwatch
+                getCurrentTime={this.getCurrentTime}
+                stop={this.state.stopTimer}
+              />
               <div className="action-zone">
                 <button
                   className={
@@ -620,7 +633,7 @@ class Workout extends Component {
                     'action ' +
                     (this.state.ongoingExercise === false ? 'active' : '')
                   }
-                  onClick={this.endRoutine}>
+                  onClick={this.closeRoutineModal.bind(this)}>
                   <FontAwesomeIcon icon={['fas', 'stop']} size="1x" />
                   <span>Terminer l'entraînement</span>
                 </button>

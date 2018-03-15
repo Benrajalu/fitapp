@@ -9,6 +9,7 @@ import { removeUser, resetUser } from '../../actions/UserActions';
 import RoutineDelete from '../blocks/Modals/RoutineDelete';
 import AccountDeleteModal from '../blocks/Modals/AccountDeleteModal';
 import WeightHelperModal from '../blocks/Modals/WeightHelperModal';
+import WorkoutExit from '../blocks/Modals/WorkoutExit';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -107,6 +108,18 @@ class ModalFactory extends Component {
             maxReps={parseFloat(this.props.modals.data.repTarget)}
             type={this.props.modals.data.exoType}
             settings={this.props.user.settings}
+          />
+        );
+        break;
+
+      case 'endWorkout':
+        modalToDisplay = (
+          <WorkoutExit
+            closeModal={this.props.toggleModal}
+            changedRoutine={this.props.modals.data.changedRoutine}
+            currentRoutine={this.props.modals.data.currentRoutine}
+            originalRoutine={this.props.modals.data.originalRoutine}
+            exercisesDatabase={this.props.exercises.list}
           />
         );
         break;

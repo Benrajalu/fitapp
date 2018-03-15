@@ -346,6 +346,23 @@
         border-radius: 0px;
       }
     }
+
+    &.exit {
+      display: flex;
+      max-height: 60vh;
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      .exit-content {
+        flex-grow: 2;
+        overflow: auto;
+        padding-bottom: 8px;
+      }
+      .exit-buttons {
+        min-height: 48px;
+        flex-grow: 1;
+      }
+    }
   }
   .icon {
     width: 50px;
@@ -400,6 +417,79 @@
         display: inline-block;
         width: auto;
       }
+    }
+  }
+}
+
+.exit-panel {
+  padding: 8px 16px;
+  &:first-child {
+    padding-top: 16px;
+  }
+  &:last-child {
+    padding-bottom: 16px;
+  }
+
+  .panel-title {
+    border-bottom: 1px solid #6e6e6e;
+    padding-bottom: 6px;
+    @include mont(12px, 500, $greyType);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  p {
+    text-align: left;
+    @include mont(11px, 300, $greyType);
+    line-height: 1.2;
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+    &.value {
+      text-align: right;
+      font-size: 30px;
+      color: $white;
+      span {
+        font-size: 0.6em;
+      }
+    }
+  }
+
+  &.intro {
+    .title {
+      @include mont(18px, 700, $white);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 8px;
+      + p {
+        @include mont(12px, 500, #828282);
+        text-transform: uppercase;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.exit-buttons {
+  background: $red;
+  box-shadow: 0px -5px 4px rgba(0, 0, 0, 0.42);
+  display: flex;
+  flex-flow: row nowrap;
+  button {
+    background: transparent;
+    text-align: center;
+    @include mont(12px, 300, $white);
+    flex-grow: 2;
+    border: 0px;
+    text-transform: uppercase;
+    transition: all 200ms ease-out;
+    padding: 0 10px;
+    &:hover {
+      color: $greyType;
+    }
+    &:nth-child(2) {
+      border-left: 1px solid #202121;
     }
   }
 }

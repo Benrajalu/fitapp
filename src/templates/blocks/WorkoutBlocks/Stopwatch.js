@@ -16,6 +16,7 @@ class Stopwatch extends Component {
   }
 
   toggleStopwatch() {
+    console.log('coucou');
     if (this.state.running) {
       this.setState({
         running: false
@@ -40,6 +41,19 @@ class Stopwatch extends Component {
       _this.repeater();
     }, 1000);
     this.timerWrapper = promise;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Using a prop set on a short timer it's possible for the parent component
+    // to signal the stopwatch that it needs to stop.
+    // We check for nextprop redunduncy to avoid infinite looping.
+    if (nextProps.stop === true && this.props.stop !== true) {
+      this.setState({
+        running: false
+      });
+      clearTimeout(this.timerWrapper);
+      this.props.getCurrentTime(this.state.currentTime);
+    }
   }
 
   render() {
