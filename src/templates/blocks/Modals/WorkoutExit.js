@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import WorkoutUpdates from '../../blocks/WorkoutUpdates';
+import IntensityPicker from '../WorkoutBlocks/IntensityPicker';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import moment from 'moment';
@@ -13,8 +14,11 @@ class WorkoutExit extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.endRoutine = this.endRoutine.bind(this);
     this.getCompletedSets = this.getCompletedSets.bind(this);
+    this.updateIntensity = this.updateIntensity.bind(this);
+    this.toggleSaveRoutine = this.toggleSaveRoutine.bind(this);
     this.state = {
       visible: null,
+      intensity: 1,
       runningStatus: false
     };
   }
@@ -108,6 +112,19 @@ class WorkoutExit extends Component {
     }, 300);
   }
 
+  updateIntensity(data) {
+    this.setState({
+      intensity: data
+    });
+    console.log(this.state);
+  }
+
+  toggleSaveRoutine() {
+    this.setState({
+      saveRoutine: !this.state.saveRoutine
+    });
+  }
+
   render() {
     console.log(this.props);
     const upgradeExercises = this.props.upgradeRoutine,
@@ -134,21 +151,24 @@ class WorkoutExit extends Component {
         {this.props.changedRoutine ? (
           <div className="exit-panel">
             <h3 className="panel-title">Routine modifiée</h3>
-            <p>
-              Vous avez changé certains poids pour cet entrainement, souhaitez
-              vous enregistrer ces modifications ?{' '}
-            </p>
-            <div className="change-saver">
-              <input
-                type="checkbox"
-                name="saveRoutine"
-                value="yes"
-                checked={this.props.saveRoutine ? true : false}
-                onChange={this.props.routineUpdateToggle}
-              />
-              <label onClick={this.props.routineUpdateToggle}>
-                Enregistrer les modifications
+            <div className="input-pair">
+              <label htmlFor="saveRoutine" onClick={this.toggleSaveRoutine}>
+                Vous avez changé certains poids pour cet entrainement, souhaitez
+                vous enregistrer ces modifications ?{' '}
               </label>
+              <div className="input">
+                <input
+                  type="checkbox"
+                  name="saveRoutine"
+                  id="saveRoutine"
+                  value="yes"
+                  checked={this.state.saveRoutine ? true : false}
+                  onChange={console.log('coucou')}
+                />
+                <label htmlFor="saveRoutine" onClick={this.toggleSaveRoutine}>
+                  {this.state.saveRoutine ? 'oui' : 'non'}
+                </label>
+              </div>
             </div>
           </div>
         ) : (
@@ -222,17 +242,27 @@ class WorkoutExit extends Component {
                   </div>
                   {this.props.currentRoutine.time &&
                   this.props.currentRoutine.time > 0 ? (
-                    <div className="exit-panel">
-                      <h3 className="panel-title">Temps actif</h3>
-                      <p className="value">
-                        {moment()
-                          .set('hour', 0)
-                          .set('minute', 0)
-                          .set('second', 0)
-                          .second(this.props.currentRoutine.time)
-                          .format(timeFormat)}
-                      </p>
-                    </div>
+                    <Fragment>
+                      <div className="exit-panel">
+                        <h3 className="panel-title">Temps actif</h3>
+                        <p className="value">
+                          {moment()
+                            .set('hour', 0)
+                            .set('minute', 0)
+                            .set('second', 0)
+                            .second(this.props.currentRoutine.time)
+                            .format(timeFormat)}
+                        </p>
+                      </div>
+                      <div className="exit-panel">
+                        <h3 className="panel-title">Intensité</h3>
+                        <IntensityPicker
+                          updateIntensity={this.updateIntensity}
+                          value={this.state.intensity}
+                          updateIntensity={this.updateIntensity}
+                        />
+                      </div>
+                    </Fragment>
                   ) : (
                     <div className="exit-panel">
                       <h3 className="panel-title">Conseil</h3>

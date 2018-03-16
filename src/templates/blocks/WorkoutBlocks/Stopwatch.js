@@ -56,6 +56,13 @@ class Stopwatch extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState({
+      running: false
+    });
+    clearTimeout(this.timerWrapper);
+  }
+
   render() {
     let timeFormat = this.state.currentTime < 3600 ? 'mm:ss' : 'kk:mm:ss';
     return (
