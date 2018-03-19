@@ -16,7 +16,6 @@ class Stopwatch extends Component {
   }
 
   toggleStopwatch() {
-    console.log('coucou');
     if (this.state.running) {
       this.setState({
         running: false

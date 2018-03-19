@@ -59,12 +59,8 @@ class Workout extends Component {
     this.getRoutine = this.getRoutine.bind(this);
     this.updateRoutine = this.updateRoutine.bind(this);
     this.feedReps = this.feedReps.bind(this);
-    this.endRoutine = this.endRoutine.bind(this);
-    this.cancelUpdate = this.cancelUpdate.bind(this);
-    this.routineUpdateToggle = this.routineUpdateToggle.bind(this);
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
     this.saveRoutine = this.saveRoutine.bind(this);
-    this.getCompletedSets = this.getCompletedSets.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.showExercise = this.showExercise.bind(this);
   }
@@ -186,27 +182,6 @@ class Workout extends Component {
     });
   }
 
-  cancelUpdate(data) {
-    // Whe users want to cancel a planned upgrade to one of their sets, we use this tu remove the set from the upgradeRoutine array
-    let updatables = this.state.upgradeRoutine,
-      index = updatables.indexOf(data);
-    updatables.splice(index, 1);
-
-    if (updatables.length === 0) {
-      updatables = false;
-    }
-    this.setState({
-      upgradeRoutine: updatables,
-      completedExercises: this.getCompletedSets()
-    });
-  }
-
-  routineUpdateToggle() {
-    this.setState({
-      saveRoutine: !this.state.saveRoutine
-    });
-  }
-
   closeRoutineModal() {
     // We trigger the modal factory from here because it enables us to also
     // stop the stopwatch if it's been triggered and get its data to feed it
@@ -218,78 +193,12 @@ class Workout extends Component {
       type: 'endWorkout',
       changedRoutine: this.state.changedRoutine,
       currentRoutine: this.state.workoutLog ? this.state.workoutLog : false,
-      originalRoutine: this.state.routine ? this.state.routine : false
+      originalRoutine: this.state.routine ? this.state.routine : false,
+      exercisesDatabase: this.props.exercises.list
     });
     setTimeout(() => {
       _this.setState({ stopTimer: false });
     }, 100);
-  }
-
-  getCompletedSets() {
-    const log = this.state.workoutLog.exercises,
-      completedExercises = [];
-
-    for (let i = 0; i < log.length; i++) {
-      // Check if this has a repTargt. If it's cardio, the target IS the handicap
-      let repTarget = log[i].repTarget
-          ? parseFloat(log[i].repTarget)
-          : parseFloat(log[i].handicap),
-        successFullSets = log[i].sets
-          ? log[i].sets.filter(value => value === repTarget)
-          : [];
-      if (log[i].sets && log[i].sets.length === successFullSets.length) {
-        // If all repored reps are equal the target, on all sets, then push the exercise index to the array
-        completedExercises.push(i);
-      }
-    }
-
-    return completedExercises;
-  }
-
-  endRoutine() {
-    // First, check if any set has been completed
-    const completedExercises = this.getCompletedSets();
-
-    this.setState(
-      {
-        completedExercises: completedExercises
-      },
-      () => {
-        if (
-          this.state.completedExercises.length !== 0 &&
-          !this.state.changedRoutine
-        ) {
-          // Some exercises can upgrade !
-          this.setState({
-            upgradeRoutine: completedExercises,
-            exitingRoutine: true,
-            saveRoutine: false
-          });
-        } else if (
-          this.state.completedExercises.length !== 0 &&
-          this.state.changedRoutine
-        ) {
-          // Then let's check for changes made to the routine AND some have been maxed out
-          this.setState({
-            upgradeRoutine: completedExercises,
-            saveRoutine: true
-          });
-        } else if (this.state.changedRoutine) {
-          // routine has been changed but no set has been completed
-          this.setState({
-            saveRoutine: true,
-            upgradeRoutine: false
-          });
-        } else {
-          this.setState({
-            upgradeRoutine: false,
-            saveRoutine: false
-          });
-        }
-
-        this.props.toggleModal();
-      }
-    );
   }
 
   saveRoutine() {
@@ -482,24 +391,6 @@ class Workout extends Component {
         ))
       : false;
 
-    let workoutExit = (
-      <WorkoutExit
-        runningStatus={
-          this.state.runningWorkout ? this.state.runningWorkout : 'exiting'
-        }
-        closeRoutineModal={this.closeRoutineModal}
-        changedRoutine={this.state.changedRoutine}
-        saveRoutine={this.state.saveRoutine ? this.state.saveRoutine : false}
-        routineUpdateToggle={this.routineUpdateToggle}
-        upgradeRoutine={this.state.upgradeRoutine}
-        currentRoutine={this.state.workoutLog}
-        originalRoutine={this.state.routine}
-        exercisesDatabase={this.props.exercises.list}
-        cancelUpdate={this.cancelUpdate}
-        writeRoutine={this.saveRoutine}
-      />
-    );
-
     let ongoingExercise = false;
     if (this.state.ongoingExercise !== false) {
       const exercise = currentRoutine.exercises[this.state.ongoingExercise];
@@ -639,7 +530,6 @@ class Workout extends Component {
                 </button>
               </div>
             </div>
-            {this.state.exitingRoutine ? workoutExit : false}
           </div>
         )}
       </div>

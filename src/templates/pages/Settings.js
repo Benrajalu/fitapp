@@ -90,7 +90,6 @@ class Settings extends Component {
         mounted: true
       });
     }, 200);
-    console.log(this.props.userWeight);
   }
 
   repeat(direction, event) {
@@ -179,7 +178,6 @@ class Settings extends Component {
             'settings.availableWeights': value
           })
           .then(function(response) {
-            console.log('Congrats, settings saved !');
             _this.setState({
               savingWeights: 'saved'
             });
@@ -217,7 +215,6 @@ class Settings extends Component {
             'settings.baseBarbell': value
           })
           .then(function(response) {
-            console.log('Congrats, settings saved !');
             _this.setState({
               savingBarbell: 'saved'
             });
@@ -408,7 +405,6 @@ class Settings extends Component {
           userWeight: userWeight
         })
         .then(function(response) {
-          console.log('Congrats, settings saved !');
           _this.setState({
             saving: 'Modifications enregistrées !'
           });

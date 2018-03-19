@@ -16,14 +16,19 @@ class WorkoutExit extends Component {
     this.getCompletedSets = this.getCompletedSets.bind(this);
     this.updateIntensity = this.updateIntensity.bind(this);
     this.toggleSaveRoutine = this.toggleSaveRoutine.bind(this);
+    this.toggleExerciseUpdate = this.toggleExerciseUpdate.bind(this);
+    this.toggleAllExercisesUpdates = this.toggleAllExercisesUpdates.bind(this);
     this.state = {
       visible: null,
       intensity: 1,
-      runningStatus: false
+      runningStatus: false,
+      completedExercises: false,
+      toUpgrade: []
     };
   }
   componentDidMount() {
     const _this = this;
+    this.setState({ completedExercises: this.getCompletedSets() });
     setTimeout(function() {
       _this.setState({
         visible: ' visible'
@@ -48,7 +53,6 @@ class WorkoutExit extends Component {
         completedExercises.push(i);
       }
     }
-
     return completedExercises;
   }
 
@@ -63,17 +67,16 @@ class WorkoutExit extends Component {
       () => {
         if (
           this.state.completedExercises.length !== 0 &&
-          !this.state.changedRoutine
+          !this.props.changedRoutine
         ) {
-          // Some exercises can upgrade !
+          // Some exercises can upgrade and the routine hasn't changed !
           this.setState({
             upgradeRoutine: completedExercises,
-            exitingRoutine: true,
             saveRoutine: false
           });
         } else if (
           this.state.completedExercises.length !== 0 &&
-          this.state.changedRoutine
+          this.props.changedRoutine
         ) {
           // Then let's check for changes made to the routine AND some have been maxed out
           this.setState({
@@ -96,9 +99,35 @@ class WorkoutExit extends Component {
     );
   }
 
+  toggleExerciseUpdate(data) {
+    let updatables = this.state.toUpgrade ? this.state.toUpgrade : [];
+    // Whe users want to cancel a planned upgrade to one of their sets, we use this tu remove the set from the upgradeRoutine array
+    if (updatables.includes(data)) {
+      let index = updatables.indexOf(data);
+      updatables.splice(index, 1);
+    } else {
+      updatables.push(data);
+    }
+
+    this.setState({
+      toUpgrade: updatables
+    });
+  }
+
+  toggleAllExercisesUpdates() {
+    if (this.state.toUpgrade && this.state.toUpgrade.length > 0) {
+      this.setState({
+        toUpgrade: false
+      });
+    } else {
+      this.setState({
+        toUpgrade: this.getCompletedSets()
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    console.log('here');
-    this.endRoutine();
+    this.getCompletedSets();
   }
 
   closeModal() {
@@ -116,7 +145,6 @@ class WorkoutExit extends Component {
     this.setState({
       intensity: data
     });
-    console.log(this.state);
   }
 
   toggleSaveRoutine() {
@@ -126,22 +154,27 @@ class WorkoutExit extends Component {
   }
 
   render() {
-    console.log(this.props);
-    const upgradeExercises = this.props.upgradeRoutine,
+    const upgradeExercises = this.state.completedExercises,
       allExercises = this.props.saveRoutine
         ? this.props.currentRoutine.exercises
         : this.props.originalRoutine.exercises;
 
     const updates = upgradeExercises
-      ? upgradeExercises.map((value, index) => (
-          <WorkoutUpdates
-            key={'log-' + index + '-' + value}
-            completedSet={value}
-            allSets={allExercises}
-            database={this.props.exercisesDatabase}
-            notUpdating={this.props.cancelUpdate}
-          />
-        ))
+      ? upgradeExercises.map((value, index) => {
+          return (
+            <WorkoutUpdates
+              key={'log-' + index + '-' + value}
+              completedSet={value}
+              allSets={allExercises}
+              database={this.props.exercisesDatabase}
+              toggleUpdate={this.toggleExerciseUpdate}
+              willUpgrade={
+                this.state.toUpgrade && this.state.toUpgrade.includes(value)
+              }
+              index={index}
+            />
+          );
+        })
       : false;
 
     let contents = <div className="contents" />;
@@ -161,9 +194,8 @@ class WorkoutExit extends Component {
                   type="checkbox"
                   name="saveRoutine"
                   id="saveRoutine"
-                  value="yes"
+                  value={this.state.saveRoutine ? true : false}
                   checked={this.state.saveRoutine ? true : false}
-                  onChange={console.log('coucou')}
                 />
                 <label htmlFor="saveRoutine" onClick={this.toggleSaveRoutine}>
                   {this.state.saveRoutine ? 'oui' : 'non'}
@@ -174,11 +206,14 @@ class WorkoutExit extends Component {
         ) : (
           false
         )}
-        {this.props.upgradeRoutine ? (
+        {this.state.completedExercises &&
+        this.state.completedExercises.length > 0 ? (
           <div className="exit-panel">
             <h3 className="panel-title">Exercices à augmenter</h3>
             <div className="action">
-              <button>Tous / Aucun</button>
+              <button onClick={this.toggleAllExercisesUpdates}>
+                Tous / Aucun
+              </button>
             </div>
             {updates}
           </div>

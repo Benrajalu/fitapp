@@ -314,50 +314,6 @@
         }
       }
 
-      .workout-update {
-        display: flex;
-        border-radius: 4px;
-        background: #2c3045;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: stretch;
-        max-width: 500px;
-        margin: 20px auto 15px;
-        &:last-child {
-          margin-bottom: 0px;
-        }
-        div,
-        button {
-          flex-grow: 2;
-          margin-bottom: 0px;
-        }
-        button {
-          flex-grow: 1;
-          max-width: 100px;
-          line-height: 35px;
-          padding: 0 10px;
-          min-width: 100px;
-          border-radius: 0px 4px 4px 0px;
-        }
-        div {
-          padding: 5px 20px;
-          display: flex;
-          align-items: center;
-          text-align: left;
-          justify-content: flex-start;
-          p {
-            margin-bottom: 0px;
-            text-align: left;
-            padding: 0px;
-            @include mont(11px, 200, $white);
-          }
-          strong {
-            color: $blue;
-            padding: 0 3px;
-          }
-        }
-      }
-
       .buttons {
         display: flex;
         flex-flow: row nowrap;
