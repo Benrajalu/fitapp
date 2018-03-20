@@ -28,4 +28,9 @@
   .routine-body {
     padding: 0 16px;
   }
+
+  @media (min-width: 721px) {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 }

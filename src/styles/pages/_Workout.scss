@@ -243,6 +243,9 @@
         color: $white;
         flex-grow: 2;
         text-align: left;
+        border: 0px;
+        background: transparent;
+        cursor: pointer;
         &:last-child {
           text-align: right;
         }
@@ -553,6 +556,16 @@
       height: 50px;
       overflow: auto;
       top: 55px;
+      @media (min-width: 721px) {
+        position: absolute;
+        top: 0px;
+        justify-content: center;
+        width: 100%;
+        background: transparent;
+        li {
+          flex-grow: 0;
+        }
+      }
     }
     li {
       padding: 0 10px;
@@ -595,6 +608,11 @@
 
   .currentExercise {
     padding-top: 50px;
+    @media (min-width: 721px) {
+      padding-top: 50px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
   }
 
   @media (min-width: 721px) {

@@ -7,6 +7,7 @@ import Timestamper from '../blocks/Timestamper';
 class WorkoutHistoryDetail extends Component {
   constructor(props) {
     super(props);
+    this.calorieCounter = this.calorieCounter.bind(this);
     this.state = {
       getIn: {
         transform: 'translateX(-30%)',
@@ -25,6 +26,19 @@ class WorkoutHistoryDetail extends Component {
       });
     }, this.props.delay);
   }
+
+  calorieCounter() {
+    const userWeight = parseFloat(this.props.user.userWeight),
+      timeActive = (this.props.contents.time / 60).toFixed(2),
+      intensity = this.props.contents.intensity
+        ? this.props.contents.intensity + 2
+        : 3;
+
+    let formula = intensity * 3.5 * userWeight / 1000 * 5 * timeActive;
+
+    return Math.floor(formula - formula * 0.3);
+  }
+
   render() {
     const workoutExercices = this.props.contents.exercises;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -55,18 +69,22 @@ class WorkoutHistoryDetail extends Component {
         <div className="routine-body log">
           <div className="routine-breakdown">
             <p>
-              <strong>{workoutExercices.length}</strong> exercices
+              <strong>{workoutExercices.length}</strong> exercice{workoutExercices.length >
+              1
+                ? 's'
+                : false}
             </p>
-            {this.props.contents.duration ? (
+            {this.props.contents.time ? (
               <p>
-                <strong>{this.props.contents.duration}</strong> minutes
+                <strong>{(this.props.contents.time / 60).toFixed(2)}</strong>{' '}
+                minutes
               </p>
             ) : (
               false
             )}
-            {this.props.contents.calories ? (
+            {this.props.user.userWeight && this.props.contents.time ? (
               <p>
-                <strong>{this.props.contents.calories}</strong> kcalories
+                <strong>{this.calorieCounter()}</strong> kcalories
               </p>
             ) : (
               false

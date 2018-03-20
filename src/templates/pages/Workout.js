@@ -1,13 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { Prompt, Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import { firebaseAuth, database } from '../../store';
 import { connect } from 'react-redux';
 import { watchRoutines } from '../../actions/RoutinesActions';
 import { changeLayout } from '../../actions/MenuActions';
 import { toggleModal } from '../../actions/ModalActions';
 
-import WorkoutExit from '../blocks/WorkoutExit';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import InlineLoader from '../blocks/InlineLoader';
 
@@ -60,7 +57,6 @@ class Workout extends Component {
     this.updateRoutine = this.updateRoutine.bind(this);
     this.feedReps = this.feedReps.bind(this);
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
-    this.saveRoutine = this.saveRoutine.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.showExercise = this.showExercise.bind(this);
   }
@@ -193,179 +189,11 @@ class Workout extends Component {
       type: 'endWorkout',
       changedRoutine: this.state.changedRoutine,
       currentRoutine: this.state.workoutLog ? this.state.workoutLog : false,
-      originalRoutine: this.state.routine ? this.state.routine : false,
-      exercisesDatabase: this.props.exercises.list
+      originalRoutine: this.state.routine ? this.state.routine : false
     });
     setTimeout(() => {
       _this.setState({ stopTimer: false });
     }, 100);
-  }
-
-  saveRoutine() {
-    const _this = this,
-      today = new Date(),
-      workout = this.state.workoutLog;
-
-    workout.timestamp = today.getTime();
-
-    this.setState({
-      runningWorkout: 'saving',
-      workoutLog: workout
-    });
-
-    /* const dd = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), 
-          mm = today.getMonth()+1 < 10 ? '0' + (today.getMonth()+1) : today.getMonth()+1,
-          yyyy = today.getFullYear(),
-          fullDate = dd+'/'+mm+'/'+yyyy;*/
-
-    // If some sets have been completed, then we update the user's personal records because they did good
-    if (
-      this.state.completedExercises &&
-      this.state.completedExercises.length > 0
-    ) {
-      const routine = this.state.workoutLog,
-        areUpdatable = this.state.completedExercises,
-        records = this.props.workoutLogs.records;
-
-      for (var xb = 0; xb < areUpdatable.length; xb++) {
-        let current = routine.exercises[areUpdatable[xb]],
-          type = this.props.exercises.list.filter(
-            obj => obj.id === current.exerciseId
-          )[0].type;
-
-        // Updating the records...
-        if (type === 'barbell' || type === 'cable' || type === 'dumbbell') {
-          const newRecordValue = parseFloat(
-            routine.exercises[areUpdatable[xb]].handicap
-          );
-
-          // Check if that exercise is already in records
-          const recordsHistory = records.findIndex(
-            obj => obj.exerciseId === current.exerciseId
-          );
-          if (recordsHistory >= 0) {
-            const oldValue = parseFloat(
-              records[recordsHistory].record.replace('kg', '')
-            );
-            if (oldValue < newRecordValue) {
-              records[recordsHistory].record = newRecordValue + 'kg';
-              records[recordsHistory].timestamp = Date.now();
-            }
-          } else {
-            const newRecord = {
-              exerciseId: current.exerciseId,
-              record: newRecordValue + 'kg',
-              timestamp: Date.now()
-            };
-            records.push(newRecord);
-          }
-        }
-      }
-
-      this.setState({
-        records: records
-      });
-
-      this.props.workoutLogs.records.map(obj => {
-        return database
-          .collection('users')
-          .doc(_this.props.user.uid)
-          .collection('personalRecords')
-          .doc(obj.exerciseId)
-          .set(obj, { merge: true });
-      });
-    }
-
-    // If the routine was changed (handicaps) and the user wants that saved, save it
-    if (this.state.saveRoutine) {
-      const routineSnapshot = this.state.routine,
-        workout = this.state.workoutLog;
-      workout.exercises.map((value, index) => {
-        return (routineSnapshot.exercises[index].handicap = value.handicap);
-      });
-      this.setState(
-        {
-          routine: routineSnapshot
-        },
-        () => {
-          database
-            .collection('users')
-            .doc(_this.props.user.uid)
-            .collection('routines')
-            .doc(_this.state.routine.routineId.toString())
-            .set(_this.state.routine);
-        }
-      );
-    }
-
-    // If there are some exercises the user can upgrade, then we work out which ones and by how much...
-    if (this.state.upgradeRoutine) {
-      const routine = this.state.routine,
-        areUpdatable = this.state.upgradeRoutine;
-
-      for (var x = 0; x < areUpdatable.length; x++) {
-        let current = routine.exercises[areUpdatable[x]],
-          type = this.props.exercises.list.filter(
-            obj => obj.id === current.exerciseId
-          )[0].type;
-
-        // Updating the routine...
-        if (type === 'cardio') {
-          routine.exercises[areUpdatable[x]].handicap =
-            parseFloat(routine.exercises[areUpdatable[x]].handicap) + 10;
-        } else if (type === 'barbell' || type === 'calisthenics') {
-          routine.exercises[areUpdatable[x]].handicap =
-            parseFloat(routine.exercises[areUpdatable[x]].handicap) + 5;
-        } else {
-          routine.exercises[areUpdatable[x]].handicap =
-            parseFloat(routine.exercises[areUpdatable[x]].handicap) + 2;
-        }
-      }
-
-      this.setState(
-        {
-          routine: routine
-        },
-        () => {
-          // ... then we add to the payload
-          database
-            .collection('users')
-            .doc(this.props.user.uid)
-            .collection('routines')
-            .doc(this.state.routine.routineId.toString())
-            .set(this.state.routine, { merge: true });
-        }
-      );
-    }
-
-    // This is the basic payload, saved whatever happens
-    // we use the "today" to update the targeted routine so users know it's the most recently used
-    // and we use the state.workout to save into the workout logs so this workout is part of the user's history
-    database
-      .collection('users')
-      .doc(this.props.user.uid)
-      .collection('routines')
-      .doc(this.state.routine.routineId.toString())
-      .update({
-        lastPerformed: today.getTime()
-      })
-      .then(() => {
-        database
-          .collection('users')
-          .doc(_this.props.user.uid)
-          .collection('workoutLog')
-          .add(_this.state.workoutLog)
-          .then(() => {
-            _this.setState({
-              runningWorkout: false
-            });
-            setTimeout(() => {
-              _this.setState({
-                successRedirect: true
-              });
-            }, 1500);
-          });
-      });
   }
 
   showExercise(index) {
@@ -387,6 +215,7 @@ class Workout extends Component {
             exercisesDatabase={this.props.exercises.list}
             settings={this.props.user.settings}
             showExercise={this.showExercise}
+            onReps={this.feedReps}
           />
         ))
       : false;
@@ -435,16 +264,6 @@ class Workout extends Component {
           </div>
         ) : (
           <div className="workout-grid">
-            <Prompt
-              when={this.state.runningWorkout ? true : false}
-              message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? "
-            />
-            {this.state.successRedirect ? (
-              <Redirect push to={{ pathname: '/' }} />
-            ) : (
-              false
-            )}
-
             <div className="head">
               <div className="container">
                 <h1>

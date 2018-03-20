@@ -5,6 +5,8 @@ class WorkoutExerciseTeaser extends Component {
   constructor(props) {
     super(props);
 
+    this.updateSetlist = this.updateSetlist.bind(this);
+
     this.state = {
       exerciseId: this.props.contents.exerciseId,
       setsTarget: this.props.contents.setsTarget
@@ -15,6 +17,33 @@ class WorkoutExerciseTeaser extends Component {
         : this.props.contents.handicap,
       completedSets: 0
     };
+  }
+
+  updateSetlist() {
+    let newSetlist = [];
+    if (this.props.contents.setsTarget && this.props.contents.sets === false) {
+      let y = 0,
+        totalSets = parseFloat(this.props.contents.setsTarget);
+      for (y; y < totalSets; y++) {
+        newSetlist.push(0);
+      }
+    } else if (this.props.contents.setsTarget && this.props.contents.sets) {
+      newSetlist = this.props.contents.sets;
+    } else if (this.props.contents.handicap && this.props.contents.sets) {
+      newSetlist = this.props.contents.sets;
+    } else {
+      newSetlist.push(0);
+    }
+
+    this.setState({
+      sets: newSetlist
+    });
+
+    this.props.onReps(newSetlist, this.props.index);
+  }
+
+  componentDidMount() {
+    this.updateSetlist();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -29,6 +58,7 @@ class WorkoutExerciseTeaser extends Component {
       });
       completedSets = completed.length ? completed.length : 0;
     }
+    //this.updateSetlist();
     this.setState({
       completedSets: completedSets
     });

@@ -152,7 +152,7 @@
         box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
         p {
           @include mont(11px, 500, $greyType);
-          margin-bottom: 8px;
+          margin-bottom: 12px;
           strong {
             display: block;
             color: $white;

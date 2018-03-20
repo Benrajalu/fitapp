@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-
 class IntensityPicker extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +47,9 @@ class IntensityPicker extends Component {
   }
 }
 
-IntensityPicker.propTypes = {};
+IntensityPicker.propTypes = {
+  updateIntensity: PropTypes.func.isRequired,
+  value: PropTypes.number.isRequired
+};
 
 export default IntensityPicker;

@@ -1,4 +1,4 @@
-@import "styles/_mixins.scss";
+@import 'styles/_mixins.scss';
 
 .selection-overlay {
   position: fixed;
@@ -20,7 +20,7 @@
     padding-top: 60px;
   }
   &:before {
-    content: "";
+    content: '';
     width: 100%;
     position: absolute;
     bottom: 15px;
@@ -199,6 +199,9 @@
       transform: translateX(0%);
       border-radius: 0px;
       background: #000;
+      @media (min-width: 721px) {
+        width: 100%;
+      }
     }
     .modal-header,
     .modal-options,

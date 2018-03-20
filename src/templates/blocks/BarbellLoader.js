@@ -104,7 +104,7 @@ class BarbellLoader extends Component {
 
     // If the weight is the same as the user's setting base barbell, then display the empty barebell
     let loadHelper = <div className="load" />;
-    if (this.props.weight === parseInt(this.props.settings.baseBarbell, 10)) {
+    if (this.props.weight === parseFloat(this.props.settings.baseBarbell)) {
       loadHelper = (
         <div className="load">
           <div className="barbell">
@@ -150,7 +150,14 @@ class BarbellLoader extends Component {
             Poids calculé{' '}
             <strong>
               {' '}
-              -{this.state.remainingWeight - this.props.settings.baseBarbell}kg
+              {this.state.remainingWeight - this.props.settings.baseBarbell > 0
+                ? '-'
+                : '+'}
+              {this.state.remainingWeight - this.props.settings.baseBarbell > 0
+                ? this.state.remainingWeight - this.props.settings.baseBarbell
+                : (this.state.remainingWeight -
+                    this.props.settings.baseBarbell) *
+                  -1}kg
             </strong>{' '}
             (disques non disponibles)
           </div>
@@ -161,7 +168,7 @@ class BarbellLoader extends Component {
     );
 
     return (
-      <div>
+      <div className="barbellLoader">
         {loadHelper}
         {weightNotReached}
       </div>

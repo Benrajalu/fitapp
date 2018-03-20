@@ -69,7 +69,7 @@ class WeightHelperModal extends Component {
     let lowHandicap = false;
     if (isBarebell) {
       lowHandicap =
-        parseInt(handicap, 10) <= parseInt(this.props.settings.baseBarbell, 10)
+        parseFloat(handicap) <= parseFloat(this.props.settings.baseBarbell)
           ? true
           : false;
     }
@@ -91,7 +91,7 @@ class WeightHelperModal extends Component {
         {isBarebell ? (
           <BarbellLoader
             settings={this.props.settings}
-            weight={parseInt(this.props.settings.baseBarbell, 10)}
+            weight={parseFloat(this.props.settings.baseBarbell)}
           />
         ) : (
           false
@@ -107,7 +107,7 @@ class WeightHelperModal extends Component {
         {isBarebell ? (
           <BarbellLoader
             settings={this.props.settings}
-            weight={parseInt(this.props.settings.baseBarbell, 10)}
+            weight={parseFloat(this.props.settings.baseBarbell)}
           />
         ) : (
           false
@@ -124,6 +124,10 @@ class WeightHelperModal extends Component {
             <p>
               {repCeil} x {this.props.settings.baseBarbell + 'kg'}
             </p>
+            <BarbellLoader
+              settings={this.props.settings}
+              weight={parseFloat(this.props.settings.baseBarbell)}
+            />
           </div>
         );
         indexes.push(this.props.settings.baseBarbell + 'kg');

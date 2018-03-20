@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { watchRoutines } from '../../actions/RoutinesActions';
 import { toggleModal } from '../../actions/ModalActions';
 import { removeUser, resetUser } from '../../actions/UserActions';
+import { watchLogs, watchRecords } from '../../actions/WorkoutLogActions';
 
 // Modal imports
 import RoutineDelete from '../blocks/Modals/RoutineDelete';
@@ -17,7 +18,8 @@ const mapStateToProps = (state, ownProps) => {
     menu: state.menu,
     modals: state.modals,
     routines: state.routines,
-    exercises: state.exercises
+    exercises: state.exercises,
+    workoutLogs: state.workoutLogs
   };
 };
 
@@ -34,6 +36,12 @@ const mapDispatchToProps = dispatch => {
     },
     toggleModal: data => {
       dispatch(toggleModal(data));
+    },
+    watchLogs: () => {
+      dispatch(watchLogs());
+    },
+    watchRecords: () => {
+      dispatch(watchRecords());
     }
   };
 };
@@ -45,10 +53,6 @@ class ModalFactory extends Component {
       visible: false,
       type: this.props.modals.data.type
     };
-  }
-
-  componentDidMount() {
-    console.log('coucou modal factory');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,6 +124,12 @@ class ModalFactory extends Component {
             currentRoutine={this.props.modals.data.currentRoutine}
             originalRoutine={this.props.modals.data.originalRoutine}
             exercisesDatabase={this.props.exercises.list}
+            workoutLogs={this.props.workoutLogs.list}
+            records={this.props.workoutLogs.records}
+            user={this.props.user}
+            watchLogs={this.props.watchLogs}
+            watchRecords={this.props.watchRecords}
+            watchRoutines={this.props.watchRoutines}
           />
         );
         break;

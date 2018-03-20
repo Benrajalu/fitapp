@@ -91,7 +91,6 @@
       width: 30px;
       height: 110px;
       line-height: 110px;
-      background: #62abd6;
     }
     &.size-20 {
       height: 110px;
@@ -142,6 +141,11 @@
       }
     }
   }
+}
+
+.load + div .alert {
+  @include mont(11px, 700, $greyType);
+  margin-bottom: 8px;
 }
 
 .visible .load .disc {

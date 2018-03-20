@@ -151,7 +151,10 @@ class ExerciseListing extends Component {
                 <strong>
                   {completedSets}/{currentExercise.sets.length}
                 </strong>{' '}
-                <span>–</span> sets complétés
+                <span>–</span> set{currentExercise.sets.length > 1
+                  ? 's'
+                  : false}{' '}
+                complété{currentExercise.sets.length > 1 ? 's' : false}
               </p>
             </div>
           ) : (

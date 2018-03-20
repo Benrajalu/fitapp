@@ -104,6 +104,7 @@ class WorkoutsHistory extends Component {
         contents={value}
         exercisesDatabase={this.props.exercisesDatabase}
         delay={index * 100}
+        user={this.props.user}
       />
     ));
 
@@ -112,7 +113,7 @@ class WorkoutsHistory extends Component {
         {workoutItems.length > 0 ? (
           <div id="listWrapper">
             {output}
-            {pages ? (
+            {pages && workoutItems.length > 5 ? (
               <ul className="pagination">
                 <li className="legend">
                   Page {this.state.activePage} / {this.state.totalPages}
