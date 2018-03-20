@@ -113,7 +113,7 @@ class WorkoutsHistory extends Component {
         {workoutItems.length > 0 ? (
           <div id="listWrapper">
             {output}
-            {pages && workoutItems.length > 5 ? (
+            {pages && workouts.length > 5 ? (
               <ul className="pagination">
                 <li className="legend">
                   Page {this.state.activePage} / {this.state.totalPages}
