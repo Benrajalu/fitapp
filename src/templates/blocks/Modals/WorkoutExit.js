@@ -408,12 +408,10 @@ class WorkoutExit extends Component {
                   <FontAwesomeIcon icon={['fas', 'times']} size="1x" />
                 </button>
               </div>
-              <div className="exit-slides">
+              <div className="window-body exit no-padding">
                 <div
                   className={
-                    this.state.saving
-                      ? 'window-body no-padding exit'
-                      : 'window-body no-padding exit active'
+                    this.state.saving ? 'exit-slide' : 'exit-slide active'
                   }>
                   <div className="exit-content">
                     <div className="intro exit-panel">
@@ -475,8 +473,8 @@ class WorkoutExit extends Component {
                 <div
                   className={
                     this.state.saving
-                      ? 'window-body no-padding loading active'
-                      : 'window-body no-padding loading'
+                      ? 'exit-slide loading active'
+                      : 'exit-slide loading'
                   }>
                   <InlineLoader
                     copy={
@@ -490,7 +488,7 @@ class WorkoutExit extends Component {
             </div>
           </div>
         </div>
-        {this.state.successRedirect ? (
+        {this.state.successRedirect && window.location.pathname !== '/' ? (
           <Redirect push to={{ pathname: '/' }} />
         ) : (
           false

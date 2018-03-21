@@ -94,3 +94,22 @@ html {
     }
   }
 }
+
+.page-animations {
+  .intro-animation {
+    transition: all 300ms ease-out;
+    opacity: 0;
+    transform: translateY(30px);
+    @for $i from 2 through 9 {
+      &:nth-child(#{$i}) {
+        transition-delay: (($i - 1) * 100ms);
+      }
+    }
+  }
+  &.loaded {
+    .intro-animation {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+}

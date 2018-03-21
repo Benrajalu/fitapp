@@ -202,10 +202,6 @@
   align-self: center;
   text-align: center;
   max-width: 500px;
-  .exit-slides {
-    overflow: hidden;
-    position: relative;
-  }
   .window-head {
     display: flex;
     flex-flow: row nowrap;
@@ -358,10 +354,26 @@
       flex-flow: column;
       justify-content: flex-start;
       align-items: stretch;
-      transition: all 200ms ease-out;
-      transform: translateX(-120%) !important;
-      &.active {
-        transform: translateX(0%) !important;
+      //transition: all 200ms ease-out;
+      .exit-slide {
+        transform: translateX(-120%) !important;
+        transition: all 200ms ease-out;
+        opacity: 0;
+        &:last-child {
+          transform: translateX(120%) !important;
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        &.active {
+          opacity: 1;
+          transform: translateX(0%) !important;
+        }
       }
       .exit-content {
         flex-grow: 2;

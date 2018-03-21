@@ -29,7 +29,12 @@ class RoutineMaker extends Component {
         lastPerformed: timestamp.getTime(),
         name: defaultName
       },
-      errors: {}
+      errors: {},
+      styles: {
+        transform: 'translateY(30px)',
+        opacity: 0,
+        transition: 'all 200ms ease-out'
+      }
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -43,6 +48,17 @@ class RoutineMaker extends Component {
 
   componentDidMount() {
     this.props.toggleMenu('hidden');
+    const _this = this;
+    setTimeout(() => {
+      _this.setState({
+        styles: {
+          transform: 'translateY(0px)',
+          opacity: 1,
+          transition: 'all 300ms ease-out'
+        }
+      });
+    }, 300);
+
     if (this.props.editRoutine) {
       const timestamp = new Date();
 
@@ -260,7 +276,8 @@ class RoutineMaker extends Component {
               <div
                 className={
                   this.state.errors.name ? 'form-group has-error' : 'form-group'
-                }>
+                }
+                style={this.state.styles}>
                 <label>Nom de l'entraînement</label>
                 <input
                   type="text"
@@ -283,7 +300,8 @@ class RoutineMaker extends Component {
                 this.state.newRoutine.exercises.length === 0
                   ? ' routine-exercises empty'
                   : 'routine-exercises'
-              }>
+              }
+              style={this.state.styles}>
               <h3 className="label">
                 {this.state.newRoutine.exercises.length > 0
                   ? this.state.newRoutine.exercises.length

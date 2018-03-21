@@ -26,8 +26,13 @@ class History extends Component {
 
   render() {
     return (
-      <div className={this.state.mounted ? 'History loaded' : 'History'}>
-        <div className="container-fluid page-intro">
+      <div
+        className={
+          this.state.mounted
+            ? 'History page-animations loaded'
+            : 'History page-animations'
+        }>
+        <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
@@ -36,7 +41,7 @@ class History extends Component {
           </div>
         </div>
 
-        <div className="container">
+        <div className="container intro-animation">
           <div className="large-9 medium-8 columns workout-logs">
             <p className="records-title">Vos entraînements</p>
             <WorkoutsHistoryContainer />

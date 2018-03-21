@@ -52,7 +52,8 @@ class EditRoutine extends Component {
     if (realRoutine.length > 0) {
       this.setState({
         routine: realRoutine[0],
-        loading: false
+        loading: false,
+        error: false
       });
     } else {
       this.setState({
@@ -85,8 +86,12 @@ class EditRoutine extends Component {
   render() {
     return (
       <div
-        className={this.state.mounted ? 'EditRoutine loaded' : 'EditRoutine'}>
-        <div className="container-fluid page-intro">
+        className={
+          this.state.mounted
+            ? 'EditRoutine page-animations loaded'
+            : 'EditRoutine page-animations'
+        }>
+        <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
@@ -94,7 +99,7 @@ class EditRoutine extends Component {
             <h1 className="page-header">Modifier une routine</h1>
           </div>
         </div>
-        <div className="container animation-contents">
+        <div className="container">
           {this.state.routine ? (
             <RoutineMaker
               postHandler={this.handleFormPost}

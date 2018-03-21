@@ -26,15 +26,20 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className={this.state.mounted ? 'Dashboard loaded' : 'Dashboard'}>
-        <p className="mainLogo">
+      <div
+        className={
+          this.state.mounted
+            ? 'Dashboard page-animations loaded'
+            : 'Dashboard page-animations'
+        }>
+        <p className="mainLogo intro-animation">
           fit<strong>app</strong>
         </p>
-        <div className="container">
+        <div className="container intro-animation">
           <DashboardIntroContainer />
         </div>
 
-        <div className="container">
+        <div className="container intro-animation">
           <div className="large-9 medium-8 columns workout-logs">
             <div className="header">
               <WeeklyCounterContainer />

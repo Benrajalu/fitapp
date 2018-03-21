@@ -52,8 +52,13 @@ class NewRoutine extends Component {
 
   render() {
     return (
-      <div className={this.state.mounted ? 'NewRoutine loaded' : 'NewRoutine'}>
-        <div className="container-fluid page-intro">
+      <div
+        className={
+          this.state.mounted
+            ? 'NewRoutine page-animations loaded'
+            : 'NewRoutine page-animations'
+        }>
+        <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour

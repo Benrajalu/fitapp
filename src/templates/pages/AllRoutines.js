@@ -134,8 +134,12 @@ class AllRoutines extends Component {
 
     return (
       <div
-        className={this.state.mounted ? 'AllRoutines loaded' : 'AllRoutines'}>
-        <div className="container-fluid page-intro">
+        className={
+          this.state.mounted
+            ? 'AllRoutines page-animations loaded'
+            : 'AllRoutines page-animations'
+        }>
+        <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
@@ -145,13 +149,13 @@ class AllRoutines extends Component {
         </div>
 
         {this.state.loading ? (
-          <div className="container empty animation-contents">
+          <div className="container empty intro-animation">
             <div className="inlineLoader">
               <p>Chargement de vos données</p>
             </div>
           </div>
         ) : (
-          <div className="container animation-contents">
+          <div className="container intro-animation">
             <div className="medium-8 columns teasers-list">
               {routines.length > 0 ? (
                 <div className="all-routines">

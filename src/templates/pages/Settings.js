@@ -443,9 +443,13 @@ class Settings extends Component {
 
     return (
       <div
-        className={this.state.mounted ? 'Settings loaded' : 'Settings'}
+        className={
+          this.state.mounted
+            ? 'Settings page-animations loaded'
+            : 'Settings page-animations'
+        }
         id="Settings">
-        <div className="container-fluid page-intro">
+        <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
@@ -458,7 +462,7 @@ class Settings extends Component {
           </div>
         </div>
 
-        <div className="container setting-contents animation-contents">
+        <div className="container setting-contents intro-animation">
           <div id="bar-settings">
             <h3 className="type-title">Gestion de la barre libre</h3>
             <div className="setting-panel" id="barbell">

@@ -205,7 +205,6 @@ class Workout extends Component {
   }
 
   render() {
-    console.log(this.props.modals.status === 'closed');
     const currentRoutine = this.state.workoutLog;
 
     // For each exercise in the routine, we display a workoutDetails element that will enable users to track their routine
