@@ -125,6 +125,12 @@ class Settings extends Component {
     this.holdTimer = promise;
   }
   onMouseDown(direction, event) {
+    if (
+      'ontouchstart' in document.documentElement &&
+      event.type === 'mousedown'
+    ) {
+      return false;
+    }
     // When button is down, prevent context menu
     window.oncontextmenu = function(event) {
       event.preventDefault();

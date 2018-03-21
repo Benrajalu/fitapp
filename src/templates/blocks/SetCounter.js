@@ -67,7 +67,13 @@ class SetCounter extends Component {
     this.holdTimer = promise;
   }
 
-  onMouseDown(direction, index, event) {
+  onMouseDown(direction, event) {
+    if (
+      'ontouchstart' in document.documentElement &&
+      event.type === 'mousedown'
+    ) {
+      return false;
+    }
     // When button is down, prevent context menu
     window.oncontextmenu = function(event) {
       event.preventDefault();
@@ -75,7 +81,7 @@ class SetCounter extends Component {
       return false;
     };
     // Launch the repeat function to then trigger the increase/decrease
-    this.repeat(direction, index, event);
+    this.repeat(direction, event);
   }
   onMouseUp(event) {
     // When button is up, clear the timeout for the repeater

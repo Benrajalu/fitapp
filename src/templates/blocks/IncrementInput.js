@@ -24,12 +24,18 @@ class IncrementInput extends Component {
     // Set a promise to deliver the same function until the timer is stopped
     let promise = setTimeout(() => {
       _this.repeat(direction, index, event);
-      this.timer = 200;
+      this.timer = 100;
     }, this.timer);
     this.holdTimer = promise;
   }
 
   onMouseDown(direction, index, event) {
+    if (
+      'ontouchstart' in document.documentElement &&
+      event.type === 'mousedown'
+    ) {
+      return false;
+    }
     // When button is down, prevent context menu
     window.oncontextmenu = function(event) {
       event.preventDefault();
