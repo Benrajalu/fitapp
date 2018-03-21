@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { Prompt } from 'react-router';
 import { connect } from 'react-redux';
 import { watchRoutines } from '../../actions/RoutinesActions';
 import { changeLayout } from '../../actions/MenuActions';
@@ -20,6 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     routines: state.routines,
     exercises: state.exercises,
     workoutLogs: state.workoutLogs,
+    modals: state.modals,
     match: ownProps.match
   };
 };
@@ -203,6 +205,7 @@ class Workout extends Component {
   }
 
   render() {
+    console.log(this.props.modals.status === 'closed');
     const currentRoutine = this.state.workoutLog;
 
     // For each exercise in the routine, we display a workoutDetails element that will enable users to track their routine
@@ -264,6 +267,10 @@ class Workout extends Component {
           </div>
         ) : (
           <div className="workout-grid">
+            <Prompt
+              when={this.props.modals.status === 'closed'}
+              message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? "
+            />
             <div className="head">
               <div className="container">
                 <h1>

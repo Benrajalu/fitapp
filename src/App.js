@@ -71,7 +71,6 @@ class App extends Component {
           const query = database.collection('users').doc(user.uid);
           query.onSnapshot(
             doc => {
-              _this.props.removeLoading();
               if (!doc.exists && !_this.props.user.deleting) {
                 console.log("User doesn't exist");
                 _this.initiateDefaultUser(user);
@@ -109,14 +108,13 @@ class App extends Component {
               }
             },
             error => {
-              _this.props.removeLoading();
               console.log('User logged out');
               _this.props.resetUser();
             }
           );
         } else {
           console.log('not loggedin');
-          _this.props.removeLoading();
+
           _this.props.resetUser();
           _this.setState({
             userChecked: true
@@ -124,7 +122,6 @@ class App extends Component {
         }
       },
       error => {
-        _this.props.removeLoading();
         console.log('done');
       }
     );
