@@ -50,7 +50,7 @@ class Login extends Component {
       googleLogin: true
     });
     firebaseAuth
-      .signInWithPopup(provider)
+      .signInWithRedirect(provider)
       .then(() => {
         _this.setState({
           loading: true
