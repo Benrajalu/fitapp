@@ -687,7 +687,7 @@
   button {
     background: transparent;
     text-align: center;
-    @include mont(10px, 300, $white);
+    @include mont(10px, 500, $white);
     flex-grow: 2;
     border: 0px;
     text-transform: uppercase;

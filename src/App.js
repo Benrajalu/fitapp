@@ -68,10 +68,10 @@ class App extends Component {
     this.fireBaseListener = firebaseAuth.onAuthStateChanged(
       function(user) {
         if (user !== null && !_this.props.user.deleting) {
-          _this.props.removeLoading();
           const query = database.collection('users').doc(user.uid);
           query.onSnapshot(
             doc => {
+              _this.props.removeLoading();
               if (!doc.exists && !_this.props.user.deleting) {
                 console.log("User doesn't exist");
                 _this.initiateDefaultUser(user);
@@ -109,12 +109,14 @@ class App extends Component {
               }
             },
             error => {
+              _this.props.removeLoading();
               console.log('User logged out');
               _this.props.resetUser();
             }
           );
         } else {
           console.log('not loggedin');
+          _this.props.removeLoading();
           _this.props.resetUser();
           _this.setState({
             userChecked: true
@@ -122,6 +124,7 @@ class App extends Component {
         }
       },
       error => {
+        _this.props.removeLoading();
         console.log('done');
       }
     );
@@ -174,7 +177,7 @@ class App extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.props.removeLoading();
+      //this.props.removeLoading();
     }, 300);
   }
 
@@ -219,6 +222,7 @@ class App extends Component {
                     {this.props.user.uid ? (
                       <Switch>
                         <Route exact path="/" component={Dashboard} />
+                        <Route path="/dasboard" component={Dashboard} />
                         <Route path="/all-routines" component={AllRoutines} />
                         <Route exact path="/history" component={History} />
                         <Route path="/new-routine" component={NewRoutine} />
