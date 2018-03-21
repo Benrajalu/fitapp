@@ -651,6 +651,11 @@
         opacity: 1;
         transform: translateY(0%) translateX(0%);
       }
+      @media (min-width: 721px) {
+        > .footer {
+          transform: translateY(0%) translateX(-50%);
+        }
+      }
     }
 
     .active-routine {
