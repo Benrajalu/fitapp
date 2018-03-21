@@ -61,6 +61,7 @@ class Workout extends Component {
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.showExercise = this.showExercise.bind(this);
+    this.setNewHeight = this.setNewHeight.bind(this);
   }
 
   getRoutine(data) {
@@ -114,7 +115,11 @@ class Workout extends Component {
     const _this = this;
     this.props.changeLayout('hidden');
     this.setState({
-      loading: false
+      loading: false,
+      height: Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+      )
     });
     setTimeout(() => {
       _this.setState({
@@ -204,6 +209,15 @@ class Workout extends Component {
     });
   }
 
+  setNewHeight() {
+    this.setState({
+      height: Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+      )
+    });
+  }
+
   render() {
     const currentRoutine = this.state.workoutLog;
 
@@ -246,7 +260,7 @@ class Workout extends Component {
     return (
       <div id="Workout" className={this.state.mounted ? 'loaded' : null}>
         {this.state.routine === false ? (
-          <div className="workout-grid">
+          <div className="workout-grid" style={{ height: this.state.height }}>
             <div className="head">
               <div className="container">
                 <h1>Entraînement introuvable</h1>
@@ -265,7 +279,7 @@ class Workout extends Component {
             </div>
           </div>
         ) : (
-          <div className="workout-grid">
+          <div className="workout-grid" style={{ height: this.state.height }}>
             <Prompt
               when={this.props.modals.status === 'closed'}
               message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? "

@@ -17,6 +17,16 @@ class Login extends Component {
     this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
     this.handleFacebookLogin = this.handleFacebookLogin.bind(this);
     this.updateFields = this.updateFields.bind(this);
+    this.setNewHeight = this.setNewHeight.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      height: Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+      )
+    });
   }
 
   toggleTab(target, event) {
@@ -159,9 +169,22 @@ class Login extends Component {
     }
   }
 
+  setNewHeight() {
+    this.setState({
+      height: Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+      )
+    });
+  }
+
   render() {
+    const _this = this;
+    window.addEventListener('resize', () => {
+      _this.setNewHeight();
+    });
     return (
-      <div className="login" id="login">
+      <div className="login" id="login" style={{ height: this.state.height }}>
         <header>
           <p className="logo">
             fit<strong>app</strong>
