@@ -359,6 +359,9 @@
         transform: translateX(-120%) !important;
         transition: all 200ms ease-out;
         opacity: 0;
+        max-height: 100%;
+        display: flex;
+        flex-flow: column;
         &:last-child {
           transform: translateX(120%) !important;
           position: absolute;
