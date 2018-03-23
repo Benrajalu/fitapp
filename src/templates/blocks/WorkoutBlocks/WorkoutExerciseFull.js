@@ -39,7 +39,7 @@ class WorkoutExerciseFull extends Component {
     }
 
     this.setState({
-      sets: newSetlist
+      sets: Array.isArray(newSetlist) ? newSetlist : newSetlist.split()
     });
 
     this.props.onReps(newSetlist, this.props.index);
@@ -69,7 +69,6 @@ class WorkoutExerciseFull extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log();
     // Update with new setlist if the comonent is reset with new data
     let newSetlist = [];
     if (nextProps.contents.setsTarget && nextProps.contents.sets === false) {
@@ -91,7 +90,7 @@ class WorkoutExerciseFull extends Component {
     }
 
     this.setState({
-      sets: newSetlist
+      sets: Array.isArray(newSetlist) ? newSetlist : newSetlist.split()
     });
   }
 
@@ -106,7 +105,7 @@ class WorkoutExerciseFull extends Component {
     // We count how many of the sets have been done (1s in the completedSets array)
     const setsDone = this.state.sets.filter(
       value =>
-        value ===
+        parseFloat(value) ===
         (this.props.contents.repTarget
           ? parseFloat(this.props.contents.repTarget)
           : parseFloat(this.props.contents.handicap))
@@ -118,14 +117,14 @@ class WorkoutExerciseFull extends Component {
       <SetCounter
         treshold={
           this.props.contents.repTarget
-            ? parseInt(this.props.contents.repTarget, 10)
-            : parseInt(this.props.contents.handicap, 10)
+            ? parseFloat(this.props.contents.repTarget)
+            : parseFloat(this.props.contents.handicap)
         }
         repUnit={this.props.contents.repTarget ? 'reps' : 'minutes'}
         index={index}
         key={index}
         onCompletion={this.setCompletion}
-        value={value}
+        value={parseFloat(value)}
       />
     ));
 

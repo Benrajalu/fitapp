@@ -88,18 +88,18 @@ class EditRoutine extends Component {
       <div
         className={
           this.state.mounted
-            ? 'EditRoutine page-animations loaded'
-            : 'EditRoutine page-animations'
+            ? 'NewRoutine page-animations loaded'
+            : 'NewRoutine page-animations'
         }>
         <div className="container-fluid page-intro intro-animation">
           <div className="container">
             <Link to="/">
               <FontAwesomeIcon icon={['fas', 'angle-left']} size="1x" /> Retour
             </Link>
-            <h1 className="page-header">Modifier une routine</h1>
+            <h1 className="page-header">Modifier la routine</h1>
           </div>
         </div>
-        <div className="container">
+        <div className="container animation-contents">
           {this.state.routine ? (
             <RoutineMaker
               postHandler={this.handleFormPost}
@@ -112,12 +112,12 @@ class EditRoutine extends Component {
             />
           ) : null}
           {this.state.loading ? (
-            <div className="container empty">
+            <div className="container empty animation-contents">
               <InlineLoader copy="Chargement de la routine" />
             </div>
           ) : null}
           {this.state.error ? (
-            <div className="container empty">
+            <div className="container empty animation-contents">
               <InlineLoader copy="Cette routine n'existe pas" type="error" />
             </div>
           ) : null}

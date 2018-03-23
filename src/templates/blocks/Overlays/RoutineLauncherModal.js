@@ -160,7 +160,10 @@ class RoutineLauncherModal extends Component {
             <div className="container">
               <div className="routine-detail empty">
                 <p>Vous n'avez pas créé d'entraînement !</p>
-                <Link to="/new-routine" className="btn btn-ghost">
+                <Link
+                  to="/new-routine"
+                  className="btn btn-ghost"
+                  onClick={this.props.closeModal}>
                   Créer un entraînement
                 </Link>
               </div>

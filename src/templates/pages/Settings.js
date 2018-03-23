@@ -505,6 +505,7 @@ class Settings extends Component {
                     <div className="input">
                       <p>kg</p>
                       <input
+                        id="barbellWeight"
                         type="number"
                         value={this.state.settings.baseBarbell}
                         onChange={this.updateBarbell}
@@ -550,6 +551,7 @@ class Settings extends Component {
                       value="25"
                       id="input-25"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(25) > -1
                           ? true
                           : false
@@ -565,6 +567,7 @@ class Settings extends Component {
                       value="20"
                       id="input-20"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(20) > -1
                           ? true
                           : false
@@ -580,6 +583,7 @@ class Settings extends Component {
                       value="15"
                       id="input-15"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(15) > -1
                           ? true
                           : false
@@ -595,6 +599,7 @@ class Settings extends Component {
                       value="10"
                       id="input-10"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(10) > -1
                           ? true
                           : false
@@ -610,6 +615,7 @@ class Settings extends Component {
                       value="5"
                       id="input-5"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(5) > -1
                           ? true
                           : false
@@ -625,6 +631,7 @@ class Settings extends Component {
                       value="2.5"
                       id="input-2.5"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(2.5) > -1
                           ? true
                           : false
@@ -640,6 +647,7 @@ class Settings extends Component {
                       value="1.25"
                       id="input-1.25"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(1.25) > -1
                           ? true
                           : false
@@ -655,6 +663,7 @@ class Settings extends Component {
                       value="1"
                       id="input-1"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(1) > -1
                           ? true
                           : false
@@ -670,6 +679,7 @@ class Settings extends Component {
                       value="0.5"
                       id="input-0.5"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(0.5) > -1
                           ? true
                           : false
@@ -685,6 +695,7 @@ class Settings extends Component {
                       value="0.25"
                       id="input-0.25"
                       checked={
+                        this.state.settings.availableWeights &&
                         this.state.settings.availableWeights.indexOf(0.25) > -1
                           ? true
                           : false
@@ -795,7 +806,8 @@ class Settings extends Component {
                             className="btn submit-button"
                             disabled={
                               this.state.wrongEmail ||
-                              this.state.userName.length === 0
+                              (this.state.userName &&
+                                this.state.userName.length === 0)
                                 ? true
                                 : false
                             }>

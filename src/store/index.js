@@ -5,9 +5,10 @@ import 'firebase/firestore';
 
 import rootReducer from '../reducers/index';
 import thunk from 'redux-thunk';
-//import logger from 'redux-logger';
+import logger from 'redux-logger';
 
 import userData from '../data/users.json';
+import exercises from '../data/exercises.json';
 
 const config = {
   apiKey: 'AIzaSyCk5jCqyW5yNP32nTn5yha6PEi2wSFuCKg',
@@ -25,7 +26,7 @@ const initialState = {};
 export const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, logger)
 );
 // Add logger to middlewere if needed (thunk, logger)
 
@@ -33,7 +34,15 @@ export const store = createStore(
 const fakeInitialState = {
   routines: {
     routines: userData[0].routines
-  }
+  },
+  exercises: {
+    list: exercises
+  },
+  workoutLogs: {
+    list: userData[0].workoutLog,
+    records: userData[0].personalRecords
+  },
+  user: userData[0]
 };
 export const fakeStore = createStore(
   rootReducer,
