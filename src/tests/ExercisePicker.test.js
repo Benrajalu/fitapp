@@ -1,62 +1,71 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
-import {shallow, mount} from 'enzyme';
-import ExercisePicker from '../blocks/ExercisePicker';
+import { shallow, mount } from 'enzyme';
+import ExercisePicker from '../templates/blocks/Overlays/ExercisePicker';
 
 import users from '../data/users.json';
 import exercisesDatabase from '../data/exercises.json';
 
+import FontAwesome from './fontawesome-all.min.js';
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  
+
   let modalDisplay = false;
 
   const displayModal = function(event) {
-    modalDisplay: !modalDisplay
-  }
+    modalDisplay: !modalDisplay;
+  };
 
   const updateExercises = function(data) {
     return true;
-  }
+  };
 
   ReactDOM.render(
     <MemoryRouter>
-      <ExercisePicker 
-        exercisesDatabase={exercisesDatabase} 
-        shouldAppear={modalDisplay ? 'visible' : 'hidden'} 
+      <ExercisePicker
+        exercisesDatabase={exercisesDatabase}
+        shouldAppear={modalDisplay ? 'visible' : 'hidden'}
         modalCloser={displayModal}
         updateExercises={updateExercises}
         settings={users[0]}
-        pickedExercises={[]} />
-    </MemoryRouter>, 
-  div);
+        pickedExercises={[]}
+      />
+    </MemoryRouter>,
+    div
+  );
 });
 
 it('add exercises when users click on one', () => {
   const div = document.createElement('div');
-  
+
   let modalDisplay = false;
 
   const displayModal = function(event) {
-    modalDisplay: !modalDisplay
-  }
+    modalDisplay: !modalDisplay;
+  };
 
   const updateExercises = function(data) {
     return true;
-  }
+  };
 
   const picker = mount(
-      <ExercisePicker 
-        exercisesDatabase={exercisesDatabase} 
-        shouldAppear={modalDisplay ? 'visible' : 'hidden'} 
-        modalCloser={displayModal}
-        updateExercises={updateExercises}
-        settings={users[0]}
-        pickedExercises={[]} />
+    <ExercisePicker
+      exercisesDatabase={exercisesDatabase}
+      shouldAppear={modalDisplay ? 'visible' : 'hidden'}
+      modalCloser={displayModal}
+      updateExercises={updateExercises}
+      settings={users[0]}
+      pickedExercises={[]}
+    />
   );
 
-  picker.find('.exercise-action').first().simulate('click');
+  picker
+    .find('.exercise-panel')
+    .first()
+    .find('.description')
+    .simulate('click');
 
   expect(picker.find('.exercise-pick')).not.toHaveLength(0);
 });
@@ -64,23 +73,31 @@ it('add exercises when users click on one', () => {
 it('add displays current exercises when users edit a routine', () => {
   let modalDisplay = false;
   const displayModal = function(event) {
-    modalDisplay: !modalDisplay
-  }
+    modalDisplay: !modalDisplay;
+  };
   const updateExercises = function(data) {
     return true;
-  }
+  };
 
-  const testExercises=[{exerciseId: "ex-04", sets: "5", reps: "10", handicap: "20"},{exerciseId: "ex-06", sets: "8", reps: "5", handicap: "15"}];
+  const testExercises = [
+    { exerciseId: 'ex-04', sets: '5', reps: '10', handicap: '20' },
+    { exerciseId: 'ex-06', sets: '8', reps: '5', handicap: '15' }
+  ];
 
   const picker = mount(
-      <ExercisePicker 
-        exercisesDatabase={exercisesDatabase} 
-        shouldAppear={modalDisplay ? 'visible' : 'hidden'} 
-        modalCloser={displayModal}
-        updateExercises={updateExercises}
-        settings={users[0]}
-        pickedExercises={testExercises} />
+    <ExercisePicker
+      exercisesDatabase={exercisesDatabase}
+      shouldAppear={modalDisplay ? 'visible' : 'hidden'}
+      modalCloser={displayModal}
+      updateExercises={updateExercises}
+      settings={users[0]}
+      pickedExercises={testExercises}
+    />
   );
-  expect(picker.find('.exercise-pick').first().text()).toEqual("Bent-over Rows ");
+  expect(
+    picker
+      .find('.exercise-pick')
+      .first()
+      .text()
+  ).toEqual('Bent-over Rows ');
 });
-

@@ -1,0 +1,183 @@
+@keyframes movingdot {
+  0% {
+    top: 0%;
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    top: 50%;
+    transform: translateY(0) translateX(-200%);
+  }
+  100% {
+    top: 100%;
+    transform: translateY(0) translateX(0);
+  }
+}
+@keyframes movingdotRev {
+  0% {
+    bottom: 0%;
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    bottom: 50%;
+    transform: translateY(0) translateX(200%);
+  }
+  100% {
+    bottom: 100%;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.loader {
+  position: fixed;
+  z-index: 99;
+  transition: all 20ms ease-out;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  transition: all 300ms ease-out;
+  .top,
+  .bottom {
+    height: 40%;
+    position: relative;
+    z-index: 2;
+    transition: all 300ms ease-out;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 32px;
+  }
+  .top {
+    background: #3d3d3d;
+    padding-bottom: 16px;
+    transform: translateY(-100%);
+    .copy {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    p {
+      @include mont(12px, 500, $greyType);
+      line-height: 1.3;
+      transition: 200ms all 300ms ease-out;
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+  .bottom {
+    height: 60%;
+    background: #000;
+    transform: translateY(100%);
+    .name {
+      font-family: 'Questrial';
+      font-size: 25px;
+      color: #fff;
+      display: block;
+      strong {
+        color: #d42f2f;
+      }
+    }
+  }
+
+  &:after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    background: #000;
+    content: '';
+    opacity: 0.7;
+    transition: all 3200ms ease-out;
+  }
+
+  &.hidden {
+    display: none;
+  }
+  &.visible {
+    display: block;
+    opacity: 0;
+    .top,
+    .bottom {
+      opacity: 0;
+    }
+  }
+  &.opaque {
+    opacity: 1;
+  }
+  &.nowLoading {
+    .top,
+    .bottom {
+      opacity: 1;
+      transform: translateY(0%) rotate(0deg);
+    }
+    .top {
+      p {
+        opacity: 1;
+        transform: translateX(0%);
+      }
+    }
+  }
+}
+
+.inlineLoader {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  margin: 10px auto 20px;
+  min-width: 0px;
+  .bits {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    //transform: rotate(-45deg);
+    margin: 0 auto 15px;
+    animation: rotation 1.5s linear infinite normal;
+    i {
+      width: 14px;
+      background: $red;
+      height: 14px;
+      margin-bottom: 2px;
+      animation: bitMovementTopLeft 1s linear infinite;
+      border-radius: 100%;
+      &:nth-child(2) {
+        animation: bitMovementTopRight 1s linear infinite;
+        animation-delay: 150ms;
+      }
+      &:nth-child(3) {
+        animation: bitMovementBottomLeft 1s linear infinite;
+        animation-delay: 300ms;
+      }
+      &:nth-child(4) {
+        animation: bitMovementBottomRight 1s linear infinite;
+        animation-delay: 450ms;
+      }
+    }
+  }
+  p {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 2;
+    @include mont(10px, 400, $greyType);
+    text-transform: uppercase;
+    margin-bottom: 0px !important;
+  }
+  &.error {
+    color: $red;
+    svg {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 10px;
+      display: block;
+    }
+  }
+}

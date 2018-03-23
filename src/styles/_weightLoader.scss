@@ -1,0 +1,154 @@
+@import '../styles/mixins';
+
+.load {
+  position: relative;
+  text-align: right;
+  height: 110px;
+  line-height: 110px;
+  padding-right: 95px;
+  margin: 20px 0px;
+  .barbell {
+    display: block;
+    width: 80%;
+    height: 16px;
+    //background:#b5b6b8;
+    border-radius: 0px;
+    line-height: 16px;
+    text-align: right;
+    padding: 0 10px;
+    @include mont(11px, 700, #32374e);
+    font-weight: bold;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    border-right: 0px;
+    background: linear-gradient(180deg, #858585 61.95%, #616161 63.95%), #c4c4c4;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+      inset 0px 2px 2px rgba(255, 255, 255, 0.25);
+    border-radius: 5px 0px 0px 5px;
+    &:after {
+      content: '';
+      right: 80px;
+      height: 190%;
+      position: absolute;
+      width: 14px;
+      background: linear-gradient(180deg, #858585 61.95%, #616161 63.95%),
+        #c4c4c4;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+        inset 0px 2px 2px rgba(255, 255, 255, 0.25);
+      border-radius: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .barWeight {
+      @include mont(12px, 500, $white);
+      display: inline-block;
+      position: relative;
+      top: -31px;
+      &:after {
+        content: '';
+        width: 1px;
+        height: 20px;
+        background: $red;
+        display: block;
+        margin: 3px auto 0;
+      }
+    }
+  }
+  .disc {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+    width: 24px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-left: 2px;
+    transition: all 200ms ease-out;
+    transition-delay: 200ms;
+    transform: translateX(-50%);
+    opacity: 0;
+    /* Rectangle 3.2 */
+    background: linear-gradient(180deg, #2e2e2e 50%, #000000 68.11%), #c4c4c4;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25),
+      inset 0px 2px 2px rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    p {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+      line-height: 1 !important;
+      @include mont(12px, 500, $white);
+      margin-bottom: 0px;
+    }
+    &.size-25 {
+      width: 30px;
+      height: 110px;
+      line-height: 110px;
+    }
+    &.size-20 {
+      height: 110px;
+      line-height: 110px;
+    }
+    &.size-15 {
+      height: 100px;
+      line-height: 100px;
+    }
+    &.size-10 {
+      height: 90px;
+      line-height: 90px;
+    }
+    &.size-5 {
+      height: 70px;
+      line-height: 70px;
+    }
+    &.size-2-5 {
+      height: 55px;
+      line-height: 55px;
+      p {
+        font-size: 10px;
+      }
+    }
+    &.size-1-25 {
+      height: 50px;
+      line-height: 50px;
+      p {
+        font-size: 10px;
+      }
+    }
+    &.size-1 {
+      height: 45px;
+      line-height: 45px;
+    }
+    &.size-0-5 {
+      height: 40px;
+      line-height: 40px;
+      p {
+        font-size: 10px;
+      }
+    }
+    &.size-0-25 {
+      height: 35px;
+      line-height: 35px;
+      p {
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+.load + div .alert {
+  @include mont(11px, 700, $greyType);
+  margin-bottom: 8px;
+}
+
+.visible .load .disc {
+  opacity: 1;
+  transform: translateX(0px);
+}

@@ -1,0 +1,85 @@
+@import 'styles/_mixins.scss';
+
+.mainLogo {
+  text-align: center;
+  line-height: 45px;
+  font-family: 'Questrial';
+  font-size: 25px;
+  color: #fff;
+  margin-bottom: 18px;
+  strong {
+    color: $red;
+  }
+  @media (min-width: 721px) {
+    display: none;
+  }
+}
+.dashboard-intro {
+  padding: 0 30px;
+  margin-bottom: 40px;
+  h1 {
+    font-family: 'Questrial';
+    font-size: 47px;
+    color: #fff;
+    margin-bottom: 17px;
+  }
+  p {
+    font-family: 'Questrial';
+    font-size: 14px;
+    color: #fff;
+    position: relative;
+    text-transform: capitalize;
+    &:before {
+      content: '';
+      height: 9px;
+      width: 9px;
+      background: $red;
+      border-radius: 100%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  }
+  @media (max-width: 350px) {
+    padding: 0 20px;
+  }
+}
+
+.workout-logs {
+  > .header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    p {
+      font-family: 'Questrial';
+      font-size: 16px;
+      color: $white;
+      strong {
+        color: $red;
+      }
+      @media (max-width: 350px) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.records-title {
+  font-family: 'Questrial';
+  font-size: 16px;
+  color: $white;
+  margin-bottom: 20px;
+  strong {
+    color: $red;
+  }
+  @media (max-width: 350px) {
+    font-size: 14px;
+  }
+}
+
+.workout-logs-list {
+  margin-bottom: 40px;
+}

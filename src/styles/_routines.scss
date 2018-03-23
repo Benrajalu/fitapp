@@ -1,0 +1,19 @@
+@import 'styles/_mixins.scss';
+
+.empty-workouts,
+.routine-detail.empty {
+  background: linear-gradient(180deg, #262626 58%, #383838 100%);
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+  width: 100%;
+  display: block;
+  p {
+    @include mont(13px, 400, $greyType);
+    margin-bottom: 15px;
+  }
+}
+
+@import './routines/routine-details';
+@import './routines/active-routine';
+@import './routines/pagination';

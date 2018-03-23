@@ -2,27 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import {shallow} from 'enzyme';
-import Nav from '../blocks/Nav';
-import UserLog from '../blocks/UserLog';
+import Nav from '../templates/blocks/Nav';
+import UserLog from '../templates/blocks/UserLog';
 
 import users from '../data/users.json';
+import exercises from '../data/exercises.json';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <MemoryRouter>
-      <Nav />
-    </MemoryRouter>, 
-  div);
-});
+import FontAwesome from './fontawesome-all.min.js';
 
-test('has 5 menu entries', () => {
+test('has 4 menu entries', () => {
+  const menuProps ={
+    status: "closed", 
+    workouts: "closed", 
+    layout: "default"
+  };
+  const routineProps={
+    routines: users[0].routines
+  };
+  const exercisesProps={
+    list: exercises
+  }
   const dash = shallow(
-    <Nav />
+    <Nav menu={menuProps} routines={routineProps} exercises={exercisesProps}/>
   );
   
   // Expecting to find 5 menu entries
-  expect(dash.find('li')).toHaveLength(4);
+  expect(dash.find('.nav li')).toHaveLength(4);
 });
 
 test('shows the user name', () => {
@@ -35,7 +40,7 @@ test('shows the user name', () => {
   expect(userItem.find('p').text()).toEqual('Hello, Benoit');
 });
 
-test('shows absolute profile pic or default avatar', () => {
+test('shows a profile pic even if none is provided', () => {
   const mockuser1 = users[0];
   const mockuser2 = users[1];
 
@@ -47,6 +52,6 @@ test('shows absolute profile pic or default avatar', () => {
     <UserLog user={mockuser2} />
   );
 
-  expect(imageItem.find('img').prop('src').split(':')[0]).toMatch(new RegExp('http'));
-  expect(defaultItem.find('img').prop('src')).toMatch(new RegExp('default-avatar.png'));
+  expect(imageItem.find('.profile').prop('data-image')).toEqual("true");
+  expect(defaultItem.find('.profile').prop('data-image')).toEqual("true");
 });
