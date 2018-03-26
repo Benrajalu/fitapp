@@ -5,7 +5,7 @@ import 'firebase/firestore';
 
 import rootReducer from '../reducers/index';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+//import logger from 'redux-logger';
 
 import userData from '../data/users.json';
 import exercises from '../data/exercises.json';
@@ -26,7 +26,7 @@ const initialState = {};
 export const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 );
 // Add logger to middlewere if needed (thunk, logger)
 
