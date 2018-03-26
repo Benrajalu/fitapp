@@ -53,6 +53,14 @@ class Stopwatch extends Component {
       clearTimeout(this.timerWrapper);
       this.props.getCurrentTime(this.state.currentTime);
     }
+
+    if (
+      nextProps.start === true &&
+      this.props.start !== true &&
+      this.state.running !== true
+    ) {
+      this.toggleStopwatch();
+    }
   }
 
   componentWillUnmount() {

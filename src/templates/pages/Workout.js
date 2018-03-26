@@ -62,6 +62,7 @@ class Workout extends Component {
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.showExercise = this.showExercise.bind(this);
     this.setNewHeight = this.setNewHeight.bind(this);
+    this.startStopwatch = this.startStopwatch.bind(this);
   }
 
   getRoutine(data) {
@@ -218,6 +219,17 @@ class Workout extends Component {
     });
   }
 
+  startStopwatch() {
+    this.setState({
+      startStopwatch: true
+    });
+    setTimeout(() => {
+      this.setState({
+        startStopwatch: false
+      });
+    }, 100);
+  }
+
   render() {
     const currentRoutine = this.state.workoutLog;
 
@@ -232,6 +244,7 @@ class Workout extends Component {
             settings={this.props.user.settings}
             showExercise={this.showExercise}
             onReps={this.feedReps}
+            startStopwatch={this.startStopwatch}
           />
         ))
       : false;
@@ -347,6 +360,7 @@ class Workout extends Component {
               <Stopwatch
                 getCurrentTime={this.getCurrentTime}
                 stop={this.state.stopTimer}
+                start={this.state.startStopwatch}
               />
               <div className="action-zone">
                 <button

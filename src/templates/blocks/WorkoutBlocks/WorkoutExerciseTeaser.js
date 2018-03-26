@@ -6,6 +6,7 @@ class WorkoutExerciseTeaser extends Component {
     super(props);
 
     this.updateSetlist = this.updateSetlist.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
 
     this.state = {
       exerciseId: this.props.contents.exerciseId,
@@ -44,6 +45,11 @@ class WorkoutExerciseTeaser extends Component {
 
   componentDidMount() {
     this.updateSetlist();
+  }
+
+  clickHandler() {
+    this.props.startStopwatch();
+    this.props.showExercise(this.props.index);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -176,9 +182,7 @@ class WorkoutExerciseTeaser extends Component {
             </div>
           </div>
         </div>
-        <button
-          className="completion"
-          onClick={this.props.showExercise.bind(this, this.props.index)}>
+        <button className="completion" onClick={this.clickHandler}>
           <div className="copy">
             <p className="counter">
               {this.state.completedSets}/{this.state.setsTarget}
