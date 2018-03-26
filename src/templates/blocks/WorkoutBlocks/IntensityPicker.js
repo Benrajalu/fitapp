@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Slider from 'react-rangeslider';
@@ -8,6 +8,7 @@ class IntensityPicker extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.printLevel = this.printLevel.bind(this);
     this.state = {
       value: this.props.value
     };
@@ -26,23 +27,51 @@ class IntensityPicker extends Component {
     });
   }
 
+  printLevel(level) {
+    let copy;
+    switch (level) {
+      case 1:
+        copy = 'Effort léger, rythme cardiaque proche du repos.';
+        break;
+
+      case 2:
+        copy = "Effort moderé, rythme cardiaque d'une marche rapide.";
+        break;
+
+      case 3:
+        copy = 'Effort et rythme cardiaque soutenus.';
+        break;
+
+      case 4:
+        copy = 'Effort intense, rythme cardiaque élevé.';
+        break;
+
+      default:
+        copy = 'Effort léger, rythme cardiaque proche du repos.';
+    }
+    return copy;
+  }
+
   render() {
     return (
-      <div className="intensity">
-        <Slider
-          min={1}
-          max={4}
-          value={this.state.value}
-          orientation="horizontal"
-          onChange={this.handleChange}
-        />
-        <div className="level">
-          <p className="value">
-            <span>lvl</span>
-            {this.state.value}
-          </p>
+      <Fragment>
+        <div className="intensity">
+          <Slider
+            min={1}
+            max={4}
+            value={this.state.value}
+            orientation="horizontal"
+            onChange={this.handleChange}
+          />
+          <div className="level">
+            <p className="value">
+              <span>lvl</span>
+              {this.state.value}
+            </p>
+          </div>
         </div>
-      </div>
+        <p>{this.printLevel(this.state.value)}</p>
+      </Fragment>
     );
   }
 }

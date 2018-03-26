@@ -6,7 +6,7 @@
     flex-grow: 2;
     width: 100%;
     overflow: auto;
-    background: #000;
+    background: #2c2d2d;
     transition: all 200ms ease-out;
     #mainContents,
     .navbar-header {
@@ -42,8 +42,12 @@
     transition: all 200ms ease-out;
     right: 0px;
     overflow: auto;
+    transform: scale(1);
+    border-radius: 0px;
     &.menuActive {
-      right: 320px;
+      right: 280px;
+      transform: scale(0.9);
+      border-radius: 5px;
     }
   }
 
