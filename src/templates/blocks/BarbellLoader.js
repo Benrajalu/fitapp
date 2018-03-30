@@ -50,7 +50,6 @@ class BarbellLoader extends Component {
   }
 
   componentDidMount() {
-    console.log('here');
     // Decompose a weight into loads using only available weights set in settings:
     // Initializing the "rack" : what discs are available ?
     const rack = this.props.settings.availableWeights

@@ -28,7 +28,6 @@ class WeightHelperModal extends Component {
   }
 
   moveSlider(direction) {
-    console.log(direction);
     if (direction === 'next') {
       this.setState({
         currentIndex:
