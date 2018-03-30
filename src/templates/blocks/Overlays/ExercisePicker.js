@@ -10,7 +10,6 @@ class ExercisePicker extends Component {
     super(props);
 
     this.state = {
-      exercises: this.props.pickedExercises ? this.props.pickedExercises : [],
       animate: ' animate'
     };
 
@@ -18,14 +17,6 @@ class ExercisePicker extends Component {
     this.addExercise = this.addExercise.bind(this);
     this.removeExercise = this.removeExercise.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pickedExercises) {
-      this.setState({
-        exercises: nextProps.pickedExercises
-      });
-    }
   }
 
   componentDidMount() {
@@ -41,13 +32,14 @@ class ExercisePicker extends Component {
     this.props.modalCloser();
   }
   addExercise(data) {
-    let currentExercises = this.state.exercises;
+    let currentExercises = this.props.pickedExercises
+      ? this.props.pickedExercises
+      : [];
     currentExercises.push(data);
     this.setState({
-      exercises: currentExercises,
       animateList: true
     });
-    this.props.updateExercises(this.state.exercises);
+    this.props.updateExercises(currentExercises);
     const _this = this;
     setTimeout(() => {
       _this.setState({
@@ -56,13 +48,14 @@ class ExercisePicker extends Component {
     }, 100);
   }
   removeExercise(data) {
-    let currentExercises = this.state.exercises;
+    let currentExercises = this.props.pickedExercises
+      ? this.props.pickedExercises
+      : [];
     currentExercises.splice(data, 1);
     this.setState({
-      exercises: currentExercises,
       animateList: true
     });
-    this.props.updateExercises(this.state.exercises);
+    this.props.updateExercises(currentExercises);
     const _this = this;
     setTimeout(() => {
       _this.setState({
@@ -187,8 +180,8 @@ class ExercisePicker extends Component {
     let currentExercisesList = (
       <p className="empty-state">Aucun exercice sélectionné</p>
     );
-    if (this.state.exercises.length > 0) {
-      currentExercisesList = this.state.exercises.map((value, index) => (
+    if (this.props.pickedExercises && this.props.pickedExercises.length > 0) {
+      currentExercisesList = this.props.pickedExercises.map((value, index) => (
         <ExercisePickerPick
           database={this.props.exercisesDatabase}
           currentExercise={value}
@@ -319,7 +312,8 @@ class ExercisePicker extends Component {
                 {currentExercisesList}
               </div>
               <button onClick={this.closeModal} className="close-button">
-                {this.state.exercises.length > 0
+                {this.props.pickedExercises &&
+                this.props.pickedExercises.length > 0
                   ? 'Configurez ces exercises'
                   : 'Modifier la routine'}
               </button>

@@ -71,11 +71,14 @@ class RoutineMaker extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const timestamp = new Date();
-
-    if (nextProps.editRoutine && nextProps.editRoutine !== 'empty') {
-      const nextRoutineShot = nextProps.editRoutine;
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.editRoutine &&
+      this.props.editRoutine !== 'empty' &&
+      this.props.editRoutine !== prevProps.editRoutine
+    ) {
+      const timestamp = new Date();
+      const nextRoutineShot = this.props.editRoutine;
       nextRoutineShot.lastPerformed = timestamp.getTime();
       this.setState({
         newRoutine: nextRoutineShot,

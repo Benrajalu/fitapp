@@ -107,13 +107,10 @@ class Workout extends Component {
     }
   }
 
-  componentWillMount() {
-    this.getRoutine(this.props);
-  }
-
   componentDidMount() {
     document.title = 'FitApp. - Entraînement en cours !';
     const _this = this;
+    this.getRoutine(this.props);
     this.props.changeLayout('hidden');
     this.setState({
       loading: false,
@@ -129,17 +126,21 @@ class Workout extends Component {
     }, 200);
   }
 
-  componentWillReceiveProps(nextProps) {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.routines.routines.length > 0;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
     // Check if the next props are trying to feed the currentlu fed routine again
     // You don't want to overwrite the currently used routine
     // It would set back all changes to their originals.
     // Opening a pop-up (warmup) changes the redux State, thus feeding this new props
     // therefore without this check, opening a modal would erase progress
     if (
-      parseFloat(nextProps.match.params.id) !==
-      parseFloat(this.state.routine.routineId)
+      parseFloat(this.props.match.params.id) !==
+      parseFloat(prevState.routine.routineId)
     ) {
-      this.getRoutine(nextProps);
+      this.getRoutine(this.props);
     }
   }
 

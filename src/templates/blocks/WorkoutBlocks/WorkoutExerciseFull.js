@@ -11,6 +11,7 @@ class WorkoutExerciseFull extends Component {
     super(props);
     this.setCompletion = this.setCompletion.bind(this);
     this.displayModal = this.displayModal.bind(this);
+    this.outputSets = this.outputSets.bind(this);
     this.state = {
       sets: [],
       modalDisplay: {
@@ -49,11 +50,8 @@ class WorkoutExerciseFull extends Component {
     // The SetCounter element communicates the current value of reps
     // We store that value in the setsSnapshot, storing where we are now
     // And we compare that value to the requested amount of reps. if it's equal to it, then the set is marked completed
-    const setsSnapshot = this.state.sets;
+    const setsSnapshot = this.outputSets();
     setsSnapshot[data[1]] = parseFloat(data[0]);
-    this.setState({
-      sets: setsSnapshot
-    });
 
     this.props.onReps(setsSnapshot, this.props.index);
   }
@@ -68,42 +66,41 @@ class WorkoutExerciseFull extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  outputSets() {
     // Update with new setlist if the comonent is reset with new data
     let newSetlist = [];
-    if (nextProps.contents.setsTarget && nextProps.contents.sets === false) {
+    if (this.props.contents.setsTarget && this.props.contents.sets === false) {
       // There is a target for sets, but the setlist hasn't been made yet
       let y = 0,
-        totalSets = parseFloat(nextProps.contents.setsTarget);
+        totalSets = parseFloat(this.props.contents.setsTarget);
       for (y; y < totalSets; y++) {
         newSetlist.push(0);
       }
-    } else if (nextProps.contents.setsTarget && nextProps.contents.sets) {
+    } else if (this.props.contents.setsTarget && this.props.contents.sets) {
       // There is a target and it's already been set so we reuse it
-      newSetlist = nextProps.contents.sets;
-    } else if (nextProps.contents.handicap && nextProps.contents.sets) {
+      newSetlist = this.props.contents.sets;
+    } else if (this.props.contents.handicap && this.props.contents.sets) {
       // There isn't a set target so the target is the handicap (ie: cardio exercices) AND that's been created so we reuse it
-      newSetlist = nextProps.contents.sets;
+      newSetlist = this.props.contents.sets;
     } else {
       // None of the condition apply so we set the sets to 1 entry, at 0
       newSetlist.push(0);
     }
 
-    this.setState({
-      sets: Array.isArray(newSetlist) ? newSetlist : newSetlist.split()
-    });
+    return Array.isArray(newSetlist) ? newSetlist : newSetlist.split();
   }
 
   render() {
     // Setting up variables
     const workoutExercise = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
+    const setList = this.outputSets();
     const trueExercise = exercisesDatabase.filter(
       obj => obj.id === workoutExercise.exerciseId
     )[0];
     const handicapType = trueExercise.type !== 'cardio' ? 'kg' : 'minutes';
     // We count how many of the sets have been done (1s in the completedSets array)
-    const setsDone = this.state.sets.filter(
+    const setsDone = setList.filter(
       value =>
         parseFloat(value) ===
         (this.props.contents.repTarget
@@ -113,7 +110,7 @@ class WorkoutExerciseFull extends Component {
 
     // Let's build the sets (ranger sliders to say how many reps you've done in that set)
     let sets = false;
-    sets = this.state.sets.map((value, index) => (
+    sets = setList.map((value, index) => (
       <SetCounter
         treshold={
           this.props.contents.repTarget

@@ -62,13 +62,6 @@ class WorkoutsHistory extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const pageNumber = Math.ceil(nextProps.workoutLogs.length / 5);
-    this.setState({
-      totalPages: pageNumber
-    });
-  }
-
   render() {
     // Order the workouts chronologically
     let workoutItems = [],
@@ -116,7 +109,8 @@ class WorkoutsHistory extends Component {
             {pages && workouts.length > 5 ? (
               <ul className="pagination">
                 <li className="legend">
-                  Page {this.state.activePage} / {this.state.totalPages}
+                  Page {this.state.activePage} /{' '}
+                  {Math.ceil(this.props.workoutLogs.length / 5)}
                 </li>
                 <li>
                   <button

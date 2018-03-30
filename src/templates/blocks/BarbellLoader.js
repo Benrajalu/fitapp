@@ -50,6 +50,7 @@ class BarbellLoader extends Component {
   }
 
   componentDidMount() {
+    console.log('here');
     // Decompose a weight into loads using only available weights set in settings:
     // Initializing the "rack" : what discs are available ?
     const rack = this.props.settings.availableWeights
@@ -64,26 +65,6 @@ class BarbellLoader extends Component {
     this.setState({
       finalLoads: finalLoads
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.weight !== this.props.weight) {
-      // Decompose a weight into loads using only available weights set in settings:
-      // Initializing the "rack" : what discs are available ?
-      const rack = this.props.settings.availableWeights
-        .sort((a, b) => {
-          return a - b;
-        })
-        .reverse();
-      // Initializing the container (always empty before the fonction hits it)
-      let finalLoads = {};
-      // Decompose the weight in individua loads, aiming for heavier discs first
-      this.decomposeWeight(rack, nextProps.weight, 0, finalLoads);
-      // Updating the component with its weight list
-      this.setState({
-        finalLoads: finalLoads
-      });
-    }
   }
 
   render() {

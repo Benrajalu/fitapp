@@ -75,8 +75,10 @@ class EditRoutine extends Component {
     this.getRoutine(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.getRoutine(nextProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.routines !== prevProps.routines) {
+      this.getRoutine(this.props);
+    }
   }
 
   handleFormPost(event, data) {

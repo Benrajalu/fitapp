@@ -4,18 +4,6 @@ import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 class WorkoutUpdates extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isChecked: this.props.willUpgrade ? 'yes' : 'no'
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      isChecked: nextProps.willUpgrade ? 'yes' : 'no'
-    });
-  }
   render() {
     const currentExercise = this.props.allSets[this.props.completedSet],
       fullData = this.props.database.filter(
@@ -61,8 +49,8 @@ class WorkoutUpdates extends Component {
             type="checkbox"
             id={fullData.name.replace(' ', '') + '-' + this.props.index}
             className="checkbox"
-            checked={this.state.isChecked === 'yes' ? true : false}
-            value={this.state.isChecked}
+            checked={this.props.willUpgrade}
+            value={this.props.willUpgrade}
             name="exercise update"
           />
           <label

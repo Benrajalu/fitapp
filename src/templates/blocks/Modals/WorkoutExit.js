@@ -38,7 +38,8 @@ class WorkoutExit extends Component {
       });
     }, 100);
   }
-  componentWillReceiveProps(nextProps) {
+
+  componentDidUpdate() {
     this.getCompletedSets();
   }
 

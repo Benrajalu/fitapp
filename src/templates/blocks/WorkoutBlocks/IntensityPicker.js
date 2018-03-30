@@ -14,10 +14,12 @@ class IntensityPicker extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      value: nextProps.value
-    });
+  componentDidUpdate(prevProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({
+        value: this.props.value
+      });
+    }
   }
 
   handleChange(data, event) {

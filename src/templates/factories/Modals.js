@@ -50,20 +50,13 @@ class ModalFactory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
-      type: this.props.modals.data.type
+      visible: false
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      type: nextProps.modals.data.type
-    });
   }
 
   render() {
     var modalToDisplay = null;
-    switch (this.state.type) {
+    switch (this.props.modals.data.type) {
       case 'delete':
         modalToDisplay = (
           <RoutineDelete

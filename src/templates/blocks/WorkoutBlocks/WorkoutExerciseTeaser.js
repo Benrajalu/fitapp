@@ -7,6 +7,7 @@ class WorkoutExerciseTeaser extends Component {
 
     this.updateSetlist = this.updateSetlist.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
+    this.outputCompletedSets = this.outputCompletedSets.bind(this);
 
     this.state = {
       exerciseId: this.props.contents.exerciseId,
@@ -15,8 +16,7 @@ class WorkoutExerciseTeaser extends Component {
         : 1,
       repTarget: this.props.contents.repTarget
         ? this.props.contents.repTarget
-        : this.props.contents.handicap,
-      completedSets: 0
+        : this.props.contents.handicap
     };
   }
 
@@ -52,22 +52,19 @@ class WorkoutExerciseTeaser extends Component {
     this.props.showExercise(this.props.index);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Show the work already done
+  outputCompletedSets() {
     let completedSets = 0;
-    let comparableTreshold = nextProps.contents.repTarget
-      ? nextProps.contents.repTarget
-      : nextProps.contents.handicap;
-    if (nextProps.contents.sets) {
-      var completed = nextProps.contents.sets.filter(value => {
+    let comparableTreshold = this.props.contents.repTarget
+      ? this.props.contents.repTarget
+      : this.props.contents.handicap;
+    if (this.props.contents.sets) {
+      var completed = this.props.contents.sets.filter(value => {
         return value === parseFloat(comparableTreshold);
       });
       completedSets = completed.length ? completed.length : 0;
     }
-    //this.updateSetlist();
-    this.setState({
-      completedSets: completedSets
-    });
+
+    return completedSets;
   }
 
   render() {
@@ -185,7 +182,7 @@ class WorkoutExerciseTeaser extends Component {
         <button className="completion" onClick={this.clickHandler}>
           <div className="copy">
             <p className="counter">
-              {this.state.completedSets}/{this.state.setsTarget}
+              {this.outputCompletedSets()}/{this.state.setsTarget}
             </p>
             <p>START!</p>
           </div>
@@ -202,7 +199,8 @@ class WorkoutExerciseTeaser extends Component {
             <path
               className="circle"
               strokeDasharray={
-                this.state.completedSets * 100 / this.state.setsTarget + ', 100'
+                this.outputCompletedSets() * 100 / this.state.setsTarget +
+                ', 100'
               }
               d="M18 2.0845
                       a 15.9155 15.9155 0 0 1 0 31.831

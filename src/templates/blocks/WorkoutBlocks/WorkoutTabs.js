@@ -8,11 +8,7 @@ class WorkoutTabs extends Component {
       currentExercise: false
     };
   }
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      currentExercise: nextProps.currentExercise
-    });
-  }
+
   componentDidUpdate() {
     if (this.activeEntry) {
       this.activeEntry.scrollIntoView({
@@ -32,14 +28,14 @@ class WorkoutTabs extends Component {
             <li
               key={index}
               className={
-                this.state.currentExercise !== false &&
-                this.state.currentExercise === index
+                this.props.currentExercise !== false &&
+                this.props.currentExercise === index
                   ? 'active'
                   : null
               }
               ref={
-                this.state.currentExercise !== false &&
-                this.state.currentExercise === index
+                this.props.currentExercise !== false &&
+                this.props.currentExercise === index
                   ? entry => {
                       this.activeEntry = entry;
                     }
@@ -56,7 +52,7 @@ class WorkoutTabs extends Component {
     return (
       <ul
         id="workout-tabs"
-        className={this.state.currentExercise !== false ? 'visible' : null}>
+        className={this.props.currentExercise !== false ? 'visible' : null}>
         {entries}
       </ul>
     );
