@@ -11,6 +11,7 @@ import RoutineDelete from '../blocks/Modals/RoutineDelete';
 import AccountDeleteModal from '../blocks/Modals/AccountDeleteModal';
 import WeightHelperModal from '../blocks/Modals/WeightHelperModal';
 import WorkoutExit from '../blocks/Modals/WorkoutExit';
+import TutorialModal from '../blocks/Modals/TutorialModal';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -125,6 +126,10 @@ class ModalFactory extends Component {
             watchRoutines={this.props.watchRoutines}
           />
         );
+        break;
+
+      case 'tutoriel':
+        modalToDisplay = <TutorialModal closeModal={this.props.toggleModal} />;
         break;
       default:
         modalToDisplay = null;

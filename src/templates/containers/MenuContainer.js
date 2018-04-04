@@ -1,53 +1,62 @@
-import { connect } from 'react-redux'
-import {openMenu, closeMenu, openWorkouts, closeWorkouts, changeLayout, triggerWorkoutWindow, toggleMenu} from '../../actions/MenuActions';
-import {resetUser} from '../../actions/UserActions';
-import Nav from "../blocks/Nav.js"
+import { connect } from 'react-redux';
+import {
+  openMenu,
+  closeMenu,
+  openWorkouts,
+  closeWorkouts,
+  changeLayout,
+  triggerWorkoutWindow,
+  toggleMenu
+} from '../../actions/MenuActions';
+import { toggleModal } from '../../actions/ModalActions';
+import { resetUser } from '../../actions/UserActions';
+import Nav from '../blocks/Nav.js';
 
 const mapStateToProps = (state, ownProps) => {
   return {
     firebase: state.firebase,
-    user: state.user, 
-    loading:state.loading, 
-    menu:state.menu, 
-    routines: state.routines, 
+    user: state.user,
+    loading: state.loading,
+    menu: state.menu,
+    routines: state.routines,
     exercises: state.exercises
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     openMenu: () => {
-      dispatch(openMenu())
+      dispatch(openMenu());
     },
     closeMenu: () => {
-      dispatch(closeMenu())
+      dispatch(closeMenu());
     },
     openWorkouts: () => {
-      dispatch(openWorkouts())
+      dispatch(openWorkouts());
     },
     closeWorkouts: () => {
-      dispatch(closeWorkouts())
+      dispatch(closeWorkouts());
     },
     changeLayout: () => {
-      dispatch(changeLayout())
+      dispatch(changeLayout());
     },
     triggerWorkoutWindow: () => {
-      dispatch(triggerWorkoutWindow())
-    }, 
+      dispatch(triggerWorkoutWindow());
+    },
     toggleMenu: () => {
-      dispatch(toggleMenu())
-    }, 
-    resetUser:()=>{
+      dispatch(toggleMenu());
+    },
+    resetUser: () => {
       dispatch(resetUser());
+    },
+    toggleModal: data => {
+      dispatch(toggleModal(data));
     }
-  }
-}
+  };
+};
 
-const MenuContainer = connect(
-  mapStateToProps, 
-  mapDispatchToProps, 
-  null, 
-  {pure : false}
-)(Nav)
+const MenuContainer = connect(mapStateToProps, mapDispatchToProps, null, {
+  pure: false
+})(Nav);
 
-export default MenuContainer
+export default MenuContainer;

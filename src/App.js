@@ -6,6 +6,7 @@ import { firebaseAuth, database } from './store/';
 import { connect } from 'react-redux';
 import { getLoading, removeLoading } from './actions/';
 import { authenticateUser, resetUser } from './actions/UserActions';
+import { toggleModal } from './actions/ModalActions';
 
 // Navigation and loader
 import AwareLoader from './templates/containers/AwareLoader.js';
@@ -47,6 +48,9 @@ const mapDispatchToProps = dispatch => {
     },
     authenticateUser: data => {
       dispatch(authenticateUser(data));
+    },
+    toggleModal: data => {
+      dispatch(toggleModal(data));
     },
     resetUser: () => {
       dispatch(resetUser());
@@ -174,6 +178,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.props.toggleModal({ type: 'tutoriel' });
     this.setState({
       height: Math.max(
         document.documentElement.clientHeight,

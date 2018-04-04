@@ -107,6 +107,14 @@ class Nav extends Component {
                   Paramètres <FontAwesomeIcon icon={['fas', 'cog']} size="1x" />
                 </NavLink>
               </li>
+              <li>
+                <button
+                  onClick={this.props.toggleModal.bind(this, {
+                    type: 'tutoriel'
+                  })}>
+                  Tutoriel <FontAwesomeIcon icon={['fas', 'cog']} size="1x" />
+                </button>
+              </li>
             </ul>
             {this.props.user ? (
               <div className="userZone">
