@@ -366,20 +366,33 @@ class TutorialModal extends Component {
         </div>
         <div className="cards">
           {slides.map((item, index) => {
-            let currentClass = null;
-            if (index === this.state.activeSlide) {
+            let currentClass = null,
+              positionTransform = 'rotateY(0deg) scale(1)';
+            if (index - this.state.activeSlide === 0) {
               currentClass = 'active';
             }
-            if (index === this.state.activeSlide + 1) {
+            if (Math.sign(index - this.state.activeSlide) === 1) {
               currentClass = 'next';
+              positionTransform = 'rotateY(-10deg) scale(0.9)';
             }
-            if (index === this.state.activeSlide - 1) {
+            if (Math.sign(index - this.state.activeSlide) === -1) {
               currentClass = 'previous';
+              positionTransform = 'rotateY(10deg) scale(0.9)';
             }
+
+            let style = {
+              transform: `translateY(-15px) translateX(${100 *
+                (index - this.state.activeSlide)}%) ${positionTransform}`,
+              filter: `blur(${
+                index === this.state.activeSlide ? '0px' : '5px'
+              })`
+            };
+
             return (
               <div
                 className={'card ' + currentClass}
-                key={'cardIndex-' + index}>
+                key={'cardIndex-' + index}
+                style={style}>
                 {item.content}
               </div>
             );
