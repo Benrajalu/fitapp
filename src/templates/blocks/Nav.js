@@ -112,7 +112,11 @@ class Nav extends Component {
                   onClick={this.props.toggleModal.bind(this, {
                     type: 'tutoriel'
                   })}>
-                  Tutoriel <FontAwesomeIcon icon={['fas', 'cog']} size="1x" />
+                  Tutoriel{' '}
+                  <FontAwesomeIcon
+                    icon={['fas', 'question-circle']}
+                    size="1x"
+                  />
                 </button>
               </li>
             </ul>

@@ -277,12 +277,16 @@
       li {
         padding: 5px 0px;
         width: 100%;
-        a {
+        a,
+        button {
+          background: transparent;
+          text-align: right;
           padding: 10px 15px;
           @include mont(13px, 500, #9c9d9f);
           text-decoration: none;
           display: inline-block;
           transition: all 200ms ease-out;
+          border: 0px;
           border-right: 0px solid transparent;
           width: 100%;
           svg {

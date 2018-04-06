@@ -162,6 +162,7 @@ class App extends Component {
           _this.setState({
             userChecked: true
           });
+          _this.props.toggleModal({ type: 'tutoriel' });
         });
       });
   }
@@ -178,7 +179,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.toggleModal({ type: 'tutoriel' });
     this.setState({
       height: Math.max(
         document.documentElement.clientHeight,
