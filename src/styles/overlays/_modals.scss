@@ -726,11 +726,20 @@
 
 .tutorialModal {
   background: rgba(250, 250, 250, 0);
+  clip-path: url(#clipPath);
+  .cards,
+  .timeline,
+  .navigation {
+    opacity: 0;
+    transition: all 300ms ease-out;
+    transition-delay: 400ms;
+  }
   .cards {
     flex-grow: 2;
     padding: 0 0 30px;
     position: relative;
     width: 100%;
+    transform: translateX(50%);
     .card {
       position: absolute;
       top: 0;
@@ -879,6 +888,7 @@
     flex-flow: row nowrap;
     align-items: stretch;
     justify-content: space-between;
+    transform: translateY(-100%);
     @media (min-width: 721px) {
       background: rgba(0, 0, 0, 0.3);
     }
@@ -917,6 +927,7 @@
     align-items: center;
     justify-content: center;
     max-width: 400px;
+    transform: translateY(100%);
     .direction {
       width: 48%;
       font-family: 'Questrial';
@@ -966,6 +977,21 @@
   }
   &.visible {
     background: rgba(250, 250, 250, 0.4);
+    .cards,
+    .timeline,
+    .navigation {
+      opacity: 1;
+      transform: translateX(0%) translateY(0);
+    }
+
+    &.exiting {
+      .navigation {
+        .close {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+      }
+    }
   }
 
   @media (min-width: 721px) {

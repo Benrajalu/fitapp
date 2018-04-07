@@ -8,17 +8,24 @@ class TutorialModal extends Component {
     super(props);
     this.state = {
       visible: null,
-      activeSlide: 0
+      activeSlide: 0,
+      forceTriangles: false
     };
     this.closeModal = this.closeModal.bind(this);
     this.navigate = this.navigate.bind(this);
+    this.makeTriangles = this.makeTriangles.bind(this);
+    this.togglePolygons = this.togglePolygons.bind(this);
   }
 
   componentDidMount() {
     const _this = this;
+    this.makeTriangles(this.polygonTarget);
+    window.addEventListener('resize', this.makeTriangles(this.polygonTarget));
     setTimeout(function() {
+      _this.togglePolygons();
       _this.setState({
-        visible: ' visible'
+        visible: ' visible',
+        forceTriangles: true
       });
     }, 100);
   }
@@ -35,18 +42,175 @@ class TutorialModal extends Component {
 
   closeModal() {
     const _this = this;
+    this.togglePolygons();
     this.setState({
-      visible: null
+      visible: ' visible exiting',
+      forceTriangles: false
     });
     setTimeout(function() {
       // References the parent method for displaying a modal that's in Dashboard.js
       _this.props.closeModal();
-    }, 300);
+    }, 400);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      'resize',
+      this.makeTriangles(this.polygonTarget)
+    );
   }
 
   navigate(index) {
     this.setState({
       activeSlide: index
+    });
+  }
+
+  makeTriangles(container) {
+    const _this = this;
+    // Target the element where the result will be offloaded
+    const element = container;
+    element.innerHTML = '';
+
+    // Size-up the screen to calculate triangle sizes
+    const width =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
+
+    const height =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
+
+    // We're going for about 8 triangles per line, twice as long as they're tall
+    const triangleWidth = Math.ceil(width / 6),
+      triangleHeight = Math.ceil(triangleWidth / 2);
+
+    // And thus figure out the number of lines to produce
+    const numberofLines = Math.ceil(height / triangleHeight);
+
+    // The polygon factory will output the correct polygon depending on line variables
+    function makePolygon(
+      randomNumber,
+      orientation,
+      start,
+      verticalOffset,
+      reverse
+    ) {
+      // First, we create the "polygon" dom element
+      const polygon = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'polygon'
+      );
+      polygon.setAttribute('class', 'polygon');
+      // That polygon will get no stroke from us, no sir.
+      polygon.setAttribute('stroke-width', 0);
+      // We also give it a delay value derived from the random number
+      polygon.setAttribute('data-delay', randomNumber);
+      // Also, look pretty
+      polygon.setAttribute('shape-rendering', 'crispEdges');
+
+      // Also, if the pop-in is closed, then we don't display that polygon, it'd ruin the effect
+      let displayStatus = 'none';
+      if (_this.state.forceTriangles) {
+        displayStatus = 'block';
+      }
+      polygon.setAttribute('style', 'display:' + displayStatus);
+
+      if (reverse) {
+        orientation = !orientation;
+      }
+
+      // Depending on the orientation (true or false), we output the right kind of triangle
+      switch (orientation) {
+        case true:
+          // Triangle with bottom-facing point
+          polygon.setAttribute(
+            'points',
+            start -
+              1 +
+              ',' +
+              verticalOffset +
+              ' ' +
+              (start + triangleWidth + 1) +
+              ',' +
+              verticalOffset +
+              ' ' +
+              (start + triangleWidth / 2) +
+              ',' +
+              (verticalOffset + triangleHeight)
+          );
+          element.appendChild(polygon);
+          break;
+
+        case false:
+          // Triangle with top-facing point
+          polygon.setAttribute(
+            'points',
+            start +
+              triangleWidth / 2 +
+              ',' +
+              verticalOffset +
+              ' ' +
+              (start - 1) +
+              ',' +
+              (verticalOffset + triangleHeight) +
+              ' ' +
+              (start + triangleWidth + 1) +
+              ',' +
+              (verticalOffset + triangleHeight)
+          );
+          element.appendChild(polygon);
+          break;
+
+        default:
+          return false;
+      }
+    }
+
+    // The line factory (outputs polygons in the number required to fill a line)
+    function makeLine(index, offset) {
+      // The offset is the line number. Each increments pushes the polygon down.
+      let verticalOffset = Number(offset);
+
+      // For 8 triangles a line, we actually build 18 to fill the white space.
+      for (let i = 0; i < 14; i++) {
+        // We figure out whether the line is even or odd
+        // We also calculate the horizontal offset: how much of the triangle needs to be off screen to fill the white space at the start of the line
+        let horizontalOffset = triangleWidth * i - triangleWidth / 2,
+          evenLine = index % 2 === 0;
+
+        // A random number bewteen 100 and 500 is picked
+        // It will be used to delay the animation of the polygon
+        let randomNumber = Math.floor(Math.random() * (400 - 0 + 1) + 0);
+
+        // Next we figure out where the box in which the polygon is drawn starts on the line.
+        let start = horizontalOffset - i * (triangleWidth / 2);
+        if (evenLine) {
+          makePolygon(randomNumber, i % 2 === 0, start, verticalOffset);
+        } else {
+          makePolygon(randomNumber, i % 2 === 0, start, verticalOffset, true);
+        }
+      }
+    }
+
+    for (let x = 0; x < numberofLines; x++) {
+      let offset = triangleHeight * x;
+      makeLine(x, offset);
+    }
+  }
+
+  togglePolygons() {
+    const polys = document.getElementsByClassName('polygon');
+    Array.from(polys).forEach(item => {
+      const isVisible = item.getAttribute('style') === 'display:block';
+
+      const delay = Number(item.getAttribute('data-delay'));
+      let visibleValue = isVisible ? 'none' : 'block';
+      setTimeout(() => {
+        item.setAttribute('style', 'display:' + visibleValue);
+      }, delay);
     });
   }
 
@@ -65,7 +229,7 @@ class TutorialModal extends Component {
             <div className="content hero">
               <p>
                 <strong>Fitapp</strong> est un journal d'entraînement. Créez vos
-                routines, suivez vos records et progressez !
+                routines, suivez vos records et progressez&nbsp;!
               </p>
             </div>
           </Fragment>
@@ -105,8 +269,8 @@ class TutorialModal extends Component {
                 exercices que vous souhaitez ajouter à cette routine.
               </p>
               <p>
-                Le nom de la routine est bien-sûr paramétrable ! Choisissez un
-                titre évocateur, "Routine bras et abdos", par exemple.
+                Le nom de la routine est bien-sûr paramétrable&nbsp;! Choisissez
+                un titre évocateur, "Routine bras et abdos", par exemple.
               </p>
 
               <h3>Configurer mes exercices</h3>
@@ -133,9 +297,9 @@ class TutorialModal extends Component {
               <h3>Pendant un entraînement</h3>
               <p>
                 Vous pouvez ajuster certains éléments de la routine en cours
-                d'entraînement : chaque exercice vous donne l'option de modifier
-                son paramètre de "handicap" : poids à soulever, résistance ou
-                minutes d'effort.
+                d'entraînement&nbsp;:&nbsp;chaque exercice vous donne l'option
+                de modifier son paramètre de "handicap"&nbsp;:&nbsp;poids à
+                soulever, résistance ou minutes d'effort.
               </p>
               <p>
                 Une fois l'entraînement terminé, l'option d'enregistrer ces
@@ -190,8 +354,8 @@ class TutorialModal extends Component {
               <h3>Pendant l'entraînement</h3>
               <p>
                 L'entraînement vous résume d'abord la liste des exercices à
-                faire. Chaque exercice est détaillé : nombre de sets, de reps et
-                poids / temps visé.
+                faire. Chaque exercice est détaillé&nbsp;:&nbsp;nombre de sets,
+                de reps et poids / temps visé.
               </p>
               <p>
                 Un compteur vous permet de constater l'état d'avancement de
@@ -240,7 +404,7 @@ class TutorialModal extends Component {
                   de jauger l'intensité de l'entraînement vous sera proposée. Si
                   votre poids a été renseigné dans vos paramètres, cette donnée
                   servira à établir une estimation de la dépense calorique
-                  générée par cette scéance !
+                  générée par cette scéance&nbsp;!
                 </li>
               </ul>
               <p>
@@ -269,19 +433,20 @@ class TutorialModal extends Component {
               <p>
                 Un échauffement se décompose en 5 sets d'autant de reps que
                 l'exercice final. Les deux premiers sets utilisent le moins de
-                poids possible : l'idée est de reprendre le geste en main.
+                poids possible&nbsp;:&nbsp;l'idée est de reprendre le geste en
+                main.
               </p>
               <p>
                 Les trois sets restants utilisent 40%, 60% puis 80% du poids
                 final afin d'habituer progressivement le corps à la charge
-                totale. Souvenez-vous : le but de l'échauffement n'est pas de
-                vous fatiguer, mais de vous préparer !
+                totale. Souvenez-vous&nbsp;:&nbsp;le but de l'échauffement n'est
+                pas de vous fatiguer, mais de vous préparer&nbsp;!
               </p>
 
               <h3>Exercices sans poids</h3>
               <p>
                 L'application ne vous proposera pas d'options d'échauffement,
-                mais n'oubliez pas de vous étirer !
+                mais n'oubliez pas de vous étirer&nbsp;!
               </p>
             </div>
           </Fragment>
@@ -301,7 +466,7 @@ class TutorialModal extends Component {
                 proposent, en mode entraînement, un outil vous permettant de
                 savoir quels disques placer de chaque coté de la barre. Afin de
                 vous assurer que ces renseignements correspondent aux disques à
-                votre disposition, renzeignez-les dans vos paramètres !
+                votre disposition, renzeignez-les dans vos paramètres&nbsp;!
               </p>
 
               <p>
@@ -424,6 +589,17 @@ class TutorialModal extends Component {
             Fermer le tutoriel
           </button>
         </div>
+
+        <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath
+              id="clipPath"
+              ref={polygonTarget => {
+                this.polygonTarget = polygonTarget;
+              }}
+            />
+          </defs>
+        </svg>
       </div>
     );
   }
