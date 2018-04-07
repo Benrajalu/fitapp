@@ -33,7 +33,7 @@ it('renders without crashing', () => {
   };
   const dash = mount(<Workout match={match} store={fakeStore} />, MountOptions);
 
-  dash.setState({
+  /*dash.setState({
     routineId: '01routineA',
     user: {
       contactEmail: userData[0].contactEmail,
@@ -59,5 +59,5 @@ it('renders without crashing', () => {
         }
       ]
     }
-  });
+  });*/
 });

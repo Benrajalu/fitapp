@@ -71,9 +71,16 @@ it('accurately translate completed sets and reps arrays into values', () => {
     />
   );
 
-  dash.setState({
-    completedSets: [1, 0, 0, 0, 0],
-    sets: [10, 0, 0, 0, 0]
+  const newValue = {
+    exerciseId: 'ex-04',
+    sets: [10, 0, 0, 0, 0],
+    repTarget: '10',
+    setsTarget: '5',
+    handicap: '20'
+  };
+
+  dash.setProps({
+    contents: newValue
   });
 
   expect(

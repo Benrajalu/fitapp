@@ -251,7 +251,7 @@ class TutorialModal extends Component {
               </p>
               <p>
                 De nombreux programmes d'entraînement reposent sur une
-                alternance entre deux ou trois routines par semaines, Fitapp a
+                alternance entre deux ou trois routines par semaine et Fitapp a
                 été créée avec cette philosophie en tête.
               </p>
 
@@ -262,15 +262,16 @@ class TutorialModal extends Component {
                 <strong>
                   <FontAwesomeIcon icon={['fal', 'plus']} size="1x" /> New
                 </strong>{' '}
-                et cliquez-dessus.
+                et cliquez dessus.
               </p>
               <p>
-                L'éditeur de routine vous permettra ensuite de choisir les
-                exercices que vous souhaitez ajouter à cette routine.
+                L'éditeur vous permettra ensuite de choisir les exercices que
+                vous souhaitez ajouter à cette routine.
               </p>
               <p>
                 Le nom de la routine est bien-sûr paramétrable&nbsp;! Choisissez
-                un titre évocateur, "Routine bras et abdos", par exemple.
+                un titre évocateur pour vous comme "Routine bras et abdos",
+                "Routine du Jeudi" ou "Cardio et Dos" par exemple.
               </p>
 
               <h3>Configurer mes exercices</h3>
@@ -354,13 +355,12 @@ class TutorialModal extends Component {
               <h3>Pendant l'entraînement</h3>
               <p>
                 L'entraînement vous résume d'abord la liste des exercices à
-                faire. Chaque exercice est détaillé&nbsp;:&nbsp;nombre de sets,
+                faire. Chaque objectif est détaillé&nbsp;:&nbsp;nombre de sets,
                 de reps et poids / temps visé.
               </p>
               <p>
                 Un compteur vous permet de constater l'état d'avancement de
-                chaque exercice. Cliquez sur ce compteur pour débuter
-                l'exercice.
+                chaque exercice. Cliquez sur ce compteur pour vous lancer !
               </p>
               <p>
                 L'écran d'exercice vous permet de modifier l'élement de
@@ -397,7 +397,7 @@ class TutorialModal extends Component {
                   Si vous avez atteint vos objectifs (rapporté toutes les reps
                   pour tous les sets prévus) pour au moins un exercice, l'option
                   de rendre cette exercice plus difficile à la prochaine scéance
-                  vous sera proposée
+                  vous sera proposée.
                 </li>
                 <li>
                   Si vous avez activé le timer pendant votre scéance, l'option
@@ -408,7 +408,7 @@ class TutorialModal extends Component {
                 </li>
               </ul>
               <p>
-                Il vous suffit ensuite de valider l'entraînement de votre
+                Il vous suffit ensuite de valider l'enregistrement de votre
                 entraînement afin d'être redirigé vers l'écran d'acceuil.
               </p>
             </div>

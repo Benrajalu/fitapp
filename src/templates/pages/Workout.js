@@ -98,13 +98,18 @@ class Workout extends Component {
           exercises: logExercises
         }
       });
-    } else {
+
+      return true;
+    }
+    if (realRoutine.length === 0 && this.state.routine !== false) {
       this.setState({
         routine: false,
         loading: false,
         workoutLog: false
       });
+      return true;
     }
+    return false;
   }
 
   componentDidMount() {
