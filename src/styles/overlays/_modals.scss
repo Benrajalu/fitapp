@@ -928,6 +928,15 @@
     justify-content: center;
     max-width: 400px;
     transform: translateY(100%);
+    p {
+      width: 100%;
+      line-height: 20px;
+      @include mont(10px, 400, #D6D0DC);
+      margin-bottom: 15px;
+      strong {
+        font-family: 700;
+      }
+    }
     .direction {
       width: 48%;
       font-family: 'Questrial';

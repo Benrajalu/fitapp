@@ -588,6 +588,12 @@ class TutorialModal extends Component {
           <button className="close" onClick={this.closeModal}>
             Fermer le tutoriel
           </button>
+          <p>
+            Cette aide est disponible à tout moment depuis le{' '}
+            <strong>
+              <FontAwesomeIcon icon={['far', 'bars']} size="1x" /> Menu
+            </strong>.
+          </p>
         </div>
 
         <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
