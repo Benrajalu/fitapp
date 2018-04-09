@@ -269,7 +269,7 @@ class TutorialModal extends Component {
                 vous souhaitez ajouter à cette routine.
               </p>
               <p>
-                Le nom de la routine est bien-sûr paramétrable&nbsp;! Choisissez
+                Le nom de la routine est bien sûr paramétrable&nbsp;! Choisissez
                 un titre évocateur pour vous comme "Routine bras et abdos",
                 "Routine du Jeudi" ou "Cardio et Dos" par exemple.
               </p>
@@ -278,7 +278,7 @@ class TutorialModal extends Component {
               <p>
                 Chaque exercice ajouté à la routine est paramétrable. Selon le
                 type d'exercice choisi, vous pouvez modifier le nombre de "reps"
-                (c'est à dire de répétitions) et de "sets" (c'est à dire de
+                (c'est-à-dire de répétitions) et de "sets" (c'est-à-dire de
                 séries de répétitions). Certains exercices proposent également
                 de modifier soit le poids de résistance à appliquer à cet
                 exercice ou bien simplement le nombre de minutes à atteindre.
@@ -320,7 +320,7 @@ class TutorialModal extends Component {
               <p>
                 Cliquez ensuite sur le bouton "Modifier" sous la routine
                 concernée. Vous pourrez ensuite modifier tous les paramètres de
-                la routine que vous avez créé.
+                la routine que vous avez créée.
               </p>
             </div>
           </Fragment>
@@ -336,13 +336,13 @@ class TutorialModal extends Component {
             <div className="content">
               <h3>Lancer un entraînement</h3>
               <p>
-                Pour commencer votre scéance, il suffit de lancer un
+                Pour commencer votre séance, il suffit de lancer un
                 entraînement. Rien de plus simple, dans la barre de menu
                 principale, identifiez l'icône{' '}
                 <strong>
                   <FontAwesomeIcon icon={['fas', 'play']} size="1x" />
                 </strong>{' '}
-                et cliquez-dessus.
+                et cliquez dessus.
               </p>
               <p>
                 Une liste des routines disponibles apparait alors. Choisissez
@@ -363,9 +363,9 @@ class TutorialModal extends Component {
                 chaque exercice. Cliquez sur ce compteur pour vous lancer !
               </p>
               <p>
-                L'écran d'exercice vous permet de modifier l'élement de
+                L'écran d'exercice vous permet de modifier l'élément de
                 "handicap" (poids ou temps), mais surtout doit vous servir à
-                rapporter votre progression via les gauges. Vous pouvez soit
+                rapporter votre progression via les jauges. Vous pouvez soit
                 faire coulisser celles-ci, soit utiliser les boutons{' '}
                 <strong>
                   <FontAwesomeIcon icon={['fas', 'plus']} size="1x" />
@@ -385,7 +385,7 @@ class TutorialModal extends Component {
               <p>
                 Une fenêtre contextuelle s'ouvre alors. Celle-ci contiendra
                 différentes informations en fonction de vos interactions lors de
-                la scéance :
+                la séance :
               </p>
               <ul>
                 <li>
@@ -396,20 +396,20 @@ class TutorialModal extends Component {
                 <li>
                   Si vous avez atteint vos objectifs (rapporté toutes les reps
                   pour tous les sets prévus) pour au moins un exercice, l'option
-                  de rendre cette exercice plus difficile à la prochaine scéance
+                  de rendre cet exercice plus difficile à la prochaine séance
                   vous sera proposée.
                 </li>
                 <li>
-                  Si vous avez activé le timer pendant votre scéance, l'option
-                  de jauger l'intensité de l'entraînement vous sera proposée. Si
+                  Si vous avez activé le timer pendant votre séance, l'option de
+                  jauger l'intensité de l'entraînement vous sera proposée. Si
                   votre poids a été renseigné dans vos paramètres, cette donnée
                   servira à établir une estimation de la dépense calorique
-                  générée par cette scéance&nbsp;!
+                  générée par cette séance&nbsp;!
                 </li>
               </ul>
               <p>
                 Il vous suffit ensuite de valider l'enregistrement de votre
-                entraînement afin d'être redirigé vers l'écran d'acceuil.
+                entraînement afin d'être redirigé vers l'écran d'accueil.
               </p>
             </div>
           </Fragment>
@@ -466,7 +466,7 @@ class TutorialModal extends Component {
                 proposent, en mode entraînement, un outil vous permettant de
                 savoir quels disques placer de chaque coté de la barre. Afin de
                 vous assurer que ces renseignements correspondent aux disques à
-                votre disposition, renzeignez-les dans vos paramètres&nbsp;!
+                votre disposition, renseignez-les dans vos paramètres&nbsp;!
               </p>
 
               <p>
@@ -474,7 +474,7 @@ class TutorialModal extends Component {
                 <strong>
                   <FontAwesomeIcon icon={['fal', 'bars']} size="1x" /> Menu
                 </strong>{' '}
-                dans la barre de navigation principale, puis navigez vers{' '}
+                dans la barre de navigation principale, puis naviguez vers{' '}
                 <strong>
                   <FontAwesomeIcon icon={['fas', 'cog']} size="1x" /> Paramètres
                 </strong>. Vous y trouverez de quoi choisir le poids de la barre
@@ -490,7 +490,7 @@ class TutorialModal extends Component {
                 </strong>{' '}
                 vous permet également de modifier votre nom, email de contact et
                 image de profil. Afin de calculer une estimation de la dépense
-                calorique de vos scéances, nous vous invitons également à
+                calorique de vos séances, nous vous invitons également à
                 renseigner votre poids.
               </p>
               <p>
