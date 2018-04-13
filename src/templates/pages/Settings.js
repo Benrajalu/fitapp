@@ -37,7 +37,7 @@ class Settings extends Component {
     this.updateAccount = this.updateAccount.bind(this);
     this.updateImage = this.updateImage.bind(this);
     this.handleCrop = this.handleCrop.bind(this);
-    this.handePreviewImage = this.handePreviewImage.bind(this);
+    this.handlePreviewImage = this.handlePreviewImage.bind(this);
     this.handleDefaultCrop = this.handleDefaultCrop.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.cancelNewPic = this.cancelNewPic.bind(this);
@@ -277,11 +277,11 @@ class Settings extends Component {
 
   handleCrop(crop, pixelCrop) {
     // Fires when users decide to re-crop their profile pics
-    crop.aspect = 1 / 1.1;
+    crop.aspect = 1;
     this.setState({
       crop: crop
     });
-    this.handePreviewImage();
+    this.handlePreviewImage();
   }
 
   handleDefaultCrop(image) {
@@ -326,13 +326,13 @@ class Settings extends Component {
           crop: defaultCrop
         },
         () => {
-          this.handePreviewImage();
+          this.handlePreviewImage();
         }
       );
     }
   }
 
-  handePreviewImage() {
+  handlePreviewImage() {
     const cropImage = (imgSrc, crop) => {
       var image = new Image();
       image.onload = function(e) {
@@ -394,10 +394,7 @@ class Settings extends Component {
       const updateQuery = database.collection('users').doc(this.state.userId),
         displayName = this.state.userName,
         contactEmail = this.state.userEmail,
-        userWeight =
-          this.state.userWeight && this.state.userWeight.length > 0
-            ? this.state.userWeight
-            : false,
+        userWeight = this.state.userWeight ? this.state.userWeight : false,
         profilePicture = this.state.previewImage
           ? this.state.previewImage
           : this.state.userPic,
