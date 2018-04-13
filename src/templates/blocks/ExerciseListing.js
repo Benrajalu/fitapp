@@ -75,7 +75,7 @@ class ExerciseListing extends Component {
         completedPercentage = 0;
       if (status) {
         // We're now checking data from a past report, regardless of the current Routine shape
-        let sets = currentExercise.sets ? currentExercise.sets : [];
+        let sets = currentExercise.sets ? currentExercise.sets : [0];
 
         setNumber = sets.length;
         repTarget = currentExercise.repTarget

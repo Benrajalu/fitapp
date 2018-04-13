@@ -78,15 +78,22 @@ class Workout extends Component {
       // Setting up a mock version of the workout log (for history) of the current exercises...
       let logExercises = [];
       // ...then mapping the routine's infos into it
-      cleanRoutine.exercises.map(value =>
+      cleanRoutine.exercises.map(value => {
+        let newSetlist = [];
+        let y = 0,
+          totalSets = parseFloat(value.sets ? value.sets : 1);
+        for (y; y < totalSets; y++) {
+          newSetlist.push(0);
+        }
         logExercises.push({
           exerciseId: value.exerciseId,
           repTarget: value.reps ? value.reps : false,
           setsTarget: value.sets ? value.sets : false,
-          sets: false,
+          sets: newSetlist,
           handicap: value.handicap ? value.handicap : 0
-        })
-      );
+        });
+        return true;
+      });
 
       this.setState({
         routine: cleanRoutine,

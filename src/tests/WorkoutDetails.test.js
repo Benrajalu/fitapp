@@ -24,7 +24,8 @@ const toggleModal = function(data, event) {
 it('renders without crashing', () => {
   const value = {
     exerciseId: 'ex-04',
-    sets: '5',
+    setsTarget: '5',
+    sets: [0, 0, 0, 0, 0],
     reps: '10',
     handicap: '20'
   };
@@ -100,6 +101,7 @@ it('accurately translate completed sets and reps arrays into values', () => {
 it('manages to deal with cardio exercises by remplacing reps with minutes', () => {
   const value = {
     exerciseId: 'ex-30',
+    sets: [0],
     handicap: '40'
   };
 
