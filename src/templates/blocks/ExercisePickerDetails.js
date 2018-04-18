@@ -23,6 +23,8 @@ class ExercisePickerDetails extends Component {
       ExerciseObject.sets = 1;
       ExerciseObject.reps = 1;
       ExerciseObject.handicap = 0;
+    } else if (this.props.data.id === 'ex-33') {
+      ExerciseObject.exercises = [];
     } else {
       ExerciseObject.handicap = 30;
     }

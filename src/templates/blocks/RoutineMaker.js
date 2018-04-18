@@ -7,6 +7,7 @@ import { database } from '../../store/';
 import ExercisePicker from './Overlays/ExercisePicker';
 import InlineLoader from './InlineLoader';
 import ExerciseCustomizer from './ExerciseCustomizer';
+import ExerciseCustomizerIntervals from './ExerciseCustomizerIntervals';
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -44,6 +45,7 @@ class RoutineMaker extends Component {
     this.customizeExercise = this.customizeExercise.bind(this);
     this.organizeExercises = this.organizeExercises.bind(this);
     this.removeExercise = this.removeExercise.bind(this);
+    this.addIntervalExercice = this.addIntervalExercice.bind(this);
   }
 
   componentDidMount() {
@@ -215,6 +217,19 @@ class RoutineMaker extends Component {
     });
   }
 
+  addIntervalExercice(index, name) {
+    const routineSnapshot = this.state.newRoutine;
+    routineSnapshot.exercises[index].exercises.push({
+      name: name,
+      sets: 1,
+      active: 30,
+      pause: 10
+    });
+    this.setState({
+      newRoutine: routineSnapshot
+    });
+  }
+
   organizeExercises(index, direction, event) {
     // We use this to move exercises up and down the list for better ordering
     const routineSnapshot = this.state.newRoutine,
@@ -253,19 +268,38 @@ class RoutineMaker extends Component {
   render() {
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if (this.state.newRoutine.exercises.length > 0) {
-      listExercises = this.state.newRoutine.exercises.map((value, index) => (
-        <ExerciseCustomizer
-          database={this.props.exercises}
-          currentExercise={value}
-          key={index + '-' + value.exerciseId}
-          index={index}
-          last={index === this.state.newRoutine.exercises.length - 1}
-          newValues={this.customizeExercise}
-          organize={this.organizeExercises}
-          removeExercise={this.removeExercise}
-        />
-      ));
+      listExercises = this.state.newRoutine.exercises.map((value, index) => {
+        if (value.exerciseId === 'ex-33') {
+          return (
+            <ExerciseCustomizerIntervals
+              database={this.props.exercises}
+              currentExercise={value}
+              key={index + '-' + value.exerciseId}
+              index={index}
+              last={index === this.state.newRoutine.exercises.length - 1}
+              newValues={this.customizeExercise}
+              organize={this.organizeExercises}
+              removeExercise={this.removeExercise}
+              addIntervalExercice={this.addIntervalExercice}
+            />
+          );
+        }
+        return (
+          <ExerciseCustomizer
+            database={this.props.exercises}
+            currentExercise={value}
+            key={index + '-' + value.exerciseId}
+            index={index}
+            last={index === this.state.newRoutine.exercises.length - 1}
+            newValues={this.customizeExercise}
+            organize={this.organizeExercises}
+            removeExercise={this.removeExercise}
+          />
+        );
+      });
     }
+
+    console.log(this.state);
 
     return (
       <div id="RoutineMaker">
