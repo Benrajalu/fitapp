@@ -374,6 +374,103 @@
         text-align: center;
         @include mont(11px, 500, $greyType);
       }
+      .actions {
+        display: flex;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        padding: 0px;
+        align-items: stretch;
+        box-shadow: 0px 3px 5px rgba(20, 20, 20, 0.4);
+        .module-title {
+          background: #3e3e43;
+          white-space: nowrap;
+          flex-grow: 2;
+          padding: 0 15px;
+          line-height: 38px;
+          border: 0px;
+          border-right: 0px;
+          @include mont(11px, 500, $white);
+          caret-color: $red;
+          transition: all 200ms ease-out;
+          &::placeholder {
+            color: #a7b1b3;
+          }
+          &:focus {
+            border-color: $red;
+            outline: 0;
+          }
+        }
+        button {
+          border: 0px;
+          padding: 0px 15px;
+          border-radius: 0px;
+          text-align: center;
+          background: $red;
+          @include mont(10px, 400, $white);
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          line-height: 1;
+          border: 0px;
+        }
+      }
+
+      .exercise-list {
+        .title {
+          @include mont(11px, 700, $greyType);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin: 15px 0px;
+          padding: 0 10px;
+        }
+        .list {
+          padding: 0 20px 8px 36px;
+        }
+        .nested_exerciseTunner {
+          background: linear-gradient(
+            170deg,
+            #37373e 30%,
+            #2b2b30 60%,
+            #212124
+          );
+          border-radius: 5px;
+          margin: 0px auto 15px;
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+          position: relative;
+          box-shadow: 4px 8px 6px rgba(20, 20, 20, 0.8);
+          &:after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: $red;
+            border-radius: 100%;
+            position: absolute;
+            top: 50%;
+            left: -17px;
+            border: 5px solid #1e1f21;
+            transform: translateX(-50%);
+            z-index: 2;
+          }
+          .heading {
+            font-size: 0.8rem;
+            border-bottom-color: #404048;
+          }
+          .item {
+            border-bottom: 1px solid #404048;
+            &:last-child {
+              border-bottom: 0px;
+            }
+          }
+        }
+      }
+
+      .empty {
+        padding: 50px 10px;
+        text-align: center;
+        @include mont(11px, 500, $greyType);
+      }
     }
 
     @media (max-width: 500px) {
