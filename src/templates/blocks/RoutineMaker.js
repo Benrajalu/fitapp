@@ -46,6 +46,7 @@ class RoutineMaker extends Component {
     this.organizeExercises = this.organizeExercises.bind(this);
     this.removeExercise = this.removeExercise.bind(this);
     this.addIntervalExercice = this.addIntervalExercice.bind(this);
+    this.tuneIntervalExercise = this.tuneIntervalExercise.bind(this);
   }
 
   componentDidMount() {
@@ -111,6 +112,19 @@ class RoutineMaker extends Component {
           ? (currentErrors = {})
           : currentErrors;
       currentErrors.exercises = 'Vous devez ajouter au moins un exercice';
+    }
+    if (
+      this.state.newRoutine.exercises.includes({
+        exerciseId: 'ex-33',
+        exercises: []
+      })
+    ) {
+      currentErrors =
+        typeof currentErrors === 'boolean'
+          ? (currentErrors = {})
+          : currentErrors;
+      currentErrors.exercises =
+        'Vous devez créer au moins un exercice pour les intervalles';
     }
 
     // Updating the error state. If it's filled, then the submission will fail
@@ -230,6 +244,17 @@ class RoutineMaker extends Component {
     });
   }
 
+  tuneIntervalExercise(intervalIndex, exerciseIndex, newValues) {
+    const routineSnapshot = this.state.newRoutine;
+    routineSnapshot.exercises[intervalIndex]['exercises'][exerciseIndex][
+      newValues.name
+    ] =
+      newValues.value;
+    this.setState({
+      newRoutine: routineSnapshot
+    });
+  }
+
   organizeExercises(index, direction, event) {
     // We use this to move exercises up and down the list for better ordering
     const routineSnapshot = this.state.newRoutine,
@@ -266,6 +291,7 @@ class RoutineMaker extends Component {
   }
 
   render() {
+    console.log(this.state.newRoutine);
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if (this.state.newRoutine.exercises.length > 0) {
       listExercises = this.state.newRoutine.exercises.map((value, index) => {
@@ -277,7 +303,7 @@ class RoutineMaker extends Component {
               key={index + '-' + value.exerciseId}
               index={index}
               last={index === this.state.newRoutine.exercises.length - 1}
-              newValues={this.customizeExercise}
+              newValues={this.tuneIntervalExercise}
               organize={this.organizeExercises}
               removeExercise={this.removeExercise}
               addIntervalExercice={this.addIntervalExercice}
@@ -298,8 +324,6 @@ class RoutineMaker extends Component {
         );
       });
     }
-
-    console.log(this.state);
 
     return (
       <div id="RoutineMaker">
@@ -400,7 +424,12 @@ class RoutineMaker extends Component {
                     className="btn important"
                     disabled={
                       this.state.newRoutine.exercises.length <= 0 ||
-                      this.state.newRoutine.name.length <= 0
+                      this.state.newRoutine.name.length <= 0 ||
+                      this.state.newRoutine.exercises.filter(
+                        value =>
+                          value.exerciseId === 'ex-33' &&
+                          value.exercises.length === 0
+                      ).length > 0
                         ? true
                         : false
                     }>
@@ -413,7 +442,12 @@ class RoutineMaker extends Component {
                     className="btn important"
                     disabled={
                       this.state.newRoutine.exercises.length <= 0 ||
-                      this.state.newRoutine.name.length <= 0
+                      this.state.newRoutine.name.length <= 0 ||
+                      this.state.newRoutine.exercises.filter(
+                        value =>
+                          value.exerciseId === 'ex-33' &&
+                          value.exercises.length === 0
+                      ).length > 0
                         ? true
                         : false
                     }>

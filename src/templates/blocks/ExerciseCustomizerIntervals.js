@@ -35,17 +35,18 @@ class ExerciseCustomizerIntervals extends Component {
   }
 
   handleExerciseTunning(index, newValues) {
-    console.log(index);
-    console.log(newValues);
+    const passedValues = newValues.target;
+    this.props.newValues(this.props.index, index, passedValues);
   }
 
   render() {
-    console.log(this.state);
     const realExercise = this.props.database.filter(
       obj => obj.id === this.props.currentExercise.exerciseId
     )[0];
 
-    let exercises = null;
+    let exercises = null,
+      totalLength = 0,
+      totalLengthString = null;
 
     if (this.props.currentExercise.exercises.length > 0) {
       exercises = this.props.currentExercise.exercises.map((value, index) => (
@@ -85,6 +86,19 @@ class ExerciseCustomizerIntervals extends Component {
           </div>
         </div>
       ));
+
+      totalLength += this.props.currentExercise.exercises
+        .map(value => value.sets * (value.active + value.pause))
+        .reduce((accu, value) => accu + value);
+
+      let getMinutes =
+        Math.floor(totalLength / 60) < 10
+          ? `0${Math.floor(totalLength / 60)}`
+          : Math.floor(totalLength / 60);
+      let getRemainingSeconds =
+        totalLength % 60 < 10 ? `0${totalLength % 60}` : totalLength % 60;
+
+      totalLengthString = `${getMinutes}:${getRemainingSeconds}`;
     }
 
     return (
@@ -139,7 +153,10 @@ class ExerciseCustomizerIntervals extends Component {
             </div>
             {exercises ? (
               <div className="exercise-list">
-                <h3 className="title">Exercices : </h3>
+                <h3 className="title">
+                  Exercices :{' '}
+                  <strong>(Durée totale {totalLengthString})</strong>
+                </h3>
                 <div className="list">{exercises}</div>
               </div>
             ) : (

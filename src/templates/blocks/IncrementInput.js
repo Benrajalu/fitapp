@@ -65,19 +65,35 @@ class IncrementInput extends Component {
 
   tuneValue(direction, index, event) {
     let newValue, eventObject, value;
+    let noZero = false;
 
     switch (this.props.name) {
       case 'reps':
         value = this.props.currentExercise.reps;
+        noZero = true;
         break;
 
       case 'sets':
         value = this.props.currentExercise.sets;
+        noZero = true;
         break;
 
       case 'handicap':
         value = this.props.currentExercise.handicap
           ? this.props.currentExercise.handicap
+          : 0;
+        break;
+
+      case 'active':
+        value = this.props.currentExercise.active
+          ? this.props.currentExercise.active
+          : 0;
+        noZero = true;
+        break;
+
+      case 'pause':
+        value = this.props.currentExercise.pause
+          ? this.props.currentExercise.pause
           : 0;
         break;
 
@@ -94,7 +110,9 @@ class IncrementInput extends Component {
         }
       };
     } else {
-      newValue = parseFloat(value) > 0 ? parseFloat(value) - 1 : 0;
+      let trueBottom = noZero ? 1 : 0;
+      newValue =
+        parseFloat(value) > trueBottom ? parseFloat(value) - 1 : trueBottom;
       eventObject = {
         target: {
           name: this.props.name,
