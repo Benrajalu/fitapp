@@ -437,6 +437,26 @@
                 transition: stroke-dasharray 500ms linear;
               }
             }
+
+            &.alternate {
+              flex-flow: row nowrap;
+              width: auto;
+              .copy {
+                position: static;
+                transform: translateY(0);
+                p {
+                  font-size: 13px;
+                }
+              }
+              .circular-chart {
+                width: 40px;
+                height: 40px;
+                .circle-bg,
+                .circle {
+                  stroke-width: 4px;
+                }
+              }
+            }
           }
         }
       }
@@ -698,5 +718,84 @@
     background: $red;
     border-radius: 3px;
     transition: background 200ms ease-out;
+  }
+}
+
+.interval-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  padding: 16px 0px;
+  align-items: stretch;
+  .mainAction {
+    position: relative;
+    overflow: hidden;
+    button {
+      position: absolute;
+      top: 150%;
+      left: 0;
+      transition: all 200ms cubic-bezier(0.62, -0.3, 0.33, 1.32);
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      &.active {
+        top: 0;
+        opacity: 1;
+      }
+    }
+  }
+  button,
+  .mainAction {
+    flex-grow: 1;
+    text-align: center;
+    color: $white;
+    background: transparent;
+    padding: 0px;
+    line-height: 1;
+    border: 0px;
+    font-size: 20px;
+  }
+}
+
+.interval-exercice {
+  display: none;
+  padding: 12px;
+  background: #232328;
+  box-radius: 4px;
+  &.active {
+    display: block;
+  }
+  .interval-heading {
+    display: flex;
+    width: 100%;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #000;
+    padding-bottom: 12px;
+    .index {
+      order: 2;
+      @include mont(12px, 500, $greyType);
+    }
+    .name {
+      @include mont(20px, 700, $white);
+      text-transform: uppercase;
+    }
+  }
+
+  .counter {
+    display: block;
+    text-align: center;
+    padding: 12px 0px;
+    border-bottom: 1px solid #000;
+    .counter-title {
+      @include mont(18px, 500, $greyType);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .counter-value {
+      @include mont(26px, 700, $white);
+      letter-spacing: 1px;
+    }
   }
 }

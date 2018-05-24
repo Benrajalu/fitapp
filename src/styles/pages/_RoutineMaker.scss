@@ -230,6 +230,10 @@
             }
           }
         }
+
+        &.nested {
+          flex-flow: column;
+        }
       }
       .actions {
         display: flex;
@@ -285,6 +289,8 @@
           }
         }
         .list {
+          transition: all 200ms ease-out;
+          background: transparent;
           padding: 0 20px 8px 36px;
         }
         .nested_exerciseTunner {
@@ -295,12 +301,14 @@
             #212124
           );
           border-radius: 5px;
-          margin: 0px auto 15px;
+          margin: 0px auto;
           display: block;
           width: 100%;
           box-sizing: border-box;
           position: relative;
           box-shadow: 4px 8px 6px rgba(20, 20, 20, 0.8);
+          transition: all 200ms ease-out;
+          transform: scale(1);
           &:after {
             content: '';
             width: 10px;
@@ -317,12 +325,46 @@
           .heading {
             font-size: 0.8rem;
             border-bottom-color: #404048;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            padding: 16px;
+            align-items: center;
+            > button {
+              border: 1px solid $greyType;
+              @include mont(8px, 500, $greyType);
+              text-transform: uppercase;
+              line-height: 1;
+              padding: 8px;
+              border-radius: 16px;
+              background: transparent;
+              cursor: pointer;
+              &:hover {
+                color: $red;
+                border-color: $red;
+              }
+              svg {
+                margin-right: 4px;
+              }
+            }
           }
           .item {
             border-bottom: 1px solid #404048;
             &:last-child {
               border-bottom: 0px;
             }
+          }
+        }
+        .dragging > .nested_exerciseTunner {
+          background: linear-gradient(
+            170deg,
+            #28282d 30%,
+            #1c1c20 60%,
+            #141416
+          );
+          box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+          &:after {
+            background: $blue;
           }
         }
       }
