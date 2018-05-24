@@ -5,6 +5,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { TransitionGroup } from 'react-transition-group';
 
 import ExerciseListing from '../blocks/ExerciseListing';
+import ExerciseListingIntervals from '../blocks/ExerciseListingIntervals';
 import AnimatedPanel from '../blocks/AnimatedPanel';
 
 class RoutineDetail extends Component {
@@ -58,6 +59,15 @@ class RoutineDetail extends Component {
       ? this.props.exercisesDatabase
       : [];
     const listExercises = routineExercices.map((value, index) => {
+      if (value.exerciseId === 'ex-33') {
+        return (
+          <ExerciseListingIntervals
+            key={value.exerciseId.toString() + '-' + index}
+            exerciseData={value}
+            exercisesDatabase={exercisesDatabase}
+          />
+        );
+      }
       return (
         <ExerciseListing
           key={value.exerciseId.toString() + '-' + index}

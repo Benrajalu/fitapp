@@ -5,6 +5,8 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import ExercisePickerDetails from '../../blocks/ExercisePickerDetails';
 import ExercisePickerPick from '../../blocks/ExercisePickerPick';
 
+import uuid from 'uuid';
+
 class ExercisePicker extends Component {
   constructor(props) {
     super(props);
@@ -187,7 +189,7 @@ class ExercisePicker extends Component {
           currentExercise={value}
           handleClick={this.removeExercise}
           index={index}
-          key={value.exerciseId + '-' + new Date().getTime() + index}
+          key={value.exerciseId + '-' + uuid.v1()}
         />
       ));
     }

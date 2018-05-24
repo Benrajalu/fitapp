@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import uuid from 'uuid';
+
 class WorkoutTabs extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,7 @@ class WorkoutTabs extends Component {
           )[0].name;
           return (
             <li
-              key={index}
+              key={uuid.v1()}
               className={
                 this.props.currentExercise !== false &&
                 this.props.currentExercise === index

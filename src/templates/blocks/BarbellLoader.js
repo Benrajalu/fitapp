@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import uuid from 'uuid';
+
 class BarbellLoader extends Component {
   constructor(props) {
     super(props);
@@ -104,7 +106,7 @@ class BarbellLoader extends Component {
           // Then push a dsic in the loadsWrapper array
           let discSize = 'disc size-' + orderedKeys[y].replace('.', '-');
           loadsWrapper.push(
-            <div className={discSize} key={'disc-' + z + ' - ' + y}>
+            <div className={discSize} key={'disc-' + uuid.v1()}>
               <p>{orderedKeys[y]} kg</p>
             </div>
           );

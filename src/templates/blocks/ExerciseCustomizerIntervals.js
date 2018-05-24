@@ -5,12 +5,28 @@ import IncrementInput from '../blocks/IncrementInput';
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+
+// Working on D&D stuff
+const getItemStyle = (isDragging, draggableStyle) => ({
+  background: isDragging ? 'rgba(250,250,250,0.1)' : 'black',
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
+const getListStyle = isDraggingOver => ({
+  background: isDraggingOver ? '#313337' : 'transparent',
+  boxShadow: isDraggingOver
+    ? 'inset 2px -5px 5px rgba(20,20,20,0.6)'
+    : '0px 0px 0px transparent'
+});
+
 class ExerciseCustomizerIntervals extends Component {
   constructor(props) {
     super(props);
     this.handleIntervalAddition = this.handleIntervalAddition.bind(this);
     this.handleIntervalNameChange = this.handleIntervalNameChange.bind(this);
     this.handleExerciseTunning = this.handleExerciseTunning.bind(this);
+    this.handleExerciseRemoval = this.handleExerciseRemoval.bind(this);
     this.state = {
       isPressed: false,
       newExerciseName: ''
@@ -39,6 +55,10 @@ class ExerciseCustomizerIntervals extends Component {
     this.props.newValues(this.props.index, index, passedValues);
   }
 
+  handleExerciseRemoval(index) {
+    this.props.removeIntervalExercice(this.props.index, index);
+  }
+
   render() {
     const realExercise = this.props.database.filter(
       obj => obj.id === this.props.currentExercise.exerciseId
@@ -50,40 +70,66 @@ class ExerciseCustomizerIntervals extends Component {
 
     if (this.props.currentExercise.exercises.length > 0) {
       exercises = this.props.currentExercise.exercises.map((value, index) => (
-        <div className="nested_exerciseTunner" key={`tunner-${index}`}>
-          <div className="heading">{value.name}</div>
-          <div className="tunners">
-            <div className="item">
-              <IncrementInput
-                value={value.sets}
-                name="sets"
-                index={index}
-                currentExercise={value}
-                updater={this.handleExerciseTunning}
-                unit="Sets"
-              />
-            </div>
-            <div className="item">
-              <IncrementInput
-                value={value.active}
-                name="active"
-                index={index}
-                currentExercise={value}
-                updater={this.handleExerciseTunning}
-                unit="secondes d'activité"
-              />
-            </div>
-            <div className="item">
-              <IncrementInput
-                value={value.pause}
-                name="pause"
-                index={index}
-                currentExercise={value}
-                updater={this.handleExerciseTunning}
-                unit="Secondes de repos"
-              />
-            </div>
-          </div>
+        <div style={{ marginBottom: '15px' }} key={index}>
+          <Draggable
+            draggableId={`nested-${index}-${value.name.replace(' ', '')}`}
+            index={index}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={getItemStyle(
+                  snapshot.isDragging,
+                  provided.draggableProps.style
+                )}
+                className={snapshot.isDragging ? 'dragging' : ''}>
+                <div className="nested_exerciseTunner">
+                  <div className="heading">
+                    {value.name}{' '}
+                    <button
+                      type="button"
+                      onClick={this.handleExerciseRemoval.bind(this, index)}>
+                      <FontAwesomeIcon icon={['fas', 'trash']} size="1x" />{' '}
+                      Supprimer
+                    </button>
+                  </div>
+                  <div className="tunners">
+                    <div className="item">
+                      <IncrementInput
+                        value={value.sets}
+                        name="sets"
+                        index={index}
+                        currentExercise={value}
+                        updater={this.handleExerciseTunning}
+                        unit="Sets"
+                      />
+                    </div>
+                    <div className="item">
+                      <IncrementInput
+                        value={value.active}
+                        name="active"
+                        index={index}
+                        currentExercise={value}
+                        updater={this.handleExerciseTunning}
+                        unit="secondes d'activité"
+                      />
+                    </div>
+                    <div className="item">
+                      <IncrementInput
+                        value={value.pause}
+                        name="pause"
+                        index={index}
+                        currentExercise={value}
+                        updater={this.handleExerciseTunning}
+                        unit="Secondes de repos"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Draggable>
         </div>
       ));
 
@@ -133,7 +179,7 @@ class ExerciseCustomizerIntervals extends Component {
               <FontAwesomeIcon icon={['fas', 'trash']} size="1x" />
             </button>
           </div>
-          <div className="body">
+          <div className="body nested">
             <div className="actions">
               <input
                 form="nestedForm"
@@ -157,7 +203,18 @@ class ExerciseCustomizerIntervals extends Component {
                   Exercices :{' '}
                   <strong>(Durée totale {totalLengthString})</strong>
                 </h3>
-                <div className="list">{exercises}</div>
+                <Droppable
+                  droppableId={`droppableInterval-${this.props.index}`}>
+                  {(provided, snapshot) => (
+                    <div
+                      className="list"
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}>
+                      {exercises}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
               </div>
             ) : (
               <div className="empty">

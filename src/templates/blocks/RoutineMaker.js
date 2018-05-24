@@ -9,6 +9,9 @@ import InlineLoader from './InlineLoader';
 import ExerciseCustomizer from './ExerciseCustomizer';
 import ExerciseCustomizerIntervals from './ExerciseCustomizerIntervals';
 
+// DND context
+import { DragDropContext } from 'react-beautiful-dnd';
+
 import moment from 'moment';
 import 'moment/locale/fr';
 
@@ -32,7 +35,7 @@ class RoutineMaker extends Component {
       },
       errors: {},
       styles: {
-        transform: 'translateY(30px)',
+        marginTop: '30px',
         opacity: 0,
         transition: 'all 200ms ease-out'
       }
@@ -47,6 +50,12 @@ class RoutineMaker extends Component {
     this.removeExercise = this.removeExercise.bind(this);
     this.addIntervalExercice = this.addIntervalExercice.bind(this);
     this.tuneIntervalExercise = this.tuneIntervalExercise.bind(this);
+    this.removeIntervalExercice = this.removeIntervalExercice.bind(this);
+    this.reorderIntervalExercice = this.reorderIntervalExercice.bind(this);
+    this.calculateTotalLength = this.calculateTotalLength.bind(this);
+    // DnD stuff
+    this.onDragEnd = this.onDragEnd.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
   }
 
   componentDidMount() {
@@ -55,7 +64,7 @@ class RoutineMaker extends Component {
     setTimeout(() => {
       _this.setState({
         styles: {
-          transform: 'translateY(0px)',
+          marginTop: '0px',
           opacity: 1,
           transition: 'all 300ms ease-out'
         }
@@ -231,6 +240,14 @@ class RoutineMaker extends Component {
     });
   }
 
+  calculateTotalLength(array) {
+    let value = 0;
+    value += array
+      .map(value => value.sets * (value.active + value.pause))
+      .reduce((accu, value) => accu + value);
+    return value;
+  }
+
   addIntervalExercice(index, name) {
     const routineSnapshot = this.state.newRoutine;
     routineSnapshot.exercises[index].exercises.push({
@@ -239,6 +256,11 @@ class RoutineMaker extends Component {
       active: 30,
       pause: 10
     });
+
+    routineSnapshot.exercises[index].handicap = this.calculateTotalLength(
+      routineSnapshot.exercises[index].exercises
+    );
+
     this.setState({
       newRoutine: routineSnapshot
     });
@@ -250,6 +272,47 @@ class RoutineMaker extends Component {
       newValues.name
     ] =
       newValues.value;
+
+    routineSnapshot.exercises[
+      intervalIndex
+    ].handicap = this.calculateTotalLength(
+      routineSnapshot.exercises[intervalIndex].exercises
+    );
+    this.setState({
+      newRoutine: routineSnapshot
+    });
+  }
+
+  removeIntervalExercice(intervalIndex, targetIndex) {
+    const routineSnapshot = this.state.newRoutine;
+    routineSnapshot.exercises[intervalIndex]['exercises'].splice(
+      targetIndex,
+      1
+    );
+
+    routineSnapshot.exercises[
+      intervalIndex
+    ].handicap = this.calculateTotalLength(
+      routineSnapshot.exercises[intervalIndex].exercises
+    );
+
+    this.setState({
+      newRoutine: routineSnapshot
+    });
+  }
+
+  reorderIntervalExercice(intervalIndex, startIndex, endIndex) {
+    // Get the current dataset
+    const routineSnapshot = this.state.newRoutine;
+    // Extract the relevant nested exercise array inside the custom exercise
+    const exercises = routineSnapshot.exercises[intervalIndex]['exercises'];
+    // using array destructuring they store the 'removed' element
+    const [removed] = exercises.splice(startIndex, 1);
+    // then splice it back at the requested 'endIndex' into the original array
+    exercises.splice(endIndex, 0, removed);
+    // I just have to update the snapshop before creating the new state
+    routineSnapshot.exercises[intervalIndex]['exercises'] = exercises;
+
     this.setState({
       newRoutine: routineSnapshot
     });
@@ -290,8 +353,30 @@ class RoutineMaker extends Component {
     });
   }
 
+  // DND stuff
+  onDragStart() {
+    // If the browser supports it, send a short burst of vibration to signify it's dragging
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(100);
+    }
+  }
+
+  onDragEnd(result) {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const intervalIndex = result.source.droppableId.split('-')[1];
+
+    this.reorderIntervalExercice(
+      intervalIndex,
+      result.source.index,
+      result.destination.index
+    );
+  }
+
   render() {
-    console.log(this.state.newRoutine);
     let listExercises = <p>Aucun exercice n'a été ajouté</p>;
     if (this.state.newRoutine.exercises.length > 0) {
       listExercises = this.state.newRoutine.exercises.map((value, index) => {
@@ -307,6 +392,7 @@ class RoutineMaker extends Component {
               organize={this.organizeExercises}
               removeExercise={this.removeExercise}
               addIntervalExercice={this.addIntervalExercice}
+              removeIntervalExercice={this.removeIntervalExercice}
             />
           );
         }
@@ -326,167 +412,176 @@ class RoutineMaker extends Component {
     }
 
     return (
-      <div id="RoutineMaker">
-        {this.state.loading ? (
-          <div className="container empty">
-            <InlineLoader copy="Chargement de la routine" />
-          </div>
-        ) : (
-          <form onSubmit={this.validate}>
-            <div className="routine-labels">
+      <DragDropContext
+        onDragEnd={this.onDragEnd}
+        onDragStart={this.onDragStart}>
+        <div id="RoutineMaker">
+          {this.state.loading ? (
+            <div className="container empty">
+              <InlineLoader copy="Chargement de la routine" />
+            </div>
+          ) : (
+            <form onSubmit={this.validate}>
+              <div className="routine-labels">
+                <div
+                  className={
+                    this.state.errors.name
+                      ? 'form-group has-error'
+                      : 'form-group'
+                  }
+                  style={this.state.styles}>
+                  <label>Nom de l'entraînement</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    onChange={this.handleInputChange}
+                    value={this.state.newRoutine.name}
+                    placeholder="Ex: Routine du Lundi"
+                  />
+                  {this.state.errors.name ? (
+                    <span className="help-block">{this.state.errors.name}</span>
+                  ) : (
+                    false
+                  )}
+                </div>
+              </div>
+
               <div
                 className={
-                  this.state.errors.name ? 'form-group has-error' : 'form-group'
+                  this.state.newRoutine.exercises.length === 0
+                    ? ' routine-exercises empty'
+                    : 'routine-exercises'
                 }
                 style={this.state.styles}>
-                <label>Nom de l'entraînement</label>
-                <input
-                  type="text"
-                  name="name"
-                  className="form-control"
-                  onChange={this.handleInputChange}
-                  value={this.state.newRoutine.name}
-                  placeholder="Ex: Routine du Lundi"
-                />
-                {this.state.errors.name ? (
-                  <span className="help-block">{this.state.errors.name}</span>
-                ) : (
-                  false
-                )}
-              </div>
-            </div>
-
-            <div
-              className={
-                this.state.newRoutine.exercises.length === 0
-                  ? ' routine-exercises empty'
-                  : 'routine-exercises'
-              }
-              style={this.state.styles}>
-              <h3 className="label">
-                {this.state.newRoutine.exercises.length > 0
-                  ? this.state.newRoutine.exercises.length
-                  : null}{' '}
-                Exercice{this.state.newRoutine.exercises.length > 1 ||
-                this.state.newRoutine.exercises.length === 0
-                  ? 's'
-                  : null}{' '}
-                lié{this.state.newRoutine.exercises.length > 1 ||
-                this.state.newRoutine.exercises.length === 0
-                  ? 's'
-                  : null}
-              </h3>
-              <div
-                className={
-                  this.state.errors.exercises
-                    ? 'form-group has-error'
-                    : 'form-group'
-                }>
-                {listExercises}
-                {this.state.errors.exercises ? (
-                  <span className="help-block">
-                    {this.state.errors.exercises}
-                  </span>
-                ) : (
-                  false
-                )}
-              </div>
-            </div>
-
-            {this.state.saving ? (
-              <div className="routine-footer saving">
-                <InlineLoader copy="Sauvegarde en cours" />
-              </div>
-            ) : (
-              <div className="routine-footer">
-                <Link to="/" className="btn rewind">
-                  <FontAwesomeIcon icon={['fas', 'arrow-left']} size="1x" />
-                </Link>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={this.displayModal}>
-                  {this.state.newRoutine.exercises.length > 0 ? (
-                    <Fragment>
-                      <FontAwesomeIcon icon={['fal', 'edit']} size="1x" />{' '}
-                      Modifier les exercices
-                    </Fragment>
+                <h3 className="label">
+                  {this.state.newRoutine.exercises.length > 0
+                    ? this.state.newRoutine.exercises.length
+                    : null}{' '}
+                  Exercice{this.state.newRoutine.exercises.length > 1 ||
+                  this.state.newRoutine.exercises.length === 0
+                    ? 's'
+                    : null}{' '}
+                  lié{this.state.newRoutine.exercises.length > 1 ||
+                  this.state.newRoutine.exercises.length === 0
+                    ? 's'
+                    : null}
+                </h3>
+                <div
+                  className={
+                    this.state.errors.exercises
+                      ? 'form-group has-error'
+                      : 'form-group'
+                  }>
+                  {listExercises}
+                  {this.state.errors.exercises ? (
+                    <span className="help-block">
+                      {this.state.errors.exercises}
+                    </span>
                   ) : (
-                    <Fragment>
-                      <FontAwesomeIcon icon={['fal', 'plus']} size="1x" />{' '}
-                      Ajouter un exercice
-                    </Fragment>
+                    false
                   )}
-                </button>
-                {this.state.isEdit ? (
-                  <button
-                    type="submit"
-                    className="btn important"
-                    disabled={
-                      this.state.newRoutine.exercises.length <= 0 ||
-                      this.state.newRoutine.name.length <= 0 ||
-                      this.state.newRoutine.exercises.filter(
-                        value =>
-                          value.exerciseId === 'ex-33' &&
-                          value.exercises.length === 0
-                      ).length > 0
-                        ? true
-                        : false
-                    }>
-                    <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
-                    Enregistrer la routine
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="btn important"
-                    disabled={
-                      this.state.newRoutine.exercises.length <= 0 ||
-                      this.state.newRoutine.name.length <= 0 ||
-                      this.state.newRoutine.exercises.filter(
-                        value =>
-                          value.exerciseId === 'ex-33' &&
-                          value.exercises.length === 0
-                      ).length > 0
-                        ? true
-                        : false
-                    }>
-                    <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
-                    Créer la routine
-                  </button>
-                )}
-                {this.state.success ? (
-                  <div className="panel-warning">
-                    <p>
-                      Bravo ! Votre entraînement a été créé ! Vous allez être
-                      redirigé vers le dashboard...
-                    </p>
-                  </div>
-                ) : (
-                  false
-                )}
+                </div>
               </div>
-            )}
-            {this.state.successRedirect ? (
-              <Redirect
-                push
-                to={{ pathname: '/all-routines', state: { newRoutine: true } }}
-              />
-            ) : (
-              false
-            )}
-          </form>
-        )}
 
-        <ExercisePicker
-          exercisesDatabase={this.props.exercises}
-          shouldAppear={this.state.modalDisplay ? 'opened' : 'closed'}
-          modalCloser={this.displayModal}
-          updateExercises={this.updateExercises}
-          settings={this.props.user}
-          pickedExercises={this.state.newRoutine.exercises}
-        />
-      </div>
+              {this.state.saving ? (
+                <div className="routine-footer saving">
+                  <InlineLoader copy="Sauvegarde en cours" />
+                </div>
+              ) : (
+                <div className="routine-footer">
+                  <Link to="/" className="btn rewind">
+                    <FontAwesomeIcon icon={['fas', 'arrow-left']} size="1x" />
+                  </Link>
+                  <button
+                    className="btn"
+                    type="button"
+                    onClick={this.displayModal}>
+                    {this.state.newRoutine.exercises.length > 0 ? (
+                      <Fragment>
+                        <FontAwesomeIcon icon={['fal', 'edit']} size="1x" />{' '}
+                        Modifier les exercices
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <FontAwesomeIcon icon={['fal', 'plus']} size="1x" />{' '}
+                        Ajouter un exercice
+                      </Fragment>
+                    )}
+                  </button>
+                  {this.state.isEdit ? (
+                    <button
+                      type="submit"
+                      className="btn important"
+                      disabled={
+                        this.state.newRoutine.exercises.length <= 0 ||
+                        this.state.newRoutine.name.length <= 0 ||
+                        this.state.newRoutine.exercises.filter(
+                          value =>
+                            value.exerciseId === 'ex-33' &&
+                            value.exercises.length === 0
+                        ).length > 0
+                          ? true
+                          : false
+                      }>
+                      <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
+                      Enregistrer la routine
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn important"
+                      disabled={
+                        this.state.newRoutine.exercises.length <= 0 ||
+                        this.state.newRoutine.name.length <= 0 ||
+                        this.state.newRoutine.exercises.filter(
+                          value =>
+                            value.exerciseId === 'ex-33' &&
+                            value.exercises.length === 0
+                        ).length > 0
+                          ? true
+                          : false
+                      }>
+                      <FontAwesomeIcon icon={['fal', 'save']} size="1x" />
+                      Créer la routine
+                    </button>
+                  )}
+                  {this.state.success ? (
+                    <div className="panel-warning">
+                      <p>
+                        Bravo ! Votre entraînement a été créé ! Vous allez être
+                        redirigé vers le dashboard...
+                      </p>
+                    </div>
+                  ) : (
+                    false
+                  )}
+                </div>
+              )}
+              {this.state.successRedirect ? (
+                <Redirect
+                  push
+                  to={{
+                    pathname: '/all-routines',
+                    state: { newRoutine: true }
+                  }}
+                />
+              ) : (
+                false
+              )}
+            </form>
+          )}
+
+          <ExercisePicker
+            exercisesDatabase={this.props.exercises}
+            shouldAppear={this.state.modalDisplay ? 'opened' : 'closed'}
+            modalCloser={this.displayModal}
+            updateExercises={this.updateExercises}
+            settings={this.props.user}
+            pickedExercises={this.state.newRoutine.exercises}
+          />
+        </div>
+      </DragDropContext>
     );
   }
 }

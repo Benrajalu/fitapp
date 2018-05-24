@@ -11,6 +11,8 @@ import InlineLoader from '../../blocks/InlineLoader';
 import moment from 'moment';
 import 'moment/locale/fr';
 
+import uuid from 'uuid';
+
 class WorkoutExit extends Component {
   constructor(props) {
     super(props);
@@ -303,7 +305,7 @@ class WorkoutExit extends Component {
       ? upgradeExercises.map((value, index) => {
           return (
             <WorkoutUpdates
-              key={'log-' + index + '-' + value}
+              key={'log-' + index + '-' + uuid.v1()}
               completedSet={value}
               allSets={allExercises}
               database={this.props.exercisesDatabase}
