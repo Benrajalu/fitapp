@@ -14,6 +14,7 @@ class WorkoutExerciseFullIntervals extends Component {
     this.changeStatus = this.changeStatus.bind(this);
     this.timeMachine = this.timeMachine.bind(this);
     this.timerInterval = undefined;
+
     this.state = {
       sets: [],
       timeSpent: 0,
@@ -38,9 +39,10 @@ class WorkoutExerciseFullIntervals extends Component {
   }
 
   setCompletion() {
-    // The SetCounter element communicates the current value of reps
+    // The props communicates the current value of advancement (in seconds here)
     // We store that value in the setsSnapshot, storing where we are now
-    // And we compare that value to the requested amount of reps. if it's equal to it, then the set is marked completed
+    // We then add one to that and communicate it back to the wrapper.
+    // Basically we're treating seconds like reps in a single set.
     let setsSnapshot = this.props.contents.sets;
     setsSnapshot[0] = setsSnapshot[0] + 1;
 
@@ -67,6 +69,7 @@ class WorkoutExerciseFullIntervals extends Component {
     ) {
       let promise = setTimeout(() => {
         this.setCompletion();
+        this.makePlayList();
         this.timeMachine();
       }, 1000);
 
@@ -81,8 +84,29 @@ class WorkoutExerciseFullIntervals extends Component {
     clearTimeout(this.holdTimer);
   }
 
+  makePlayList = () => {
+    let playList = [];
+    this.props.contents.exercises.map( (item, index) => {
+      for(let i = 0; i < item.sets; i++){
+        playList.push({
+          length: item.active,
+          legend: "Active",
+          index: index
+        });
+
+        playList.push({
+          length: item.pause,
+          legend: "Pause",
+          index: index
+        });
+      }
+    });
+    console.log(playList);
+  };
+
   render() {
-    console.log(this.state.status);
+    console.log("coucou");
+    console.log(this.props.contents);
     // Setting up variables
     const workoutExercise = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -91,9 +115,8 @@ class WorkoutExerciseFullIntervals extends Component {
       obj => obj.id === workoutExercise.exerciseId
     )[0];
 
-    // Let's build the sets (ranger sliders to say how many reps you've done in that set)
-    let exercises = false;
-    exercises = setList.map((value, index) => (
+    // Let's build the intervals
+    let exercises = setList.map((value, index) => (
       <IntervalExerciseWrapper
         index={index}
         total={setList.length}
@@ -123,7 +146,7 @@ class WorkoutExerciseFullIntervals extends Component {
           </div>
           <button
             className="direction"
-            disabled={this.props.last ? true : false}
+            disabled={!!this.props.last}
             onClick={this.props.showExercise.bind(this, this.props.index + 1)}>
             <FontAwesomeIcon icon={['far', 'angle-right']} size="1x" />
           </button>
