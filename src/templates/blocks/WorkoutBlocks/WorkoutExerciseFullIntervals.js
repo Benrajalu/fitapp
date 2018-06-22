@@ -13,6 +13,7 @@ class WorkoutExerciseFullIntervals extends Component {
     this.makeDurationString = this.makeDurationString.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
     this.timeMachine = this.timeMachine.bind(this);
+    this.playList = [];
     this.timerInterval = undefined;
 
     this.state = {
@@ -50,6 +51,7 @@ class WorkoutExerciseFullIntervals extends Component {
   }
 
   changeStatus(newStatus) {
+    this.makePlayList();
     this.setState(
       {
         status: newStatus
@@ -63,49 +65,71 @@ class WorkoutExerciseFullIntervals extends Component {
   }
 
   timeMachine() {
+    this.timeKeeper();
     if (
       this.state.status === 'playing' &&
       this.props.contents.sets[0] < this.props.contents.handicap
     ) {
       let promise = setTimeout(() => {
         this.setCompletion();
-        this.makePlayList();
         this.timeMachine();
       }, 1000);
 
       this.holdTimer = promise;
       return true;
     }
-    return false;
     clearTimeout(this.holdTimer);
+    return false;
   }
 
   componentWillUnmount() {
     clearTimeout(this.holdTimer);
   }
 
+  componentDidMount() {
+    this.makePlayList();
+  }
+
   makePlayList = () => {
-    let playList = [];
+    let stackedTime = 0;
+    this.playList.length = 0; // Reinitiate the playlist to avoid stacking it up
+
     this.props.contents.exercises.map( (item, index) => {
       for(let i = 0; i < item.sets; i++){
-        playList.push({
+        stackedTime += item.active;
+        this.playList.push({
           length: item.active,
           legend: "Active",
-          index: index
+          exerciseIndex: index,
+          setIndex: i,
+          ends: stackedTime
         });
 
-        playList.push({
+        stackedTime += item.pause;
+        this.playList.push({
           length: item.pause,
           legend: "Pause",
-          index: index
+          exerciseIndex: index,
+          setIndex: i,
+          ends: stackedTime
         });
       }
     });
-    console.log(playList);
+    console.log(this.playList);
+  };
+
+  timeKeeper = () => {
+    const currentTimeSpent = this.state.timeSpent;
+    const playlist = this.playList;
+
+    var closest = playlist.reduce( function( previous, current ) {
+      return (Math.abs(current.ends - currentTimeSpent) < Math.abs(previous.ends - currentTimeSpent) ? current.ends : previous.ends);
+    });
+
+    console.log(closest);
   };
 
   render() {
-    console.log("coucou");
     console.log(this.props.contents);
     // Setting up variables
     const workoutExercise = this.props.contents;

@@ -778,8 +778,7 @@
       @include mont(12px, 500, $greyType);
     }
     .name {
-      @include mont(20px, 700, $white);
-      text-transform: uppercase;
+      @include mont(18px, 500, $white);
     }
   }
 
