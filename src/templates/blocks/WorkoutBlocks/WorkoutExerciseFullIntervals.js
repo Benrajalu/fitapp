@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {
+  find,
+  findIndex,
+} from 'lodash';
 
 import SetCounter from '../../blocks/SetCounter';
 import IntervalExerciseWrapper from './IntervalExerciseWrapper';
@@ -20,6 +24,7 @@ class WorkoutExerciseFullIntervals extends Component {
       sets: [],
       timeSpent: 0,
       currentRound: { exercise: 0, round: 0 },
+      currentTrack: 'track-0-0-active',
       status: 'stopped',
       modalDisplay: {
         warmup: false,
@@ -46,6 +51,9 @@ class WorkoutExerciseFullIntervals extends Component {
     // Basically we're treating seconds like reps in a single set.
     let setsSnapshot = this.props.contents.sets;
     setsSnapshot[0] = setsSnapshot[0] + 1;
+    this.setState({
+      timeSpent: setsSnapshot[0]
+    });
 
     this.props.onReps(setsSnapshot, this.props.index);
   }
@@ -102,7 +110,8 @@ class WorkoutExerciseFullIntervals extends Component {
           legend: "Active",
           exerciseIndex: index,
           setIndex: i,
-          ends: stackedTime
+          ends: stackedTime,
+          trackId: `track-${index}-${i}-active`,
         });
 
         stackedTime += item.pause;
@@ -111,26 +120,30 @@ class WorkoutExerciseFullIntervals extends Component {
           legend: "Pause",
           exerciseIndex: index,
           setIndex: i,
-          ends: stackedTime
+          ends: stackedTime,
+          trackId: `track-${index}-${i}-pause`,
         });
       }
     });
-    console.log(this.playList);
   };
 
   timeKeeper = () => {
     const currentTimeSpent = this.state.timeSpent;
+    const currentTrack = this.state.currentTrack;
     const playlist = this.playList;
 
-    var closest = playlist.reduce( function( previous, current ) {
-      return (Math.abs(current.ends - currentTimeSpent) < Math.abs(previous.ends - currentTimeSpent) ? current.ends : previous.ends);
-    });
+    const current = find(playlist, (item) => { return item.trackId === currentTrack});
+    const currentIndex = findIndex(playlist, (item) => { return item.trackId === currentTrack});
 
-    console.log(closest);
+    if(currentTimeSpent > current.ends) {
+      const newCurrentTrack = playlist[currentIndex + 1].trackId;
+      this.setState({
+        currentTrack: newCurrentTrack
+      });
+    }
   };
 
   render() {
-    console.log(this.props.contents);
     // Setting up variables
     const workoutExercise = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
@@ -138,19 +151,17 @@ class WorkoutExerciseFullIntervals extends Component {
     const trueExercise = exercisesDatabase.filter(
       obj => obj.id === workoutExercise.exerciseId
     )[0];
+    const currentTrack = this.state.currentTrack;
+    const playlist = this.playList;
 
-    // Let's build the intervals
-    let exercises = setList.map((value, index) => (
-      <IntervalExerciseWrapper
-        index={index}
-        total={setList.length}
-        key={index}
-        onCompletion={this.setCompletion}
-        value={value}
-        isCurrent={this.state.currentRound.exercise === index}
-        currentRound={this.state.currentRound.round}
-      />
-    ));
+    const current = playlist.length > 0 ? find(playlist, (item) => { return item.trackId === currentTrack}) : {
+      setIndex: 0,
+      exerciseIndex: 0,
+    };
+
+    console.log(current);
+    console.log(setList);
+
 
     // Let's display muscle group and tool name
     let cleanType = trueExercise.type;
@@ -160,7 +171,7 @@ class WorkoutExerciseFullIntervals extends Component {
         <div className="heading">
           <button
             className="direction"
-            disabled={this.props.index > 0 ? false : true}
+            disabled={this.props.index <= 0}
             onClick={this.props.showExercise.bind(this, this.props.index - 1)}>
             <FontAwesomeIcon icon={['far', 'angle-left']} size="1x" />
           </button>
@@ -213,7 +224,13 @@ class WorkoutExerciseFullIntervals extends Component {
                 </svg>
               </div>
             </div>
-            <div className="sets">{exercises}</div>
+            <div className="sets">
+              <IntervalExerciseWrapper
+                current={current}
+                setList={setList}
+                timeSpent={this.state.timeSpent}
+              />
+            </div>
             <div className="interval-controls">
               <button>
                 <FontAwesomeIcon icon={['fas', 'step-backward']} size="1x" />

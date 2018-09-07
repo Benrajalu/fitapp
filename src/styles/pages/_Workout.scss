@@ -758,13 +758,9 @@
 }
 
 .interval-exercice {
-  display: none;
   padding: 12px;
   background: #232328;
   box-radius: 4px;
-  &.active {
-    display: block;
-  }
   .interval-heading {
     display: flex;
     width: 100%;

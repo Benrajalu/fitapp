@@ -62,7 +62,6 @@ class WorkoutExerciseTeaserIntervals extends Component {
   }
 
   render() {
-    console.log(this.props);
     // Setting up variables
     const currentExercise = this.props.contents;
     const exercisesDatabase = this.props.exercisesDatabase;
