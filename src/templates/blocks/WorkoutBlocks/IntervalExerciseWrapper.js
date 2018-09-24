@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css';
-
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-
 class IntervalExerciseWrapper extends Component {
 
   render() {
@@ -13,25 +8,26 @@ class IntervalExerciseWrapper extends Component {
       setList,
       current,
       timeSpent,
+      timeFormater,
+      previous,
     } = this.props;
 
     const currentExercise = setList[current.exerciseIndex];
     const remainingTime = current.ends - timeSpent;
 
+    const circleCircumference =  Math.PI*(148*2);
+    // (currentCounter / targetLenght ) * 100 = x
+    const percent = previous ? ((timeSpent - previous.ends) / current.length) * 100 : 0;
+    const progressOffset = circleCircumference - percent / 100 * circleCircumference;
+
     return (
       <div
         className={`interval-exercice`}>
-        <div className="interval-heading">
-          <p className="index">
-            Exo. {current.exerciseIndex + 1}/{setList.length}
-          </p>
-          <h2 className="name">{currentExercise.name}</h2>
-        </div>
         <div className="interval-body">
           <div className="counter">
-            <h3 className="counter-title">Restant</h3>
+            <h3 className="counter-title">Exercice</h3>
             <p className="counter-value">
-              {remainingTime >= 10 ? remainingTime : `0${remainingTime}`} secondes
+              {currentExercise.name}
             </p>
           </div>
           <div className="counter">
@@ -40,11 +36,41 @@ class IntervalExerciseWrapper extends Component {
               {current.setIndex + 1}/{setList[current.exerciseIndex].sets}
             </p>
           </div>
-          <div className="counter">
-            <h3 className="counter-title">Mode</h3>
-            <p className="counter-value">
+          <div className="counter-big">
+            <p className="big-value">
+              {timeFormater(remainingTime)}
+            </p>
+            <p className={`small-value ${current.legend === "Active" ? "active" : "pause"}`}>
               {current.legend}
             </p>
+          </div>
+        </div>
+
+        <div className="circle-zone">
+          <div className="completion">
+            <svg
+              viewBox="0 0 300 300"
+              maintainaspectratio="true"
+              className="circular-chart">
+              <circle
+                cx="150"
+                cy="150"
+                r="148"
+                strokeWidth="0"
+                className="circle-bg"
+              />
+              <circle
+                cx="150"
+                cy="150"
+                r="148"
+                className="circle"
+                style={{
+                  strokeDashoffset: progressOffset ? progressOffset : 0,
+                  strokeDasharray: `${circleCircumference} ${circleCircumference}`,
+                }}
+              />
+            </svg>
+
           </div>
         </div>
       </div>
