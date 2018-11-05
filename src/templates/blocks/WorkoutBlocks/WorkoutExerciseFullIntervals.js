@@ -7,6 +7,9 @@ import {
 } from 'lodash';
 import IntervalExerciseWrapper from './IntervalExerciseWrapper';
 
+import beep from './sound/beep.mp3';
+import begin from './sound/begin.wav';
+import rest from './sound/rest.wav';
 
 class WorkoutExerciseFullIntervals extends Component {
   constructor(props) {
@@ -135,6 +138,8 @@ class WorkoutExerciseFullIntervals extends Component {
     const current = find(playlist, (item) => { return item.trackId === currentTrack});
     const currentIndex = findIndex(playlist, (item) => { return item.trackId === currentTrack});
 
+    this.handleAlerts(currentTimeSpent, current.ends);
+
     if(currentTimeSpent > current.ends) {
       const newCurrentTrack = playlist[currentIndex + 1].trackId;
       this.setState({
@@ -189,6 +194,34 @@ class WorkoutExerciseFullIntervals extends Component {
 
     return false;
 
+  };
+
+  handleAlerts = (currentTime, maxTime) => {
+    const type = this.state.currentTrack.split('-')[3];
+
+    const beeps = times => {
+      const beepSound = new Audio(beep);
+      for(let i = 0; i < times; i++) {
+        setTimeout(() => {
+          beepSound.play();
+          beepSound.currentTime = 0;
+        }, i * 1000);
+      }
+    };
+
+    if (currentTime === maxTime - 3) {
+      beeps(3);
+      window.navigator.vibrate([800,200,800,200,800]);
+    }
+
+    if (currentTime === maxTime && type === "active") {
+      const restSound = new Audio(rest);
+      restSound.play();
+    }
+    else if (currentTime === maxTime && type === "pause") {
+      const beginSound = new Audio(begin);
+      beginSound.play();
+    }
   };
 
   render() {
