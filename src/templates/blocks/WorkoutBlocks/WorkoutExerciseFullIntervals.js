@@ -8,8 +8,8 @@ import {
 import IntervalExerciseWrapper from './IntervalExerciseWrapper';
 
 import beep from './sound/beep.mp3';
-import begin from './sound/begin.wav';
-import rest from './sound/rest.wav';
+import begin from './sound/go.mp3';
+import rest from './sound/rest.mp3';
 
 class WorkoutExerciseFullIntervals extends Component {
   constructor(props) {
