@@ -301,6 +301,8 @@ class WorkoutExit extends Component {
         ? this.props.currentRoutine.exercises
         : this.props.originalRoutine.exercises;
 
+    console.log(this.state.completedExercises);
+
     const updates = upgradeExercises
       ? upgradeExercises.map((value, index) => {
           return (
