@@ -19,7 +19,8 @@ const config = {
 firebase.initializeApp(config);
 
 // Initialize Cloud Firestore through Firebase
-firebase.firestore();
+const firestore = firebase.firestore();
+firestore.settings({timestampsInSnapshots: true });
 
 // Create store with reducers and initial state
 const initialState = {};
