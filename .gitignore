@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/functions
 
 # testing
 /coverage
@@ -24,3 +25,4 @@ yarn-error.log*
 .firebaserc
 firebase.json
 database.rules.json
+.idea/
