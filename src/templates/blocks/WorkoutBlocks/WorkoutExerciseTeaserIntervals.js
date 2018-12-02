@@ -80,7 +80,7 @@ class WorkoutExerciseTeaserIntervals extends Component {
       exerciseNumber = currentExercise.exercises.length,
       totalDuration = currentExercise.handicap;
 
-    // That is then put trhough a little calculation grinder to get it into a readable string
+    // That is then put through a little calculation grinder to get it into a readable string
     let getMinutes =
       Math.floor(totalDuration / 60) < 10
         ? `0${Math.floor(totalDuration / 60)}`

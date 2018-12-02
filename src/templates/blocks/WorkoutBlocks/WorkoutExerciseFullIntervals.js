@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import {
-  find,
-  findIndex,
-} from 'lodash';
-import IntervalExerciseWrapper from './IntervalExerciseWrapper';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import { find, findIndex } from "lodash";
+import IntervalExerciseWrapper from "./IntervalExerciseWrapper";
 
-import beep from './sound/beep.mp3';
-import begin from './sound/go.mp3';
-import rest from './sound/rest.mp3';
+import beep from "./sound/beep.mp3";
+import begin from "./sound/go.mp3";
+import rest from "./sound/rest.mp3";
 
 class WorkoutExerciseFullIntervals extends Component {
   constructor(props) {
@@ -24,8 +21,8 @@ class WorkoutExerciseFullIntervals extends Component {
       sets: [],
       timeSpent: 0,
       currentRound: { exercise: 0, round: 0 },
-      currentTrack: 'track-0-0-active',
-      status: 'stopped',
+      currentTrack: "track-0-0-active",
+      status: "stopped",
       modalDisplay: {
         warmup: false,
         weightHelper: false
@@ -65,10 +62,9 @@ class WorkoutExerciseFullIntervals extends Component {
         status: newStatus
       },
       () => {
-        if (this.state.status === 'playing') {
+        if (this.state.status === "playing") {
           this.timeMachine();
-        }
-        else {
+        } else {
           clearTimeout(this.holdTimer);
         }
       }
@@ -78,7 +74,7 @@ class WorkoutExerciseFullIntervals extends Component {
   timeMachine() {
     this.timeKeeper();
     if (
-      this.state.status === 'playing' &&
+      this.state.status === "playing" &&
       this.props.contents.sets[0] < this.props.contents.handicap
     ) {
       let promise = setTimeout(() => {
@@ -105,8 +101,8 @@ class WorkoutExerciseFullIntervals extends Component {
     let stackedTime = 0;
     this.playList.length = 0; // Reinitiate the playlist to avoid stacking it up
 
-    this.props.contents.exercises.map( (item, index) => {
-      for(let i = 0; i < item.sets; i++){
+    this.props.contents.exercises.map((item, index) => {
+      for (let i = 0; i < item.sets; i++) {
         stackedTime += item.active;
         this.playList.push({
           length: item.active,
@@ -114,7 +110,7 @@ class WorkoutExerciseFullIntervals extends Component {
           exerciseIndex: index,
           setIndex: i,
           ends: stackedTime,
-          trackId: `track-${index}-${i}-active`,
+          trackId: `track-${index}-${i}-active`
         });
 
         stackedTime += item.pause;
@@ -124,9 +120,10 @@ class WorkoutExerciseFullIntervals extends Component {
           exerciseIndex: index,
           setIndex: i,
           ends: stackedTime,
-          trackId: `track-${index}-${i}-pause`,
+          trackId: `track-${index}-${i}-pause`
         });
       }
+      return true;
     });
   };
 
@@ -135,12 +132,16 @@ class WorkoutExerciseFullIntervals extends Component {
     const currentTrack = this.state.currentTrack;
     const playlist = this.playList;
 
-    const current = find(playlist, (item) => { return item.trackId === currentTrack});
-    const currentIndex = findIndex(playlist, (item) => { return item.trackId === currentTrack});
+    const current = find(playlist, item => {
+      return item.trackId === currentTrack;
+    });
+    const currentIndex = findIndex(playlist, item => {
+      return item.trackId === currentTrack;
+    });
 
     this.handleAlerts(currentTimeSpent, current.ends);
 
-    if(currentTimeSpent > current.ends) {
+    if (currentTimeSpent > current.ends) {
       const newCurrentTrack = playlist[currentIndex + 1].trackId;
       this.setState({
         currentTrack: newCurrentTrack
@@ -151,57 +152,73 @@ class WorkoutExerciseFullIntervals extends Component {
   travelBackwards = () => {
     const playlist = this.playList;
     const currentTrack = this.state.currentTrack;
-    const currentIndex = playlist.length > 0 ? findIndex(playlist, (item) => { return item.trackId === currentTrack}) : 0;
+    const currentIndex =
+      playlist.length > 0
+        ? findIndex(playlist, item => {
+            return item.trackId === currentTrack;
+          })
+        : 0;
 
-    if(currentIndex > 0 ){
+    if (currentIndex > 0) {
       clearTimeout(this.holdTimer);
-      this.changeStatus('pause');
+      this.changeStatus("pause");
       let setsSnapshot = this.props.contents.sets;
-      setsSnapshot[0] = playlist[currentIndex-1]['ends'] - playlist[currentIndex-1]['length'];
+      setsSnapshot[0] =
+        playlist[currentIndex - 1]["ends"] -
+        playlist[currentIndex - 1]["length"];
       this.props.onReps(setsSnapshot, this.props.index);
-      this.setState({
-        currentTrack: playlist[currentIndex-1].trackId,
-        timeSpent: setsSnapshot[0],
-      }, () => {
-        this.changeStatus('playing');
-      });
+      this.setState(
+        {
+          currentTrack: playlist[currentIndex - 1].trackId,
+          timeSpent: setsSnapshot[0]
+        },
+        () => {
+          this.changeStatus("playing");
+        }
+      );
       return;
     }
 
     return false;
-
   };
 
   travelForwards = () => {
     const playlist = this.playList;
     const currentTrack = this.state.currentTrack;
-    const currentIndex = playlist.length > 0 ? findIndex(playlist, (item) => { return item.trackId === currentTrack}) : 0;
+    const currentIndex =
+      playlist.length > 0
+        ? findIndex(playlist, item => {
+            return item.trackId === currentTrack;
+          })
+        : 0;
 
-    if(currentIndex < playlist.length - 1 ){
+    if (currentIndex < playlist.length - 1) {
       clearTimeout(this.holdTimer);
-      this.changeStatus('pause');
+      this.changeStatus("pause");
       let setsSnapshot = this.props.contents.sets;
-      setsSnapshot[0] = playlist[currentIndex]['ends'] + 1;
+      setsSnapshot[0] = playlist[currentIndex]["ends"] + 1;
       this.props.onReps(setsSnapshot, this.props.index);
-      this.setState({
-        currentTrack: playlist[currentIndex+1].trackId,
-        timeSpent: setsSnapshot[0],
-      }, () => {
-        this.changeStatus('playing');
-      });
+      this.setState(
+        {
+          currentTrack: playlist[currentIndex + 1].trackId,
+          timeSpent: setsSnapshot[0]
+        },
+        () => {
+          this.changeStatus("playing");
+        }
+      );
       return;
     }
 
     return false;
-
   };
 
   handleAlerts = (currentTime, maxTime) => {
-    const type = this.state.currentTrack.split('-')[3];
+    const type = this.state.currentTrack.split("-")[3];
 
     const beeps = times => {
       const beepSound = new Audio(beep);
-      for(let i = 0; i < times; i++) {
+      for (let i = 0; i < times; i++) {
         setTimeout(() => {
           beepSound.play();
           beepSound.currentTime = 0;
@@ -211,14 +228,13 @@ class WorkoutExerciseFullIntervals extends Component {
 
     if (currentTime === maxTime - 3) {
       beeps(3);
-      window.navigator.vibrate([800,200,800,200,800]);
+      window.navigator.vibrate([800, 200, 800, 200, 800]);
     }
 
     if (currentTime === maxTime && type === "active") {
       const restSound = new Audio(rest);
       restSound.play();
-    }
-    else if (currentTime === maxTime && type === "pause") {
+    } else if (currentTime === maxTime && type === "pause") {
       const beginSound = new Audio(begin);
       beginSound.play();
     }
@@ -235,14 +251,24 @@ class WorkoutExerciseFullIntervals extends Component {
     const currentTrack = this.state.currentTrack;
     const playlist = this.playList;
 
-    const current = playlist.length > 0 ? find(playlist, (item) => { return item.trackId === currentTrack}) : {
-      setIndex: 0,
-      exerciseIndex: 0,
-    };
+    const current =
+      playlist.length > 0
+        ? find(playlist, item => {
+            return item.trackId === currentTrack;
+          })
+        : {
+            setIndex: 0,
+            exerciseIndex: 0
+          };
 
-    const currentIndex = playlist.length > 0 ? findIndex(playlist, (item) => { return item.trackId === currentTrack}) : 0;
-    const previous = currentIndex > 0 ? playlist[currentIndex - 1] : { ends: 0 };
-
+    const currentIndex =
+      playlist.length > 0
+        ? findIndex(playlist, item => {
+            return item.trackId === currentTrack;
+          })
+        : 0;
+    const previous =
+      currentIndex > 0 ? playlist[currentIndex - 1] : { ends: 0 };
 
     // Let's display muscle group and tool name
     let cleanType = trueExercise.type;
@@ -253,8 +279,9 @@ class WorkoutExerciseFullIntervals extends Component {
           <button
             className="direction"
             disabled={this.props.index <= 0}
-            onClick={this.props.showExercise.bind(this, this.props.index - 1)}>
-            <FontAwesomeIcon icon={['far', 'angle-left']} size="1x" />
+            onClick={this.props.showExercise.bind(this, this.props.index - 1)}
+          >
+            <FontAwesomeIcon icon={["far", "angle-left"]} size="1x" />
           </button>
           <div className="title-wrap">
             <h3 className="title">{trueExercise.name} </h3>
@@ -263,8 +290,9 @@ class WorkoutExerciseFullIntervals extends Component {
           <button
             className="direction"
             disabled={!!this.props.last}
-            onClick={this.props.showExercise.bind(this, this.props.index + 1)}>
-            <FontAwesomeIcon icon={['far', 'angle-right']} size="1x" />
+            onClick={this.props.showExercise.bind(this, this.props.index + 1)}
+          >
+            <FontAwesomeIcon icon={["far", "angle-right"]} size="1x" />
           </button>
         </div>
         <div className="body">
@@ -288,9 +316,11 @@ class WorkoutExerciseFullIntervals extends Component {
                 <div
                   className="progress"
                   style={{
-                    width: `${this.props.contents.sets[0] * 100 / this.props.contents.handicap}%`
+                    width: `${(this.props.contents.sets[0] * 100) /
+                      this.props.contents.handicap}%`
                   }}
-                >{`${this.props.contents.sets[0] * 100 / this.props.contents.handicap}%`}</div>
+                >{`${(this.props.contents.sets[0] * 100) /
+                  this.props.contents.handicap}%`}</div>
               </div>
             </div>
             <div className="interval-capsule">
@@ -302,26 +332,25 @@ class WorkoutExerciseFullIntervals extends Component {
                 previous={previous}
               />
               <div className="interval-controls">
-                <button
-                  onClick={this.travelBackwards}>
-                  <FontAwesomeIcon icon={['fas', 'step-backward']} size="1x" />
+                <button onClick={this.travelBackwards}>
+                  <FontAwesomeIcon icon={["fas", "step-backward"]} size="1x" />
                 </button>
                 <div className="mainAction">
                   <button
-                    onClick={this.changeStatus.bind(this, 'playing')}
-                    className={this.state.status !== 'playing' ? 'active' : ''}>
-                    <FontAwesomeIcon icon={['fas', 'play']} size="1x" />
+                    onClick={this.changeStatus.bind(this, "playing")}
+                    className={this.state.status !== "playing" ? "active" : ""}
+                  >
+                    <FontAwesomeIcon icon={["fas", "play"]} size="1x" />
                   </button>
                   <button
-                    onClick={this.changeStatus.bind(this, 'pause')}
-                    className={this.state.status === 'playing' ? 'active' : ''}>
-                    <FontAwesomeIcon icon={['fas', 'pause']} size="1x" />
+                    onClick={this.changeStatus.bind(this, "pause")}
+                    className={this.state.status === "playing" ? "active" : ""}
+                  >
+                    <FontAwesomeIcon icon={["fas", "pause"]} size="1x" />
                   </button>
                 </div>
-                <button
-                  onClick={this.travelForwards}
-                >
-                  <FontAwesomeIcon icon={['fas', 'step-forward']} size="1x" />
+                <button onClick={this.travelForwards}>
+                  <FontAwesomeIcon icon={["fas", "step-forward"]} size="1x" />
                 </button>
               </div>
             </div>

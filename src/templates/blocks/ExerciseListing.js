@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class ExerciseListing extends Component {
   render() {
@@ -20,15 +20,15 @@ class ExerciseListing extends Component {
 
       // Swittches to dertermine exercise profile
       switch (trueExercise.type) {
-        case 'barbell':
-        case 'dumbbell':
-        case 'cable':
-        case 'calisthenics':
-          unit = 'kg';
+        case "barbell":
+        case "dumbbell":
+        case "cable":
+        case "calisthenics":
+          unit = "kg";
           break;
 
-        case 'cardio':
-          unit = 'min';
+        case "cardio":
+          unit = "min";
           break;
 
         default:
@@ -36,31 +36,31 @@ class ExerciseListing extends Component {
       }
 
       switch (trueExercise.type) {
-        case 'barbell':
-          cleanType = 'Barre';
+        case "barbell":
+          cleanType = "Barre";
           break;
-        case 'dumbbell':
-          cleanType = 'Haltère';
+        case "dumbbell":
+          cleanType = "Haltère";
           break;
-        case 'cable':
-          cleanType = 'Câble';
+        case "cable":
+          cleanType = "Câble";
           break;
-        case 'calisthenics':
-          cleanType = 'Calisthenics';
+        case "calisthenics":
+          cleanType = "Calisthenics";
           break;
-        case 'cardio':
-          cleanType = 'Cardio';
+        case "cardio":
+          cleanType = "Cardio";
           break;
         default:
           cleanType = false;
       }
 
       switch (trueExercise.muscleGroup) {
-        case 'lower-body':
-          bodyPart = 'Bas du corps';
+        case "lower-body":
+          bodyPart = "Bas du corps";
           break;
-        case 'upper-body':
-          bodyPart = 'Haut du corps';
+        case "upper-body":
+          bodyPart = "Haut du corps";
           break;
         default:
           bodyPart = false;
@@ -89,11 +89,23 @@ class ExerciseListing extends Component {
             return false;
           }
         });
-        completedPercentage = completedSets / currentExercise.sets.length * 100;
+        completedPercentage =
+          (completedSets / currentExercise.sets.length) * 100;
       } else {
         setNumber = parseFloat(currentExercise.sets);
         repTarget = currentExercise.reps ? currentExercise.reps : false;
       }
+
+      const buildTimeString = minutes => {
+        let getMinutes =
+          Math.floor(minutes / 60) < 10
+            ? `0${Math.floor(minutes / 60)}`
+            : Math.floor(minutes / 60);
+        let getRemainingSeconds =
+          minutes % 60 < 10 ? `0${minutes % 60}` : minutes % 60;
+
+        return `${getMinutes}:${getRemainingSeconds}`;
+      };
 
       return (
         <div className="routine-log">
@@ -102,7 +114,7 @@ class ExerciseListing extends Component {
               <h3 className="exercise-name">{trueExercise.name}</h3>
               {cleanType ? (
                 <p>
-                  {cleanType} {bodyPart ? <span>• {bodyPart}</span> : false}{' '}
+                  {cleanType} {bodyPart ? <span>• {bodyPart}</span> : false}{" "}
                 </p>
               ) : (
                 false
@@ -113,25 +125,38 @@ class ExerciseListing extends Component {
               <div className="units">
                 <p className="sets">
                   <strong>
-                    {setNumber < 10 ? '0' : false}
-                    {currentExercise.sets ? setNumber : '01'}
-                  </strong>{' '}
-                  set{setNumber > 1 ? 's' : false}
+                    {setNumber < 10 ? "0" : false}
+                    {currentExercise.sets ? setNumber : "01"}
+                  </strong>{" "}
+                  set{setNumber > 1 ? "s" : false}
                 </p>
+
                 {currentExercise.repTarget || currentExercise.reps ? (
                   <p className="reps">
                     <strong>
-                      {repTarget < 10 ? '0' : false}
+                      {repTarget < 10 ? "0" : false}
                       {repTarget}
-                    </strong>{' '}
-                    rep{repTarget > 1 ? 's' : false}
+                    </strong>{" "}
+                    rep{repTarget > 1 ? "s" : false}
                   </p>
                 ) : (
                   false
                 )}
-                {currentExercise.handicap ? (
+
+                {currentExercise.handicap &&
+                currentExercise.exerciseId !== "ex-33" ? (
                   <p className="handicap">
                     <strong> {currentExercise.handicap}</strong> {unit}
+                  </p>
+                ) : (
+                  false
+                )}
+
+                {currentExercise.handicap &&
+                currentExercise.exerciseId === "ex-33" ? (
+                  <p className="handicap">
+                    <strong>{buildTimeString(currentExercise.handicap)}</strong>{" "}
+                    {unit}
                   </p>
                 ) : (
                   false
@@ -144,17 +169,16 @@ class ExerciseListing extends Component {
               <div className="progress-bar">
                 <div
                   className="progress"
-                  style={{ width: completedPercentage + '%' }}
+                  style={{ width: completedPercentage + "%" }}
                 />
               </div>
               <p>
                 <strong>
                   {completedSets}/{currentExercise.sets.length}
-                </strong>{' '}
-                <span>–</span> set{currentExercise.sets.length > 1
-                  ? 's'
-                  : false}{' '}
-                complété{currentExercise.sets.length > 1 ? 's' : false}
+                </strong>{" "}
+                <span>–</span> set
+                {currentExercise.sets.length > 1 ? "s" : false} complété
+                {currentExercise.sets.length > 1 ? "s" : false}
               </p>
             </div>
           ) : (

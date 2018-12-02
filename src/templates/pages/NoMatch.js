@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class NoMatch extends Component {
   constructor(props) {
@@ -10,7 +10,6 @@ class NoMatch extends Component {
   componentDidMount() {
     document.title = "FitApp. - Cette page n'existe pas !";
     const _this = this;
-    console.log(this.props);
     setTimeout(() => {
       _this.setState({
         mounted: true
@@ -20,7 +19,7 @@ class NoMatch extends Component {
 
   render() {
     return (
-      <div className={this.state.mounted ? 'NoMatch loaded' : 'NoMatch'}>
+      <div className={this.state.mounted ? "NoMatch loaded" : "NoMatch"}>
         <div className="container animation-introduction">
           <div className="page-header">
             <h1>404 - Cette page n'existe pas</h1>
