@@ -177,6 +177,15 @@ class App extends Component {
     this.authListener = undefined;
   }
 
+  componentDidMount() {
+    this.setState({
+      height: Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight || 0
+      )
+    });
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -234,7 +243,6 @@ class App extends Component {
                           exact
                           path="/login"
                           component={LoginContainer}
-                          testHeight={this.state.height}
                         />
                         <Redirect from="/" to="/login" />
                         <Route component={NoMatch} />

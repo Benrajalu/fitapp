@@ -1,7 +1,11 @@
 .App {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  height: 100%;
+  width: 100%;
   .zone {
     flex-grow: 2;
     width: 100%;
@@ -59,4 +63,9 @@
       }
     }
   }
+}
+
+html, body {
+  height: 100%;
+  position: relative;
 }
