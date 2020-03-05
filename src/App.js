@@ -65,7 +65,6 @@ class App extends Component {
       userChecked: false
     };
     this.initiateDefaultUser = this.initiateDefaultUser.bind(this);
-    this.setNewHeight = this.setNewHeight.bind(this);
   }
 
   authListener() {
@@ -187,20 +186,7 @@ class App extends Component {
     });
   }
 
-  setNewHeight() {
-    this.setState({
-      height: Math.max(
-        document.documentElement.clientHeight,
-        window.innerHeight || 0
-      )
-    });
-  }
-
   render() {
-    const _this = this;
-    window.addEventListener('resize', () => {
-      _this.setNewHeight();
-    });
     return (
       <BrowserRouter>
         <ScrollToTop>
@@ -209,8 +195,7 @@ class App extends Component {
               'App ' +
               (this.props.user.uid ? 'logged-in' : 'logged-off') +
               (this.props.modals.status === 'opened' ? ' overlay' : ' ')
-            }
-            style={{ height: this.state.height }}>
+            }>
             {this.props.user.uid ? (
               <div
                 id="nav-zone"
@@ -258,7 +243,6 @@ class App extends Component {
                           exact
                           path="/login"
                           component={LoginContainer}
-                          testHeight={this.state.height}
                         />
                         <Redirect from="/" to="/login" />
                         <Route component={NoMatch} />

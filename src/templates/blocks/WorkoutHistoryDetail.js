@@ -46,7 +46,7 @@ class WorkoutHistoryDetail extends Component {
     const listExercises = workoutExercices.map((value, index) => {
       return (
         <ExerciseListing
-          key={index.toString() + '-' + value.exerciseId.toString()}
+          key={index}
           exerciseData={value}
           exercisesDatabase={exercisesDatabase}
           status="past"

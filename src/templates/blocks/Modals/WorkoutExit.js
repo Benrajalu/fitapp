@@ -1,15 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router';
-import { database } from '../../../store';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from "react";
+import { Redirect } from "react-router";
+import { database } from "../../../store";
+import PropTypes from "prop-types";
 
-import WorkoutUpdates from '../../blocks/WorkoutUpdates';
-import IntensityPicker from '../WorkoutBlocks/IntensityPicker';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import InlineLoader from '../../blocks/InlineLoader';
+import WorkoutUpdates from "../../blocks/WorkoutUpdates";
+import IntensityPicker from "../WorkoutBlocks/IntensityPicker";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import InlineLoader from "../../blocks/InlineLoader";
 
-import moment from 'moment';
-import 'moment/locale/fr';
+import moment from "moment";
+import "moment/locale/fr";
+
+import uuid from "uuid";
 
 class WorkoutExit extends Component {
   constructor(props) {
@@ -34,7 +36,7 @@ class WorkoutExit extends Component {
     this.setState({ completedExercises: this.getCompletedSets() });
     setTimeout(function() {
       _this.setState({
-        visible: ' visible'
+        visible: " visible"
       });
     }, 100);
   }
@@ -47,6 +49,8 @@ class WorkoutExit extends Component {
     const log = this.props.currentRoutine.exercises,
       completedExercises = [];
 
+    const HIITId = "ex-33";
+
     for (let i = 0; i < log.length; i++) {
       // Check if this has a repTargt. If it's cardio, the target IS the handicap
       let repTarget = log[i].repTarget
@@ -55,8 +59,14 @@ class WorkoutExit extends Component {
         successFullSets = log[i].sets
           ? log[i].sets.filter(value => value === repTarget)
           : [];
-      if (log[i].sets && log[i].sets.length === successFullSets.length) {
+
+      if (
+        log[i].sets &&
+        log[i].sets.length === successFullSets.length &&
+        log[i].exerciseId !== HIITId
+      ) {
         // If all repored reps are equal the target, on all sets, then push the exercise index to the array
+        // Unless it's HIIT because these can't be updated by magic
         completedExercises.push(i);
       }
     }
@@ -148,7 +158,7 @@ class WorkoutExit extends Component {
           )[0].type;
 
         // Updating the records...
-        if (type === 'barbell' || type === 'cable' || type === 'dumbbell') {
+        if (type === "barbell" || type === "cable" || type === "dumbbell") {
           const newRecordValue = parseFloat(
             routine.exercises[areUpdatable[xb]].handicap
           );
@@ -159,16 +169,16 @@ class WorkoutExit extends Component {
           );
           if (recordsHistory >= 0) {
             const oldValue = parseFloat(
-              records[recordsHistory].record.replace('kg', '')
+              records[recordsHistory].record.replace("kg", "")
             );
             if (oldValue < newRecordValue) {
-              records[recordsHistory].record = newRecordValue + 'kg';
+              records[recordsHistory].record = newRecordValue + "kg";
               records[recordsHistory].timestamp = Date.now();
             }
           } else {
             const newRecord = {
               exerciseId: current.exerciseId,
-              record: newRecordValue + 'kg',
+              record: newRecordValue + "kg",
               timestamp: Date.now()
             };
             records.push(newRecord);
@@ -183,9 +193,9 @@ class WorkoutExit extends Component {
         () => {
           this.state.newRecords.map(obj => {
             return database
-              .collection('users')
+              .collection("users")
               .doc(this.props.user.uid)
-              .collection('personalRecords')
+              .collection("personalRecords")
               .doc(obj.exerciseId)
               .set(obj, { merge: true })
               .catch(error => console.log(error));
@@ -208,9 +218,9 @@ class WorkoutExit extends Component {
         },
         () => {
           database
-            .collection('users')
+            .collection("users")
             .doc(this.props.user.uid)
-            .collection('routines')
+            .collection("routines")
             .doc(this.props.originalRoutine.routineId.toString())
             .set(this.state.routine);
         }
@@ -229,10 +239,10 @@ class WorkoutExit extends Component {
           )[0].type;
 
         // Updating the routine...
-        if (type === 'cardio') {
+        if (type === "cardio") {
           routine.exercises[areUpdatable[x]].handicap =
             parseFloat(routine.exercises[areUpdatable[x]].handicap) + 10;
-        } else if (type === 'barbell' || type === 'calisthenics') {
+        } else if (type === "barbell" || type === "calisthenics") {
           routine.exercises[areUpdatable[x]].handicap =
             parseFloat(routine.exercises[areUpdatable[x]].handicap) + 5;
         } else {
@@ -250,9 +260,9 @@ class WorkoutExit extends Component {
         () => {
           // ... then we add to the payload
           database
-            .collection('users')
+            .collection("users")
             .doc(this.props.user.uid)
-            .collection('routines')
+            .collection("routines")
             .doc(this.props.originalRoutine.routineId.toString())
             .set(this.state.routine, { merge: true });
         }
@@ -263,18 +273,18 @@ class WorkoutExit extends Component {
     // we use the "today" to update the targeted routine so users know it's the most recently used
     // and we use the state.workout to save into the workout logs so this workout is part of the user's history
     database
-      .collection('users')
+      .collection("users")
       .doc(this.props.user.uid)
-      .collection('routines')
+      .collection("routines")
       .doc(this.props.originalRoutine.routineId.toString())
       .update({
         lastPerformed: new Date().getTime()
       })
       .then(() => {
         database
-          .collection('users')
+          .collection("users")
           .doc(this.props.user.uid)
-          .collection('workoutLog')
+          .collection("workoutLog")
           .add(this.props.currentRoutine)
           .then(() => {
             this.setState({
@@ -303,7 +313,7 @@ class WorkoutExit extends Component {
       ? upgradeExercises.map((value, index) => {
           return (
             <WorkoutUpdates
-              key={'log-' + index + '-' + value}
+              key={"log-" + index + "-" + uuid.v1()}
               completedSet={value}
               allSets={allExercises}
               database={this.props.exercisesDatabase}
@@ -327,7 +337,7 @@ class WorkoutExit extends Component {
             <div className="input-pair">
               <label htmlFor="saveRoutine" onClick={this.toggleSaveRoutine}>
                 Vous avez changé certains poids pour cet entrainement, souhaitez
-                vous enregistrer ces modifications ?{' '}
+                vous enregistrer ces modifications ?{" "}
               </label>
               <div className="input">
                 <input
@@ -338,7 +348,7 @@ class WorkoutExit extends Component {
                   checked={this.state.saveRoutine ? true : false}
                 />
                 <label htmlFor="saveRoutine" onClick={this.toggleSaveRoutine}>
-                  {this.state.saveRoutine ? 'oui' : 'non'}
+                  {this.state.saveRoutine ? "oui" : "non"}
                 </label>
               </div>
             </div>
@@ -363,7 +373,7 @@ class WorkoutExit extends Component {
       </Fragment>
     );
 
-    if (this.state.runningStatus === 'saving') {
+    if (this.state.runningStatus === "saving") {
       contents = (
         <div>
           <div className="inlineLoader">
@@ -373,7 +383,7 @@ class WorkoutExit extends Component {
       );
     }
 
-    if (this.state.runningStatus === 'exiting') {
+    if (this.state.runningStatus === "exiting") {
       contents = (
         <div>
           {this.props.saveRoutine || this.props.upgradeRoutine ? (
@@ -393,11 +403,11 @@ class WorkoutExit extends Component {
 
     let timeFormat =
       this.props.currentRoutine.time && this.props.currentRoutine.time < 3600
-        ? 'mm:ss'
-        : 'kk:mm:ss';
+        ? "mm:ss"
+        : "kk:mm:ss";
 
     return (
-      <div className={'modal ' + this.state.visible}>
+      <div className={"modal " + this.state.visible}>
         <div className="modal-contents">
           <div className="container padding-left">
             <div className="window">
@@ -406,14 +416,15 @@ class WorkoutExit extends Component {
                   <h3>Entraînement terminé</h3>
                 </div>
                 <button className="close" onClick={this.closeModal}>
-                  <FontAwesomeIcon icon={['fas', 'times']} size="1x" />
+                  <FontAwesomeIcon icon={["fas", "times"]} size="1x" />
                 </button>
               </div>
               <div className="window-body exit no-padding">
                 <div
                   className={
-                    this.state.saving ? 'exit-slide' : 'exit-slide active'
-                  }>
+                    this.state.saving ? "exit-slide" : "exit-slide active"
+                  }
+                >
                   <div className="exit-content">
                     <div className="intro exit-panel">
                       <p className="title">Félicitations !</p>
@@ -426,9 +437,9 @@ class WorkoutExit extends Component {
                           <h3 className="panel-title">Temps actif</h3>
                           <p className="value">
                             {moment()
-                              .set('hour', 0)
-                              .set('minute', 0)
-                              .set('second', 0)
+                              .set("hour", 0)
+                              .set("minute", 0)
+                              .set("second", 0)
                               .second(this.props.currentRoutine.time)
                               .format(timeFormat)}
                           </p>
@@ -456,17 +467,19 @@ class WorkoutExit extends Component {
                     <button
                       onClick={this.saveRoutine}
                       disabled={
-                        this.state.runningStatus === 'saving' ||
-                        this.state.runningStatus === 'exiting'
-                      }>
+                        this.state.runningStatus === "saving" ||
+                        this.state.runningStatus === "exiting"
+                      }
+                    >
                       Enregistrer l'entraînement
                     </button>
                     <button
                       onClick={this.closeModal}
                       disabled={
-                        this.state.runningStatus === 'saving' ||
-                        this.state.runningStatus === 'exiting'
-                      }>
+                        this.state.runningStatus === "saving" ||
+                        this.state.runningStatus === "exiting"
+                      }
+                    >
                       Annuler
                     </button>
                   </div>
@@ -474,13 +487,14 @@ class WorkoutExit extends Component {
                 <div
                   className={
                     this.state.saving
-                      ? 'exit-slide loading active'
-                      : 'exit-slide loading'
-                  }>
+                      ? "exit-slide loading active"
+                      : "exit-slide loading"
+                  }
+                >
                   <InlineLoader
                     copy={
                       this.state.saving
-                        ? 'Enregistrement en cours'
+                        ? "Enregistrement en cours"
                         : "Redirection vers l'accueil"
                     }
                   />
@@ -489,8 +503,8 @@ class WorkoutExit extends Component {
             </div>
           </div>
         </div>
-        {this.state.successRedirect && window.location.pathname !== '/' ? (
-          <Redirect push to={{ pathname: '/' }} />
+        {this.state.successRedirect && window.location.pathname !== "/" ? (
+          <Redirect push to={{ pathname: "/" }} />
         ) : (
           false
         )}

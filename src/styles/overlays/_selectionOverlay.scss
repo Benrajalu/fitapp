@@ -175,7 +175,7 @@
   }
 
   &.closed {
-    transform: translateY(100%);
+    transform: translateY(-100%);
     opacity: 0;
     overflow: hidden;
     .modal-header,

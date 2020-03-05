@@ -437,6 +437,77 @@
                 transition: stroke-dasharray 500ms linear;
               }
             }
+
+            &.alternate {
+              flex-flow: row nowrap;
+              width: auto;
+              .copy {
+                position: static;
+                transform: translateY(0);
+                p {
+                  font-size: 13px;
+                }
+              }
+              .circular-chart {
+                width: 40px;
+                height: 40px;
+                .circle-bg,
+                .circle {
+                  stroke-width: 4px;
+                }
+              }
+            }
+          }
+        }
+
+        .interval-set-heading {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: flex-start;
+          align-items: center;
+          margin-bottom: 30px;
+
+          .info {
+            margin-right: 22px;
+            border-left: 1px solid #454545;
+            padding: 5px 0 5px 20px;
+            margin-bottom: 15px;
+
+            &:first-child {
+              border-left: 0;
+              padding-left: 0;
+            }
+
+            h4 {
+              @include mont(11px, 700, $greyType);
+              text-transform: uppercase;
+              margin-bottom: 5px;
+            }
+
+            p {
+              @include mont(25px, 700, $white);
+              text-transform: uppercase;
+            }
+          }
+
+          .progressBar {
+            width: 100%;
+            height: 5px;
+            background: #454545;
+            position: relative;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+
+            .progress {
+              position: absolute;
+              top: 0;
+              left: 0;
+              transition: all 200ms ease-out;
+              background: $red;
+              overflow: hidden;
+              text-indent: -999px;
+              white-space: nowrap;
+              height: 100%;
+            }
           }
         }
       }
@@ -699,4 +770,144 @@
     border-radius: 3px;
     transition: background 200ms ease-out;
   }
+}
+
+.interval-capsule {
+  position: relative;
+
+  .interval-exercice {
+    position: relative;
+
+    .circle-zone {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      z-index: 1;
+      transform: rotate(-90deg);
+
+      .circle-bg,
+      .circle {
+        width: 100%;
+      }
+      .circle-bg {
+        fill: none;
+        stroke: #808080;
+        stroke-width: 3px;
+      }
+      .circle {
+        fill: none;
+        stroke: $red;
+        stroke-width: 3px;
+        stroke-linecap: round;
+        stroke-dasharray: 0, 100;
+        transition: stroke-dashoffset 500ms linear;
+      }
+
+      .completion {
+        display: block;
+        width: 100%;
+
+        svg {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+
+
+    .interval-body {
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      z-index: 2;
+
+      .counter {
+        padding: 0;
+        margin-bottom: 12px;
+
+        .counter-title {
+          @include mont(11px, 700, $greyType);
+          text-transform: uppercase;
+          margin-bottom: 5px;
+        }
+
+        .counter-value {
+          @include mont(18px, 700, $white);
+        }
+      }
+
+      .counter-big {
+        padding-top: 15px;
+        padding-bottom: 55px;
+        .big-value {
+          @include mont(45px, 700, $white);
+          text-transform: uppercase;
+          margin-bottom: 5px;
+        }
+
+        .small-value {
+          @include mont(19px, 700, $greyType);
+          text-transform: uppercase;
+
+          &.active {
+            color: $red;
+          }
+        }
+      }
+    }
+  }
+
+  .interval-controls {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 16px 0px;
+    align-items: stretch;
+    z-index: 3;
+    max-width: 160px;
+
+    .mainAction {
+      position: relative;
+      overflow: hidden;
+      button {
+        position: absolute;
+        top: 150%;
+        left: 0;
+        transition: all 200ms cubic-bezier(0.62, -0.3, 0.33, 1.32);
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        &.active {
+          top: 0;
+          opacity: 1;
+        }
+      }
+    }
+    button,
+    .mainAction {
+      flex-grow: 1;
+      text-align: center;
+      color: $white;
+      background: transparent;
+      padding: 0px;
+      line-height: 1;
+      border: 0px;
+      font-size: 20px;
+      width: 40px;
+    }
+  }
+
 }

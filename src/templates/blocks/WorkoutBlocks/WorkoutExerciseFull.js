@@ -20,31 +20,6 @@ class WorkoutExerciseFull extends Component {
     };
   }
 
-  componentDidMount() {
-    // We create a setList in which the requirements for a full exercise to be successful are counted.
-    //If any entry is not a 1, then the exercise isn't 100% done
-    let newSetlist = [];
-    if (this.props.contents.setsTarget && this.props.contents.sets === false) {
-      let y = 0,
-        totalSets = parseFloat(this.props.contents.setsTarget);
-      for (y; y < totalSets; y++) {
-        newSetlist.push(0);
-      }
-    } else if (this.props.contents.setsTarget && this.props.contents.sets) {
-      newSetlist = this.props.contents.sets;
-    } else if (this.props.contents.handicap && this.props.contents.sets) {
-      newSetlist = this.props.contents.sets;
-    } else {
-      newSetlist.push(0);
-    }
-
-    this.setState({
-      sets: Array.isArray(newSetlist) ? newSetlist : newSetlist.split()
-    });
-
-    this.props.onReps(newSetlist, this.props.index);
-  }
-
   setCompletion(data) {
     // The SetCounter element communicates the current value of reps
     // We store that value in the setsSnapshot, storing where we are now

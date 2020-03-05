@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import BarbellLoader from '../../blocks/BarbellLoader';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
+import uuid from 'uuid';
+
 class WeightHelperModal extends Component {
   constructor(props) {
     super(props);
@@ -183,7 +185,7 @@ class WeightHelperModal extends Component {
             ? 'warmup-content visible'
             : 'warmup-content  hidden'
         }
-        key={'slide-' + index}>
+        key={'slide-' + uuid.v1()}>
         {value}
       </div>
     ));

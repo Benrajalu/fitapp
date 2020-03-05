@@ -1,8 +1,5 @@
 {
   "name": "fitapp",
-  "engines": {
-    "node": "8.6.0"
-  },
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -21,12 +18,14 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "firebase": "^4.8.2",
     "grpc": "^1.7.0-pre1",
+    "lodash": "^4.17.10",
     "moment": "^2.20.1",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.1",
     "prop-types": "^15.5.10",
     "protobufjs": "^5.0.2",
     "react": "^16.2.0",
+    "react-beautiful-dnd": "^7.1.0",
     "react-dom": "^16.2.0",
     "react-image-crop": "^3.0.0",
     "react-rangeslider": "^2.2.0",
@@ -39,6 +38,7 @@
     "redux-firestore": "^0.2.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "uuid": "^3.2.1",
     "velocity-animate": "^1.5.0"
   },
   "scripts": {

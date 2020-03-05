@@ -12,7 +12,9 @@ import InlineLoader from '../blocks/InlineLoader';
 import Stopwatch from '../blocks/WorkoutBlocks/Stopwatch';
 import WorkoutTabs from '../blocks/WorkoutBlocks/WorkoutTabs';
 import WorkoutExerciseTeaser from '../blocks/WorkoutBlocks/WorkoutExerciseTeaser';
+import WorkoutExerciseTeaserIntervals from '../blocks/WorkoutBlocks/WorkoutExerciseTeaserIntervals';
 import WorkoutExerciseFull from '../blocks/WorkoutBlocks/WorkoutExerciseFull';
+import WorkoutExerciseFullIntervals from '../blocks/WorkoutBlocks/WorkoutExerciseFullIntervals';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -61,7 +63,6 @@ class Workout extends Component {
     this.closeRoutineModal = this.closeRoutineModal.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.showExercise = this.showExercise.bind(this);
-    this.setNewHeight = this.setNewHeight.bind(this);
     this.startStopwatch = this.startStopwatch.bind(this);
   }
 
@@ -90,7 +91,8 @@ class Workout extends Component {
           repTarget: value.reps ? value.reps : false,
           setsTarget: value.sets ? value.sets : false,
           sets: newSetlist,
-          handicap: value.handicap ? value.handicap : 0
+          handicap: value.handicap ? value.handicap : 0,
+          exercises: value.exercises ? value.exercises : false
         });
         return true;
       });
@@ -125,11 +127,7 @@ class Workout extends Component {
     this.getRoutine(this.props);
     this.props.changeLayout('hidden');
     this.setState({
-      loading: false,
-      height: Math.max(
-        document.documentElement.clientHeight,
-        window.innerHeight || 0
-      )
+      loading: false
     });
     setTimeout(() => {
       _this.setState({
@@ -223,15 +221,6 @@ class Workout extends Component {
     });
   }
 
-  setNewHeight() {
-    this.setState({
-      height: Math.max(
-        document.documentElement.clientHeight,
-        window.innerHeight || 0
-      )
-    });
-  }
-
   startStopwatch() {
     this.setState({
       startStopwatch: true
@@ -248,45 +237,79 @@ class Workout extends Component {
 
     // For each exercise in the routine, we display a workoutDetails element that will enable users to track their routine
     const workoutItems = currentRoutine.exercises
-      ? currentRoutine.exercises.map((value, index) => (
-          <WorkoutExerciseTeaser
-            key={value.exerciseId + '-' + index}
-            index={index}
-            contents={value}
-            exercisesDatabase={this.props.exercises.list}
-            settings={this.props.user.settings}
-            showExercise={this.showExercise}
-            onReps={this.feedReps}
-            startStopwatch={this.startStopwatch}
-          />
-        ))
+      ? currentRoutine.exercises.map((value, index) => {
+          if (value.exerciseId === 'ex-33') {
+            return (
+              <WorkoutExerciseTeaserIntervals
+                key={value.exerciseId + '-' + index}
+                index={index}
+                contents={value}
+                exercisesDatabase={this.props.exercises.list}
+                settings={this.props.user.settings}
+                showExercise={this.showExercise}
+                onReps={this.feedReps}
+                startStopwatch={this.startStopwatch}
+              />
+            );
+          }
+
+          return (
+            <WorkoutExerciseTeaser
+              key={value.exerciseId + '-' + index}
+              index={index}
+              contents={value}
+              exercisesDatabase={this.props.exercises.list}
+              settings={this.props.user.settings}
+              showExercise={this.showExercise}
+              onReps={this.feedReps}
+              startStopwatch={this.startStopwatch}
+            />
+          );
+        })
       : false;
 
     let ongoingExercise = false;
     if (this.state.ongoingExercise !== false) {
       const exercise = currentRoutine.exercises[this.state.ongoingExercise];
-      ongoingExercise = (
-        <WorkoutExerciseFull
-          contents={exercise}
-          exercisesDatabase={this.props.exercises.list}
-          index={this.state.ongoingExercise}
-          onUpdate={this.updateRoutine}
-          onReps={this.feedReps}
-          settings={this.props.user.settings}
-          showExercise={this.showExercise}
-          toggleModal={this.props.toggleModal}
-          last={
-            this.state.ongoingExercise + 1 === currentRoutine.exercises.length
-              ? true
-              : false
-          }
-        />
-      );
+      ongoingExercise =
+        exercise.exerciseId === 'ex-33' ? (
+          <WorkoutExerciseFullIntervals
+            contents={exercise}
+            exercisesDatabase={this.props.exercises.list}
+            index={this.state.ongoingExercise}
+            onUpdate={this.updateRoutine}
+            onReps={this.feedReps}
+            settings={this.props.user.settings}
+            showExercise={this.showExercise}
+            toggleModal={this.props.toggleModal}
+            last={
+              this.state.ongoingExercise + 1 === currentRoutine.exercises.length
+                ? true
+                : false
+            }
+          />
+        ) : (
+          <WorkoutExerciseFull
+            contents={exercise}
+            exercisesDatabase={this.props.exercises.list}
+            index={this.state.ongoingExercise}
+            onUpdate={this.updateRoutine}
+            onReps={this.feedReps}
+            settings={this.props.user.settings}
+            showExercise={this.showExercise}
+            toggleModal={this.props.toggleModal}
+            last={
+              this.state.ongoingExercise + 1 === currentRoutine.exercises.length
+                ? true
+                : false
+            }
+          />
+        );
     }
     return (
       <div id="Workout" className={this.state.mounted ? 'loaded' : null}>
         {this.state.routine === false ? (
-          <div className="workout-grid" style={{ height: this.state.height }}>
+          <div className="workout-grid">
             <div className="head">
               <div className="container">
                 <h1>Entraînement introuvable</h1>
@@ -305,7 +328,7 @@ class Workout extends Component {
             </div>
           </div>
         ) : (
-          <div className="workout-grid" style={{ height: this.state.height }}>
+          <div className="workout-grid">
             <Prompt
               when={this.props.modals.status === 'closed'}
               message="Vous n'avez pas terminé cet entrainement. Souhaitez-vous l'annuler ? "
