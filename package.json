@@ -17,7 +17,7 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.4",
     "@fortawesome/react-fontawesome": "0.0.17",
-    "axios": "^0.16.2",
+    "axios": "^0.21.1",
     "enzyme-adapter-react-16": "^1.1.1",
     "firebase": "^4.8.2",
     "grpc": "^1.7.0-pre1",
